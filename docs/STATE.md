@@ -1,7 +1,8 @@
 # Состояние проекта
 
-Обновлено: 2026-09-17. Полное ТЗ — [SPEC.md](SPEC.md). Выполнены этапы 1–2 из 10.
-Коммиты: `0a3179c` (этап 1, каркас), `b86adc4` (этап 2, Supabase).
+Обновлено: 2026-09-17. Полное ТЗ — [SPEC.md](SPEC.md). Выполнены этапы 1–3 из 10.
+Коммиты: `0a3179c` (этап 1, каркас), `b86adc4` (этап 2, Supabase),
+этап 3 (авторизация) — в рабочем дереве.
 
 ## Этап 1 — каркас (готово)
 
@@ -80,6 +81,89 @@
   e24-longest-run, e25-divisors-mask, e26-warehouse, e27-pair-sum. Ответ каждой
   вычислен эталонным решением и подтверждён независимым решением по условию.
 
+## Этап 3 — авторизация (готово)
+
+Пакеты: `supabase_flutter` 2.17.2, `http` (распознавание обрыва запроса
+PostgREST), `meta` (`@immutable` в domain).
+
+- **Старт** `lib/app/bootstrap.dart`: `Future<Result<void>> bootstrap()` —
+  `ensureInitialized`, проверка `Env.isConfigured`, затем
+  `Supabase.initialize(url:, publishableKey:)` (`anonKey` в SDK объявлен
+  устаревшим, значение то же — публичный anon-ключ). `main.dart` по
+  результату запускает `ProviderScope(YegeWarsApp)` либо
+  `NotConfiguredApp(details:)` (`lib/app/not_configured_app.dart`).
+- **Domain** `lib/features/auth/domain/`:
+  `entities/user_role.dart` — `enum UserRole {student, admin}` (`value`,
+  `fromValue` — неизвестное значение трактуется как `student`, `isAdmin`);
+  `entities/user_profile.dart` — `UserProfile(id, username, role)` c `==`;
+  `auth_state.dart` — sealed `AuthState`: `AuthUnknown` |
+  `AuthUnauthenticated({failure})` | `AuthAuthenticated(profile)`,
+  геттеры `profileOrNull`/`isAuthenticated`/`isAdmin`
+  (**заменил `enum AuthStatus`, файл `auth_status.dart` удалён**);
+  `auth_rules.dart` — `usernamePattern` `^[A-Za-z0-9_]{3,20}$`,
+  `passwordMinLength = 8` (единственный источник правил для UI и domain);
+  `credentials_validation.dart` — `ValidationFailure` с русским текстом;
+  `repositories/auth_repository.dart` — `watchUserId`, `currentProfile`,
+  `signIn`, `signUp`, `signOut`, `isRegistrationOpen`, всё через `Result`;
+  `use_cases/` — SignIn, SignUp, SignOut, GetCurrentProfile, WatchAuthUser,
+  IsRegistrationOpen (вызываются как функции, метод `call`).
+- **Data** `lib/features/auth/data/`:
+  `datasources/auth_remote_data_source.dart` — интерфейс;
+  `supabase_auth_remote_data_source.dart` — `emailDomain = 'ege.local'`,
+  `emailFor(username)` приводит логин к нижнему регистру (логин в
+  `profiles` сохраняется как введён), `signUp` кладёт логин в
+  `data: {'username': …}` для триггера, `watchUserId` =
+  `onAuthStateChange.map(session.user.id).distinct()`;
+  `dto/profile_dto.dart` (`FormatException` на неожиданной строке);
+  `mappers/auth_error_mapper.dart` — `AuthErrorMapper.map(error,
+  {operation})` и `enum AuthOperation {signIn, signUp, other}`;
+  `repositories/auth_repository_impl.dart` — единственное место, где
+  исключения SDK превращаются в `Failure`.
+- **Ошибки БД на клиенте**: `lib/core/error/rpc_error.dart` —
+  `RpcError.tryParse('[код] Текст')` и `RpcErrorCodes` (пригодится
+  этапам 6 и 8). `Failure` теперь `implements Exception` (нужно, чтобы
+  ошибку можно было пробросить в `AsyncError`).
+- **Важно про регистрацию**: ошибку триггера (`[username_taken]`,
+  `[registration_closed]`) Supabase Auth обычно отдаёт как
+  `unexpected_failure` / «Database error saving new user», теряя исходный
+  текст. Маппер разбирает `[код]`, если текст дошёл, иначе при регистрации
+  показывает «Не удалось зарегистрироваться. Возможно, логин уже занят или
+  регистрация закрыта». **Живьём не проверено** — нужен проект Supabase.
+- **Presentation**: `lib/features/auth/auth_providers.dart` —
+  `authRepositoryProvider` (в тестах подменяется целиком), провайдеры
+  use case'ов, `registrationOpenProvider` (`FutureProvider<bool>`,
+  ошибку отдаёт как `Failure` в `AsyncError`);
+  `AuthController` — `@Riverpod(keepAlive: true)`, состояние `AuthState`,
+  подписка на `watchUserId`, методы `signIn`/`signUp`/`signOut`
+  возвращают `Result`; экраны входа и регистрации (валидация, индикатор
+  на кнопке, сообщение об ошибке над формой, блокировка формы при
+  закрытой регистрации), `ProfileScreen` (логин, роль, «Выйти»);
+  виджеты `AuthFormCard`, `AuthMessage`, `AuthSubmitButton`;
+  `auth_field_validators.dart` — правила из `AuthRules`, тексты из l10n.
+- **Роутер**: добавлен `/splash` (`AppRoutes.splash`, `splashName`) и
+  параметр `AppRoutes.fromQueryParam = 'from'`. Guard: `AuthUnknown` →
+  splash с сохранением адреса; `AuthUnauthenticated` → `/login`;
+  `AuthAuthenticated` на `/login`, `/register`, `/splash` → сохранённый
+  адрес или `/`; `/admin` не-админу → `/`.
+  `lib/app/router/app_shell.dart` (`AppShell`) скрывает пункт «Админка»
+  у студентов: ветка админки последняя, поэтому индексы видимых пунктов
+  совпадают с индексами веток, `selectedIndex` ограничен `math.min`.
+- **core**: `lib/core/network/supabase_schema.dart` (`SupabaseTables`,
+  `ProfileColumns`, `SupabaseRpc`), `supabase_client_provider.dart`
+  (`@Riverpod(keepAlive: true) SupabaseClient supabaseClient`),
+  `lib/core/widgets/splash_screen.dart`.
+- **l10n**: добавлены `authUsernameInvalid`, `authPasswordInvalid`,
+  `authRegistrationClosed`, `authRegistrationCheckFailed`,
+  `profileSignOut`, `profileRoleLabel`, `profileRoleStudent`,
+  `profileRoleAdmin`, `errorUnexpected`, `configMissingTitle`,
+  `configMissingBody`.
+- **Тесты**: 118 (было 22), покрытие auth domain+data — 93,9 %.
+  Хелперы: `test/helpers/fake_auth_repository.dart` (`FakeAuthRepository`,
+  `testStudent`, `testAdmin`) и `test/helpers/pump_app.dart`
+  (`pumpApp`, `containerOf`). Не покрыты `fetchProfile` и
+  `isRegistrationOpen` в datasource (цепочки postgrest/rpc осмысленно не
+  мокаются) и `supabaseClientProvider`.
+
 ## Секреты (только локально, в git не попадают)
 
 `supabase/seed/local/` (в .gitignore): `answers/<slug>.json` (по задаче),
@@ -95,14 +179,23 @@
 - Эталонный ответ админу отдаёт RPC `admin_get_task_answer`, а не политика на
   task_answers (у таблицы вообще нет API-доступа — надёжнее буквы ТЗ).
 - `Result<T>` собственный, без fpdart. Freezed пока не подключён (не нужен был).
+- Ключ Supabase передаётся в SDK как `publishableKey`: параметр `anonKey`
+  в `supabase_flutter` 2.17 помечен устаревшим, а `analyze --fatal-infos`
+  не прощает обращения к устаревшему API. Имя переменной окружения
+  (`SUPABASE_ANON_KEY`) не менялось.
+- Пока статус авторизации неизвестен, показывается `/splash`, а исходный
+  адрес сохраняется в параметре `from` — иначе при перезагрузке страницы
+  терялась бы глубокая ссылка.
 
 ## Чего ещё нет
 
 - Реального проекта Supabase — пользователь создаст на supabase.com и применит
-  миграции (инструкция: `supabase/README.md`). До этого живая проверка
-  авторизации невозможна — код этапа 3 тестируется юнит/виджет-тестами на моках.
+  миграции (инструкция: `supabase/README.md`). Авторизация этапа 3 проверена
+  только юнит- и виджет-тестами на моках; живой прогон регистрации и входа
+  (включая тексты ошибок триггеров) отложен до появления проекта.
 - GitHub remote, Pages, deploy/keepalive/backup/seed workflow — этап 9.
-- Каталог/страница задачи, Pyodide, отправка ответов, профиль, админка — этапы 4–8.
+- Каталог/страница задачи, Pyodide, отправка ответов, прогресс в профиле,
+  админка — этапы 4–8. Профиль пока показывает только логин, роль и выход.
 
 ## Окружение машины разработчика
 

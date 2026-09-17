@@ -29,4 +29,14 @@ abstract final class AppRoutes {
 
   /// Имя маршрута регистрации.
   static const String registerName = 'register';
+
+  /// Путь заставки: показывается, пока восстанавливается сессия.
+  static const String splash = '/splash';
+
+  /// Имя маршрута заставки.
+  static const String splashName = 'splash';
+
+  /// Параметр запроса с адресом, на который пользователь шёл
+  /// до показа заставки.
+  static const String fromQueryParam = 'from';
 }

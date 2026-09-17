@@ -2,7 +2,11 @@
 ///
 /// Каждая ошибка несёт готовое русское сообщение для показа в UI
 /// и необязательную исходную причину ([Failure.cause]) для логирования.
-sealed class Failure {
+///
+/// Реализует [Exception], чтобы ошибку можно было пробросить там, где
+/// API требует исключение (например, в асинхронных провайдерах Riverpod),
+/// не теряя готового текста.
+sealed class Failure implements Exception {
   /// Создаёт ошибку с сообщением [message] и причиной [cause].
   const Failure({required this.message, this.cause});
 
