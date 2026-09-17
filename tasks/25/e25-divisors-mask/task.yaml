@@ -1,0 +1,10 @@
+slug: e25-divisors-mask
+title: "Задание 25. Чётные делители"
+ege_number: 25
+difficulty: 2
+answer_format: multi
+tags:
+  - делители
+  - перебор
+  - теория чисел
+source: "Оригинальная задача в стиле демоверсии КЕГЭ-2027"

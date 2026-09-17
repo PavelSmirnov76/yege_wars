@@ -53,6 +53,8 @@ app.*.map.json
 lib/l10n/gen/
 
 # Секреты и локальные данные — никогда не попадают в репозиторий
-seed/answers.local.json
+# (ответы задач и эталонные решения живут только локально и в секретах CI)
+supabase/seed/local/
+**/answers.local.json
 *.env
 .env*
