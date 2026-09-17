@@ -1,8 +1,11 @@
 # Состояние проекта
 
-Обновлено: 2026-09-17. Полное ТЗ — [SPEC.md](SPEC.md). Выполнены этапы 1–3 из 10.
+Обновлено: 2026-09-17. Полное ТЗ — [SPEC.md](SPEC.md) плюс две доработки
+(справочник и мини-уроки; контент в базе и Content API — их тексты прислал
+пользователь в чате, ключевое зафиксировано здесь и в `docs/content-api.md`).
+Выполнены этапы 1–3 из 10 и серверная часть доработки «контент в базе».
 Коммиты: `0a3179c` (этап 1, каркас), `b86adc4` (этап 2, Supabase),
-этап 3 (авторизация) — в рабочем дереве.
+`e36dfd6` (этап 3, авторизация).
 
 ## Этап 1 — каркас (готово)
 
@@ -70,11 +73,9 @@
   на голом PostgreSQL), rls_tests.sql (37 проверок), run_local.sh — поднимает
   временный кластер PostgreSQL 17 и гоняет всё. Запуск:
   `bash supabase/tests/run_local.sh` → в конце `RLS OK`. Docker не нужен.
-- **Seed** `supabase/seed/seed_tasks/` — отдельный Dart-пакет (45 юнит-тестов):
-  `SEED_DATABASE_URL=postgres://… dart run bin/seed_tasks.dart`
-  `[--tasks-dir tasks] [--answers …/answers.local.json] [--dry-run] [--unpublished]`.
-  Идемпотентный upsert по slug; `files` формируются как
-  `task_files/<ege_number>/<slug>/<имя файла>`.
+- **Seed**: Dart-пакет `supabase/seed/seed_tasks/` удалён вместе с доработкой
+  «контент в базе» (он писал в таблицы напрямую и в колонки, которых больше
+  нет). Его работу делает `tools/import_repo_tasks.py` через Content API.
 - **Банк задач** `tasks/<ege_number>/<slug>/` (task.yaml + statement.md + файлы
   данных) — 10 оригинальных задач в стиле КЕГЭ-2027: e02-truth-table,
   e05-num-transform, e12-editor, e16-rec-branch, e17-pairs-file, e23-dag-paths,
@@ -164,6 +165,66 @@ PostgREST), `meta` (`@immutable` в domain).
   `isRegistrationOpen` в datasource (цепочки postgrest/rpc осмысленно не
   мокаются) и `supabaseClientProvider`.
 
+## Доработка «контент в базе» — сервер (готово)
+
+Источник истины по задачам и статьям — база, а не репозиторий. Писать в
+таблицы напрямую нельзя никому: только через `admin_*` RPC, которые
+проверяют payload, ведут журнал и работают одной транзакцией.
+
+- **Миграции** (продолжают нумерацию, применять по порядку имён):
+  `20260917130000_content_schema.sql` — у `tasks` появились `status`
+  (`draft`/`review`/`published` вместо `is_published`), `reference_solution`,
+  `answer_explanation`, `created_by`, `origin` (`human`/`ai`), `updated_at`,
+  `reference_verified_at`; колонка `files` удалена; `ege_number` теперь 1–27;
+  новые таблицы `task_files`, `reference_articles`, `task_references`,
+  `audit_log`; представление `tasks_public`; настройка
+  `content_writes_per_minute` (60);
+  `20260917130001_content_rls.sql` — политики и привилегии;
+  `20260917130002_content_functions.sql` — Content API и пересозданные
+  функции этапа 2, где `is_published` заменился статусом (`submit_solution`,
+  `get_user_progress`, `get_task_stats`).
+- **Как закрыт эталон от учеников**: `revoke all on tasks`, затем
+  `grant select` на перечисленные колонки — `reference_solution` и
+  `answer_explanation` не выдаются вообще, даже прямым запросом; строки
+  фильтрует RLS (`status = 'published'` или админ). Ученику предназначено
+  представление `tasks_public` (`security_invoker = on`), админу — RPC
+  `admin_get_task`.
+- **Content API** (все security definer, роль admin проверяется внутри):
+  `admin_upsert_task`, `admin_upsert_article`, `admin_verify_reference`,
+  `admin_set_task_status`, `admin_delete_task`, `admin_list_tasks`,
+  `admin_get_task`, `admin_check_slug_available`. Вспомогательные:
+  `assert_content_admin` (роль + лимит 60 записей в минуту), `write_audit`,
+  `is_task_visible`, `is_article_visible`, `touch_updated_at`.
+- **Правило публикации**: `admin_upsert_task` не принимает `status:
+  published`. Публикация только через `admin_set_task_status` и только после
+  `admin_verify_reference`, где база сама сравнивает вывод эталона с ответом
+  (`normalize_answer`). Любое изменение задачи снимает отметку проверки.
+- **Ошибки** — прежний формат `[код] Русский текст`. Новые коды: bad_payload,
+  bad_slug, bad_title, bad_summary, short_statement, short_content,
+  bad_number, bad_ege_number, bad_difficulty, bad_answer_format, bad_answer,
+  bad_status, bad_origin, bad_relevance, bad_level, bad_reading_minutes,
+  missing_reference_solution, not_verified, bad_filename, file_too_large,
+  files_too_large, article_not_found, not_found.
+- **Лимиты**: файл ≤ 4 МБ (constraint), сумма файлов задачи ≤ 8 МБ (RPC),
+  60 изменений контента в минуту на аккаунт (`app_settings`).
+- **Инструменты**: `tools/content_client.py` — клиент API на стандартной
+  библиотеке (CLI: list/get/upsert-task/upsert-article/verify/status/publish/
+  delete/check-slug), доступы только из переменных окружения;
+  `tools/import_repo_tasks.py` — разовый перенос банка из `tasks/` в базу:
+  запускает эталон в папке задачи, сверяет вывод с `answers.local.json`,
+  грузит через API, сверяет эталон на сервере и публикует. `--dry-run`
+  проверяет всё локально (сейчас проходит: 10 задач, 6 файлов, 2,5 МБ).
+- **Документация для агента**: `docs/content-api.md` (авторизация сервисного
+  аккаунта `<логин>@ege.local`, схемы payload, таблица ошибок, примеры curl
+  и Python, порядок работы: сгенерировать → запустить эталон → взять вывод
+  как ответ → review → сверка → публикует человек).
+- **Тесты** `supabase/tests/rls_tests.sql`: 63 проверки (было 37). Добавлены
+  идемпотентность upsert, полная замена файлов и связей, транзакционность
+  (ошибка в файле не оставляет ни задачи, ни ответа), валидация payload,
+  запрет админских RPC ученику, недоступность эталона/разбора/черновиков
+  ученику (напрямую, через представление и через RPC), видимость файлов и
+  статей только для опубликованного, журнал и лимит частоты записи.
+
 ## Секреты (только локально, в git не попадают)
 
 `supabase/seed/local/` (в .gitignore): `answers/<slug>.json` (по задаче),
@@ -196,6 +257,12 @@ PostgREST), `meta` (`@immutable` в domain).
 - GitHub remote, Pages, deploy/keepalive/backup/seed workflow — этап 9.
 - Каталог/страница задачи, Pyodide, отправка ответов, прогресс в профиле,
   админка — этапы 4–8. Профиль пока показывает только логин, роль и выход.
+- Клиентской части доработок нет совсем: каталог читает `tasks_public`,
+  вкладка «Справка», раздел «Справочник», редактор задач и статей в админке,
+  очередь «Ждут проверки», кнопка «Проверить эталон» (Pyodide) — впереди.
+- Статей справочника ещё не написано ни одной (нужны минимум file-reading,
+  regex-basics, recursion-memo, graph-paths, sorting-key).
+- Еженедельная выгрузка базы в git (бэкап банка задач) — этап 9.
 
 ## Окружение машины разработчика
 

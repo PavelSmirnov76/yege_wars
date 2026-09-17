@@ -132,13 +132,13 @@ $$;
 
 do $$
 begin
-  insert into public.tasks (slug, ege_number, title, statement_md, difficulty, answer_format, is_published)
+  insert into public.tasks (slug, ege_number, title, statement_md, difficulty, answer_format, status)
   values
-    ('t-pair',   2,  'Пара чисел',    'Найдите пару чисел.',      1, 'pair',   true),
-    ('t-other',  2,  'Ещё одна пара', 'Найдите другую пару.',     2, 'pair',   true),
-    ('t-single', 5,  'Одно число',    'Найдите число.',           1, 'single', true),
-    ('t-string', 24, 'Строка',        'Найдите строку.',          3, 'string', true),
-    ('t-unpub',  27, 'Черновик',      'Неопубликованная задача.', 1, 'single', false);
+    ('t-pair',   2,  'Пара чисел',    'Найдите пару чисел.',      1, 'pair',   'published'),
+    ('t-other',  2,  'Ещё одна пара', 'Найдите другую пару.',     2, 'pair',   'published'),
+    ('t-single', 5,  'Одно число',    'Найдите число.',           1, 'single', 'published'),
+    ('t-string', 24, 'Строка',        'Найдите строку.',          3, 'string', 'published'),
+    ('t-unpub',  27, 'Черновик',      'Неопубликованная задача.', 1, 'single', 'draft');
 
   insert into public.task_answers (task_id, answer)
   select t.id, a.answer
@@ -202,7 +202,7 @@ begin
   select id into v_admin from public.profiles where username = 'boss';
   select id into v_unpub from public.tasks where slug = 't-unpub';
   select count(*) into v_total     from public.tasks;
-  select count(*) into v_published from public.tasks where is_published;
+  select count(*) into v_published from public.tasks where status = 'published';
 
   perform tests.login(v_alice);
   select count(*) into v_cnt from public.tasks;
@@ -947,6 +947,498 @@ begin
 
   perform tests.logout();
   raise notice 'OK: (м) get_task_stats: solved_percent считается только по студентам';
+end
+$$;
+
+-- =============================================================================
+-- (н) Content API: контент создаётся только через admin_* RPC
+-- =============================================================================
+
+-- Статья справочника и задача через API; проверка полей и идемпотентности
+do $$
+declare
+  v_admin uuid;
+  v_res   jsonb;
+  v_task  jsonb;
+  v_cnt   bigint;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  v_res := public.admin_upsert_article(jsonb_build_object(
+    'slug',            'file-reading',
+    'title',           'Чтение файлов в Python',
+    'summary',         'Как открыть файл и пройти его построчно.',
+    'content_md',      repeat('Статья про чтение файлов и обработку строк. ', 10),
+    'ege_numbers',     jsonb_build_array(17, 24),
+    'tags',            jsonb_build_array('files'),
+    'level',           1,
+    'reading_minutes', 6,
+    'is_published',    true
+  ));
+  if (v_res ->> 'created')::boolean is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): статья справочника не создана';
+  end if;
+
+  v_res := public.admin_upsert_task(jsonb_build_object(
+    'slug',               'ege24-demo-01',
+    'ege_number',         24,
+    'title',              'Демонстрационная задача 24',
+    'statement_md',       'Найдите наибольшую длину подпоследовательности в файле 24.txt.',
+    'difficulty',         2,
+    'answer_format',      'single',
+    'answer',             '1523',
+    'reference_solution', 'print(1523)',
+    'answer_explanation', 'Скользящее окно',
+    'status',             'review',
+    'origin',             'ai',
+    'tags',               jsonb_build_array('strings'),
+    'files',              jsonb_build_array(
+                            jsonb_build_object('filename', '24.txt', 'content', 'ABCABC')
+                          ),
+    'references',         jsonb_build_array(
+                            jsonb_build_object('slug', 'file-reading', 'relevance', 'primary')
+                          )
+  ));
+  if (v_res ->> 'created')::boolean is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): задача не создана';
+  end if;
+
+  v_task := public.admin_get_task('ege24-demo-01');
+  if v_task ->> 'answer' is distinct from '1523'
+     or jsonb_array_length(v_task -> 'files') <> 1
+     or jsonb_array_length(v_task -> 'references') <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): admin_get_task вернул не всё: %', v_task;
+  end if;
+
+  -- Повторный вызов обновляет ту же задачу, а не создаёт вторую
+  v_res := public.admin_upsert_task(jsonb_build_object(
+    'slug',               'ege24-demo-01',
+    'ege_number',         24,
+    'title',              'Демонстрационная задача 24 (правка)',
+    'statement_md',       'Найдите наибольшую длину подпоследовательности в файле 24.txt.',
+    'difficulty',         2,
+    'answer_format',      'single',
+    'answer',             '1523',
+    'reference_solution', 'print(1523)',
+    'status',             'review',
+    'files',              jsonb_build_array(
+                            jsonb_build_object('filename', '24.txt', 'content', 'ABCABCABC')
+                          )
+  ));
+  if (v_res ->> 'created')::boolean is not false then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): повторный upsert создал новую задачу';
+  end if;
+
+  select count(*) into v_cnt from public.tasks where slug = 'ege24-demo-01';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): после повторного upsert задач с тем же slug: %', v_cnt;
+  end if;
+
+  -- Файлы заменяются целиком, а не накапливаются
+  select count(*) into v_cnt
+    from public.task_files f
+    join public.tasks t on t.id = f.task_id
+   where t.slug = 'ege24-demo-01';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): файлов после замены %, ожидался 1', v_cnt;
+  end if;
+
+  -- Связи со справочником пересобраны: в повторном вызове их не было
+  select count(*) into v_cnt
+    from public.task_references r
+    join public.tasks t on t.id = r.task_id
+   where t.slug = 'ege24-demo-01';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): связи со справочником не пересобраны (осталось %)', v_cnt;
+  end if;
+
+  perform tests.logout();
+  raise notice 'OK: (н) admin_upsert_task создаёт и идемпотентно обновляет задачу целиком';
+end
+$$;
+
+-- Валидация payload: каждая ошибка отклоняется с понятным кодом
+do $$
+declare
+  v_admin uuid;
+  v_base  jsonb;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  v_base := jsonb_build_object(
+    'slug',               'ege24-bad-01',
+    'ege_number',         24,
+    'title',              'Проверка валидации',
+    'statement_md',       'Условие достаточной длины для прохождения проверки минимума.',
+    'difficulty',         2,
+    'answer_format',      'single',
+    'answer',             '42',
+    'reference_solution', 'print(42)',
+    'status',             'draft'
+  );
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('ege_number', 42));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принят ege_number вне диапазона';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) ege_number вне диапазона отклонён (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('answer', '   '));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принят пустой ответ';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) пустой ответ отклонён (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('answer', 'не число'));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): ответ не по формату single принят';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) ответ не по формату отклонён (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('statement_md', 'Коротко'));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принято слишком короткое условие';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) короткое условие отклонено (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object(
+      'status', 'review', 'reference_solution', null));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): review без эталонного решения принят';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) review без эталона отклонён (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('files', jsonb_build_array(
+      jsonb_build_object('filename', '../etc/passwd', 'content', 'x'))));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принято имя файла с путём';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) имя файла с путём отклонено (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('files', jsonb_build_array(
+      jsonb_build_object('filename', 'big.txt', 'content', repeat('x', 4194305)))));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принят файл больше 4 МБ';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) файл больше 4 МБ отклонён (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task(v_base || jsonb_build_object('references', jsonb_build_array(
+      jsonb_build_object('slug', 'no-such-article', 'relevance', 'primary'))));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): принята ссылка на несуществующую статью';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) ссылка на несуществующую статью отклонена (%)', sqlerrm;
+  end;
+
+  perform tests.logout();
+end
+$$;
+
+-- Транзакционность: ошибка в файлах не оставляет ни задачи, ни ответа
+do $$
+declare
+  v_admin uuid;
+  v_cnt   bigint;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  begin
+    perform public.admin_upsert_task(jsonb_build_object(
+      'slug',               'ege24-atomic-01',
+      'ege_number',         24,
+      'title',              'Атомарность',
+      'statement_md',       'Условие достаточной длины для прохождения проверки минимума.',
+      'difficulty',         1,
+      'answer_format',      'single',
+      'answer',             '7',
+      'reference_solution', 'print(7)',
+      'status',             'draft',
+      'files',              jsonb_build_array(
+                              jsonb_build_object('filename', 'ok.txt', 'content', 'данные'),
+                              jsonb_build_object('filename', 'bad name.txt', 'content', 'x')
+                            )
+    ));
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): задача с битым именем файла создалась';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) вызов с битым файлом отклонён (%)', sqlerrm;
+  end;
+
+  -- Проверяем от суперпользователя: task_answers закрыта даже админу
+  perform tests.logout();
+
+  select count(*) into v_cnt from public.tasks where slug = 'ege24-atomic-01';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): после ошибки осталась задача';
+  end if;
+
+  select count(*) into v_cnt
+    from public.task_answers ta
+    join public.tasks t on t.id = ta.task_id
+   where t.slug = 'ege24-atomic-01';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): после ошибки остался эталонный ответ';
+  end if;
+  raise notice 'OK: (н) при ошибке в одном файле не создаётся ни задачи, ни ответа';
+end
+$$;
+
+-- Публикация только после совпадения вывода эталона с ответом
+do $$
+declare
+  v_admin  uuid;
+  v_res    jsonb;
+  v_status text;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  begin
+    perform public.admin_set_task_status('ege24-demo-01', 'published');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): задача опубликована без проверки эталона';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) публикация без проверки эталона отклонена (%)', sqlerrm;
+  end;
+
+  -- Вывод эталона не совпал с ответом: отметки о проверке нет
+  v_res := public.admin_verify_reference('ege24-demo-01', '999');
+  if (v_res ->> 'matches')::boolean is not false then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): неверный вывод эталона признан совпавшим';
+  end if;
+
+  begin
+    perform public.admin_set_task_status('ege24-demo-01', 'published');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): задача с неверным эталоном опубликована';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) после неудачной сверки публикация запрещена (%)', sqlerrm;
+  end;
+
+  -- Совпало (сравнение нормализованное: лишние пробелы не мешают)
+  v_res := public.admin_verify_reference('ege24-demo-01', ' 1523 ');
+  if (v_res ->> 'matches')::boolean is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): верный вывод эталона не признан совпавшим';
+  end if;
+
+  perform public.admin_set_task_status('ege24-demo-01', 'published');
+  select status into v_status from public.tasks where slug = 'ege24-demo-01';
+  if v_status is distinct from 'published' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): статус после публикации = %', v_status;
+  end if;
+
+  perform tests.logout();
+  raise notice 'OK: (н) публикация возможна только после сверки вывода эталона с ответом';
+end
+$$;
+
+-- Ученик не получает эталон, разбор и черновики ни одним путём
+do $$
+declare
+  v_alice uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  perform tests.login(v_alice);
+
+  begin
+    perform reference_solution from public.tasks where slug = 'ege24-demo-01';
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент прочитал reference_solution напрямую';
+  exception when insufficient_privilege then
+    raise notice 'OK: (н) select reference_solution под студентом — permission denied';
+  end;
+
+  begin
+    perform answer_explanation from public.tasks where slug = 'ege24-demo-01';
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент прочитал answer_explanation напрямую';
+  exception when insufficient_privilege then
+    raise notice 'OK: (н) select answer_explanation под студентом — permission denied';
+  end;
+
+  -- Представление для учеников отдаёт только опубликованные задачи
+  select count(*) into v_cnt from public.tasks_public where slug = 't-unpub';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): черновик виден в tasks_public';
+  end if;
+  select count(*) into v_cnt from public.tasks_public where slug = 'ege24-demo-01';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): опубликованная задача не видна в tasks_public';
+  end if;
+
+  -- Админские RPC под студентом
+  begin
+    perform public.admin_get_task('ege24-demo-01');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент получил задачу через admin_get_task';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) admin_get_task под студентом — отказ (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_list_tasks('{}'::jsonb);
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент получил список через admin_list_tasks';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) admin_list_tasks под студентом — отказ (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_upsert_task('{"slug":"hack-01"}'::jsonb);
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент создал задачу через admin_upsert_task';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) admin_upsert_task под студентом — отказ (%)', sqlerrm;
+  end;
+
+  begin
+    perform public.admin_delete_task('ege24-demo-01');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент удалил задачу';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) admin_delete_task под студентом — отказ (%)', sqlerrm;
+  end;
+
+  perform tests.logout();
+end
+$$;
+
+-- Файлы и справочник: что видно ученику и что закрыто на запись
+do $$
+declare
+  v_alice uuid;
+  v_admin uuid;
+  v_task  uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_admin from public.profiles where username = 'boss';
+  select id into v_task  from public.tasks where slug = 't-unpub';
+
+  -- Файл к черновику — от имени супер-пользователя (тестовый сетап)
+  insert into public.task_files (task_id, filename, content)
+  values (v_task, 'hidden.txt', 'секрет')
+  on conflict (task_id, filename) do nothing;
+
+  perform tests.login(v_alice);
+
+  select count(*) into v_cnt from public.task_files f
+   where f.filename = 'hidden.txt';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту виден файл неопубликованной задачи';
+  end if;
+
+  select count(*) into v_cnt from public.task_files f
+    join public.tasks t on t.id = f.task_id
+   where t.slug = 'ege24-demo-01';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту не виден файл опубликованной задачи (%)', v_cnt;
+  end if;
+
+  begin
+    insert into public.task_files (task_id, filename, content)
+    values (v_task, 'mine.txt', 'x');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент записал файл задачи напрямую';
+  exception when insufficient_privilege then
+    raise notice 'OK: (н) прямая запись в task_files под студентом — permission denied';
+  end;
+
+  select count(*) into v_cnt from public.reference_articles where slug = 'file-reading';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту не видна опубликованная статья';
+  end if;
+
+  begin
+    perform public.admin_upsert_article('{"slug":"hack-article"}'::jsonb);
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студент создал статью';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) admin_upsert_article под студентом — отказ (%)', sqlerrm;
+  end;
+
+  begin
+    perform 1 from public.audit_log;
+    if found then
+      raise exception 'ТЕСТ ПРОВАЛЕН (н): студент читает журнал действий';
+    end if;
+    raise notice 'OK: (н) журнал действий студенту пуст (политика RLS)';
+  exception when insufficient_privilege then
+    raise notice 'OK: (н) audit_log под студентом — permission denied';
+  end;
+
+  perform tests.logout();
+
+  -- Неопубликованная статья студенту не видна
+  perform tests.login(v_admin);
+  perform public.admin_upsert_article(jsonb_build_object(
+    'slug',       'draft-article',
+    'title',      'Черновик статьи',
+    'summary',    'Ещё не опубликована.',
+    'content_md', repeat('Черновик статьи справочника. ', 10)
+  ));
+  perform tests.logout();
+
+  perform tests.login(v_alice);
+  select count(*) into v_cnt from public.reference_articles where slug = 'draft-article';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту видна неопубликованная статья';
+  end if;
+  perform tests.logout();
+
+  raise notice 'OK: (н) файлы и статьи видны ученику только для опубликованного контента';
+end
+$$;
+
+-- Журнал действий и ограничение частоты записи
+do $$
+declare
+  v_admin uuid;
+  v_cnt   bigint;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  select count(*) into v_cnt
+    from public.audit_log
+   where actor_id = v_admin and entity_slug = 'ege24-demo-01';
+  if v_cnt = 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): действия над задачей не попали в журнал';
+  end if;
+
+  -- Временно ужимаем лимит до одной записи в минуту
+  update public.app_settings set value = '1'::jsonb
+   where key = 'content_writes_per_minute';
+
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_set_task_status('ege24-demo-01', 'draft');
+    raise exception 'ТЕСТ ПРОВАЛЕН (н): лимит частоты записи не сработал';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (н) лимит частоты записи сработал (%)', sqlerrm;
+  end;
+  perform tests.logout();
+
+  update public.app_settings set value = '60'::jsonb
+   where key = 'content_writes_per_minute';
+
+  raise notice 'OK: (н) действия пишутся в audit_log, частота записи ограничена';
 end
 $$;
 
