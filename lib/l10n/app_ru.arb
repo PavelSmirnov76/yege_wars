@@ -1,0 +1,19 @@
+{
+  "@@locale": "ru",
+  "appTitle": "YEGE Wars",
+  "navCatalog": "Каталог",
+  "navProfile": "Профиль",
+  "navAdmin": "Админка",
+  "authLoginTitle": "Вход",
+  "authRegisterTitle": "Регистрация",
+  "authUsernameLabel": "Логин",
+  "authPasswordLabel": "Пароль",
+  "authSignInButton": "Войти",
+  "authSignUpButton": "Зарегистрироваться",
+  "authNoAccountLink": "Нет аккаунта? Зарегистрируйтесь",
+  "authHaveAccountLink": "Уже есть аккаунт? Войдите",
+  "comingSoon": "Раздел в разработке",
+  "notFoundTitle": "Страница не найдена",
+  "notFoundBody": "Такой страницы нет или она была удалена.",
+  "notFoundGoHome": "На главную"
+}

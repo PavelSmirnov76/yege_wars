@@ -1,0 +1,16 @@
+# Строгий набор правил very_good_analysis + riverpod_lint (через custom_lint).
+# Цель — ноль замечаний `flutter analyze`.
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+  exclude:
+    - "**/*.g.dart"
+    - "lib/l10n/gen/**"
+
+linter:
+  rules:
+    # Учебный проект небольшой команды: документируем публичный API выборочно,
+    # а не принудительно для каждого члена.
+    public_member_api_docs: false

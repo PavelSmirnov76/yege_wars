@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.0
+          channel: stable
+          cache: true
+
+      - name: Установка зависимостей
+        run: flutter pub get
+
+      - name: Проверка форматирования (без генерённых файлов)
+        run: >
+          find lib test -name '*.dart'
+          -not -name '*.g.dart'
+          -not -path 'lib/l10n/gen/*'
+          -print0 |
+          xargs -0 dart format --output=none --set-exit-if-changed
+
+      # Кодоген (*.g.dart, lib/l10n/gen/) не коммитится в git,
+      # поэтому генерация обязательна до analyze.
+      - name: Генерация локализации
+        run: flutter gen-l10n
+
+      - name: Кодогенерация (build_runner)
+        run: dart run build_runner build
+
+      - name: Статический анализ
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      - name: Кастомные линты (riverpod_lint)
+        run: dart run custom_lint
+
+      - name: Тесты с покрытием
+        run: flutter test --coverage
+
+      - name: Сборка web-релиза
+        run: flutter build web --release
+
+      - name: Загрузка отчёта о покрытии
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
