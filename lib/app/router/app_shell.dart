@@ -32,6 +32,11 @@ class AppShell extends ConsumerWidget {
         label: l10n.navCatalog,
       ),
       AdaptiveDestination(
+        icon: Icons.menu_book_outlined,
+        selectedIcon: Icons.menu_book,
+        label: l10n.navReference,
+      ),
+      AdaptiveDestination(
         icon: Icons.person_outlined,
         selectedIcon: Icons.person,
         label: l10n.navProfile,

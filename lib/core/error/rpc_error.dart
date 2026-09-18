@@ -46,4 +46,7 @@ abstract final class RpcErrorCodes {
 
   /// Логин уже занят.
   static const String usernameTaken = 'username_taken';
+
+  /// Действие доступно только администратору.
+  static const String forbidden = 'forbidden';
 }

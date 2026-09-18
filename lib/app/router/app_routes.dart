@@ -6,6 +6,18 @@ abstract final class AppRoutes {
   /// Имя маршрута каталога.
   static const String catalogName = 'catalog';
 
+  /// Путь справочника.
+  static const String reference = '/reference';
+
+  /// Имя маршрута справочника.
+  static const String referenceName = 'reference';
+
+  /// Имя маршрута статьи справочника.
+  static const String referenceArticleName = 'referenceArticle';
+
+  /// Имя параметра пути с идентификатором статьи или задачи.
+  static const String slugParam = 'slug';
+
   /// Путь профиля.
   static const String profile = '/profile';
 

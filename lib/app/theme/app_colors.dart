@@ -56,4 +56,19 @@ abstract final class AppColors {
 
   /// Фон блоков кода и редактора — темнее [background].
   static const Color codeBackground = Color(0xFF0B0D11);
+
+  /// Ключевое слово в подсвеченном коде.
+  static const Color codeKeyword = Color(0xFFFF7A59);
+
+  /// Встроенная функция или тип в подсвеченном коде.
+  static const Color codeBuiltin = Color(0xFF7FB2FF);
+
+  /// Строковый литерал в подсвеченном коде.
+  static const Color codeString = Color(0xFF6FD08C);
+
+  /// Числовой литерал в подсвеченном коде.
+  static const Color codeNumber = Color(0xFFE2B86B);
+
+  /// Комментарий в подсвеченном коде.
+  static const Color codeComment = Color(0xFF6B7484);
 }

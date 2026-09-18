@@ -11,6 +11,8 @@ import 'package:yege_wars/features/auth/presentation/controllers/auth_controller
 import 'package:yege_wars/features/auth/presentation/screens/login_screen.dart';
 import 'package:yege_wars/features/auth/presentation/screens/register_screen.dart';
 import 'package:yege_wars/features/profile/presentation/screens/profile_screen.dart';
+import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
+import 'package:yege_wars/features/reference/presentation/screens/reference_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 
 part 'app_router.g.dart';
@@ -57,6 +59,24 @@ GoRouter appRouter(Ref ref) {
                 path: AppRoutes.catalog,
                 name: AppRoutes.catalogName,
                 builder: (context, state) => const CatalogScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.reference,
+                name: AppRoutes.referenceName,
+                builder: (context, state) => const ReferenceScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':${AppRoutes.slugParam}',
+                    name: AppRoutes.referenceArticleName,
+                    builder: (context, state) => ArticleScreen(
+                      slug: state.pathParameters[AppRoutes.slugParam]!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

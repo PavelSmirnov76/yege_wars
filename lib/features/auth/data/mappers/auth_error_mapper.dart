@@ -1,7 +1,7 @@
-import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/rpc_error.dart';
+import 'package:yege_wars/core/network/supabase_error_mapper.dart';
 import 'package:yege_wars/features/auth/domain/auth_rules.dart';
 
 /// Операция, в которой возникла ошибка.
@@ -40,66 +40,29 @@ abstract final class AuthErrorMapper {
   /// Внутренняя ошибка сервера: сюда же попадают ошибки триггеров БД.
   static const String _codeUnexpectedFailure = 'unexpected_failure';
 
-  /// Просроченный или недействительный JWT (PostgREST).
-  static const String _codeJwtExpired = 'PGRST301';
-
   /// Переводит [error] в [Failure]; [operation] уточняет формулировку.
   static Failure map(
     Object error, {
     AuthOperation operation = AuthOperation.other,
   }) {
-    // Ошибки функций и триггеров БД: `[код] Русский текст`.
-    final rpcError = RpcError.tryParse(_messageOf(error));
+    // Ошибки функций и триггеров базы: `[код] Русский текст`.
+    final rpcError = RpcError.tryParse(SupabaseErrorMapper.messageOf(error));
     if (rpcError != null) {
-      return _fromRpcError(rpcError, error);
+      return SupabaseErrorMapper.fromRpcError(rpcError, error);
     }
-
-    return switch (error) {
-      AuthRetryableFetchException() => NetworkFailure(cause: error),
-      http.ClientException() => NetworkFailure(cause: error),
-      AuthSessionMissingException() => AuthFailure(
-        message: 'Сессия истекла. Войдите заново.',
-        cause: error,
-      ),
-      AuthException() => _fromAuthException(error, operation),
-      PostgrestException(code: _codeJwtExpired) => AuthFailure(
-        message: 'Сессия истекла. Войдите заново.',
-        cause: error,
-      ),
-      PostgrestException() => DatabaseFailure(cause: error),
-      FormatException() => DatabaseFailure(
-        message: 'Сервер вернул неожиданные данные профиля.',
-        cause: error,
-      ),
-      _ => UnexpectedFailure(cause: error),
-    };
+    // Сессия и сеть разбираются общим маппером, коды GoTrue — здесь.
+    if (error is AuthException && error is! AuthSessionMissingException) {
+      final failure = _fromAuthException(error, operation);
+      if (failure != null) {
+        return failure;
+      }
+    }
+    return SupabaseErrorMapper.map(error);
   }
 
-  /// Текст исключения, в котором может прятаться формат `[код] Текст`.
-  static String? _messageOf(Object error) => switch (error) {
-    AuthException(:final message) => message,
-    PostgrestException(:final message) => message,
-    _ => null,
-  };
-
-  /// Ошибка функции или триггера БД.
-  static Failure _fromRpcError(RpcError rpcError, Object cause) =>
-      switch (rpcError.code) {
-        RpcErrorCodes.registrationClosed => AuthFailure(
-          message: rpcError.message,
-          cause: cause,
-        ),
-        RpcErrorCodes.invalidUsername ||
-        RpcErrorCodes.usernameTaken => ValidationFailure(
-          message: rpcError.message,
-          cause: cause,
-        ),
-        // Текст БД уже на русском и готов к показу.
-        _ => DatabaseFailure(message: rpcError.message, cause: cause),
-      };
-
-  /// Ошибка Supabase Auth по коду ответа.
-  static Failure _fromAuthException(
+  /// Ошибка Supabase Auth по коду ответа; `null` — код неизвестен,
+  /// разбирается общим маппером.
+  static Failure? _fromAuthException(
     AuthException error,
     AuthOperation operation,
   ) => switch (error.code) {
@@ -134,6 +97,6 @@ abstract final class AuthErrorMapper {
             'или регистрация закрыта.',
         cause: error,
       ),
-    _ => UnexpectedFailure(cause: error),
+    _ => null,
   };
 }

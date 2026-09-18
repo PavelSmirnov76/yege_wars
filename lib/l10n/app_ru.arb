@@ -4,6 +4,7 @@
   "navCatalog": "Каталог",
   "navProfile": "Профиль",
   "navAdmin": "Админка",
+  "navReference": "Справочник",
   "authLoginTitle": "Вход",
   "authRegisterTitle": "Регистрация",
   "authUsernameLabel": "Логин",
@@ -26,5 +27,31 @@
   "comingSoon": "Раздел в разработке",
   "notFoundTitle": "Страница не найдена",
   "notFoundBody": "Такой страницы нет или она была удалена.",
-  "notFoundGoHome": "На главную"
+  "notFoundGoHome": "На главную",
+  "referenceSearchHint": "Поиск по названию",
+  "referenceEmpty": "В справочнике пока нет статей",
+  "referenceEmptyFiltered": "По этим условиям ничего не нашлось",
+  "referenceResetFilters": "Сбросить фильтры",
+  "referenceLevelLabel": "Уровень",
+  "referenceLevelBasic": "Базовый",
+  "referenceLevelMedium": "Средний",
+  "referenceLevelAdvanced": "Продвинутый",
+  "referenceReadingMinutes": "{minutes} мин",
+  "@referenceReadingMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceEgeNumber": "№ {number}",
+  "@referenceEgeNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceArticleNotFound": "Статья не найдена",
+  "commonRetry": "Повторить"
 }
