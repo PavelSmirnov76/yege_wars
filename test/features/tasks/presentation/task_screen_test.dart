@@ -120,7 +120,7 @@ void main() {
     });
 
     test('длинная строка обрезается с многоточием', () {
-      final preview = filePreview('A' * 25000, maxLineLength: 10000);
+      final preview = filePreview('A' * 25000);
 
       expect(preview.length, 10001);
       expect(preview.endsWith('…'), isTrue);
