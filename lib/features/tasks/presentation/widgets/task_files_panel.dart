@@ -22,23 +22,38 @@ String fileSizeLabel(int bytes, AppLocalizations l10n) {
   );
 }
 
+/// Предпросмотр файла: первые [maxLines] строк, каждая не длиннее
+/// [maxLineLength] символов.
+///
+/// Обрезать нужно и по строкам, и по их длине: в задании 24 весь файл —
+/// одна строка на миллион символов, и её отрисовка вешает страницу.
+String filePreview(
+  String content, {
+  int maxLines = 10,
+  int maxLineLength = 10000,
+}) {
+  const ellipsis = '…';
+  final lines = content.split('\n');
+  final shown = [
+    for (final line in lines.take(maxLines))
+      line.length > maxLineLength
+          ? '${line.substring(0, maxLineLength)}$ellipsis'
+          : line,
+    if (lines.length > maxLines) ellipsis,
+  ];
+  return shown.join('\n');
+}
+
 /// Файлы данных задачи: размер, первые строки и копирование.
 ///
 /// Файл открывается программой ученика по имени, поэтому имя показывается
-/// как есть. Скачивание файла появится вместе с редактором.
+/// как есть.
 class TaskFilesPanel extends StatelessWidget {
   /// Создаёт панель для файлов [files].
   const TaskFilesPanel({required this.files, super.key});
 
-  /// Сколько строк показывать в предпросмотре.
-  static const int _previewLines = 5;
-
   /// Файлы задачи.
   final List<TaskFile> files;
-
-  /// Первые строки файла.
-  static String previewOf(String content) =>
-      content.split('\n').take(_previewLines).join('\n');
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +102,7 @@ class TaskFilesPanel extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      previewOf(file.content),
+                      filePreview(file.content),
                       style: AppTypography.code(),
                     ),
                   ),

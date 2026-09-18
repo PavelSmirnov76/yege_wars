@@ -114,6 +114,36 @@ void main() {
     expect(find.text(l10n.commonRetry), findsOneWidget);
   });
 
+  group('filePreview', () {
+    test('короткий файл показывается целиком', () {
+      expect(filePreview('первая\nвторая'), 'первая\nвторая');
+    });
+
+    test('длинная строка обрезается с многоточием', () {
+      final preview = filePreview('A' * 25000, maxLineLength: 10000);
+
+      expect(preview.length, 10001);
+      expect(preview.endsWith('…'), isTrue);
+    });
+
+    test('лишние строки заменяются многоточием', () {
+      final preview = filePreview(
+        List.generate(40, (index) => 'строка $index').join('\n'),
+      );
+
+      expect(preview.split('\n').length, 11);
+      expect(preview.split('\n').last, '…');
+      expect(preview, contains('строка 9'));
+      expect(preview, isNot(contains('строка 10')));
+    });
+
+    test('файл задания в одну строку не тянет за собой мегабайт', () {
+      final preview = filePreview('ABC' * 400000);
+
+      expect(preview.length, lessThan(10100));
+    });
+  });
+
   group('fileSizeLabel', () {
     test('маленький файл — в байтах', () {
       expect(fileSizeLabel(512, l10n), l10n.unitBytes(512));
