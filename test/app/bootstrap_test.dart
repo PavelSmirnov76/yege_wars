@@ -1,22 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/bootstrap.dart';
 import 'package:yege_wars/app/not_configured_app.dart';
+import 'package:yege_wars/core/config/env.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
 void main() {
   final l10n = AppLocalizationsRu();
 
-  test(
-    'без SUPABASE_URL и ключа bootstrap возвращает понятную ошибку',
-    () async {
-      // Тесты запускаются без --dart-define, поэтому окружение не задано.
-      final result = await bootstrap();
+  test('без адреса и ключа bootstrap возвращает понятную ошибку', () async {
+    // Пустые значения имитируют сборку с --dart-define=SUPABASE_URL=.
+    final result = await bootstrap(url: '', anonKey: '');
 
-      expect(result.failureOrNull, isA<ValidationFailure>());
-      expect(result.failureOrNull?.message, contains('SUPABASE_URL'));
-    },
-  );
+    expect(result.failureOrNull, isA<ValidationFailure>());
+    expect(result.failureOrNull?.message, contains('SUPABASE_URL'));
+  });
+
+  test('по умолчанию адрес и ключ проекта заданы в коде', () {
+    expect(Env.isConfigured, isTrue);
+    expect(Env.supabaseUrl, startsWith('https://'));
+    expect(Env.supabaseAnonKey, isNotEmpty);
+  });
 
   testWidgets('заглушка объясняет, чего не хватает', (tester) async {
     await tester.pumpWidget(const NotConfiguredApp());
