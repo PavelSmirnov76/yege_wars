@@ -8,6 +8,15 @@ abstract final class SupabaseTables {
 
   /// Связь «задача — статья справочника».
   static const String taskReferences = 'task_references';
+
+  /// Опубликованные задачи без эталона и разбора — то, что видит ученик.
+  static const String tasksPublic = 'tasks_public';
+
+  /// Файлы данных задач.
+  static const String taskFiles = 'task_files';
+
+  /// Попытки решения.
+  static const String submissions = 'submissions';
 }
 
 /// Колонки таблицы [SupabaseTables.profiles].
@@ -49,8 +58,98 @@ abstract final class ArticleColumns {
   static const String readingMinutes = 'reading_minutes';
 }
 
+/// Колонки представления [SupabaseTables.tasksPublic].
+abstract final class TaskColumns {
+  /// Идентификатор задачи.
+  static const String id = 'id';
+
+  /// Человекочитаемый идентификатор.
+  static const String slug = 'slug';
+
+  /// Номер задания ЕГЭ.
+  static const String egeNumber = 'ege_number';
+
+  /// Название.
+  static const String title = 'title';
+
+  /// Условие в markdown.
+  static const String statementMd = 'statement_md';
+
+  /// Сложность (1–3).
+  static const String difficulty = 'difficulty';
+
+  /// Формат ответа.
+  static const String answerFormat = 'answer_format';
+
+  /// Теги.
+  static const String tags = 'tags';
+
+  /// Источник задачи.
+  static const String source = 'source';
+}
+
+/// Колонки таблицы [SupabaseTables.taskFiles].
+abstract final class TaskFileColumns {
+  /// Задача, которой принадлежит файл.
+  static const String taskId = 'task_id';
+
+  /// Имя файла.
+  static const String filename = 'filename';
+
+  /// Содержимое.
+  static const String content = 'content';
+
+  /// Размер в байтах.
+  static const String sizeBytes = 'size_bytes';
+
+  /// Порядок показа.
+  static const String sortOrder = 'sort_order';
+}
+
+/// Колонки таблицы [SupabaseTables.taskReferences].
+abstract final class TaskReferenceColumns {
+  /// Задача.
+  static const String taskId = 'task_id';
+
+  /// Значимость статьи: primary или related.
+  static const String relevance = 'relevance';
+
+  /// Порядок показа.
+  static const String sortOrder = 'sort_order';
+}
+
+/// Колонки таблицы [SupabaseTables.submissions].
+abstract final class SubmissionColumns {
+  /// Автор попытки.
+  static const String userId = 'user_id';
+
+  /// Задача.
+  static const String taskId = 'task_id';
+
+  /// Верна ли попытка.
+  static const String isCorrect = 'is_correct';
+}
+
+/// Поля результата функции `get_task_stats`.
+abstract final class TaskStatsColumns {
+  /// Задача.
+  static const String taskId = 'task_id';
+
+  /// Сколько учеников пробовали.
+  static const String attemptedStudents = 'attempted_students';
+
+  /// Сколько решили.
+  static const String solvedStudents = 'solved_students';
+
+  /// Доля решивших, проценты.
+  static const String solvedPercent = 'solved_percent';
+}
+
 /// Имена RPC-функций Supabase.
 abstract final class SupabaseRpc {
   /// Открыта ли регистрация (доступна и до входа).
   static const String isRegistrationOpen = 'is_registration_open';
+
+  /// Статистика решений по опубликованным задачам.
+  static const String getTaskStats = 'get_task_stats';
 }

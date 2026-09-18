@@ -53,5 +53,59 @@
     }
   },
   "referenceArticleNotFound": "Статья не найдена",
-  "commonRetry": "Повторить"
+  "commonRetry": "Повторить",
+  "catalogSearchHint": "Поиск по названию",
+  "catalogEmpty": "Задач пока нет",
+  "catalogEmptyFiltered": "По этим условиям задач нет",
+  "catalogResetFilters": "Сбросить фильтры",
+  "catalogEgeGroup": "Задание {number}",
+  "@catalogEgeGroup": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogSolvedPercent": "Решили {percent}%",
+  "@catalogSolvedPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogNoAttempts": "Ещё никто не решал",
+  "difficultyEasy": "Простая",
+  "difficultyMedium": "Средняя",
+  "difficultyHard": "Сложная",
+  "progressSolved": "Решено",
+  "progressAttempted": "Есть попытки",
+  "progressNotStarted": "Не начата",
+  "taskStatementTitle": "Условие",
+  "taskFilesTitle": "Файлы",
+  "taskHelpTitle": "Справка",
+  "taskHelpEmpty": "К этой задаче пока нет статей справочника",
+  "taskHelpHint": "Не знаешь, с чего начать? Загляни в справку",
+  "taskFilesEmpty": "У задачи нет файлов с данными",
+  "taskFileCopy": "Копировать",
+  "taskFileCopied": "Файл скопирован в буфер обмена",
+  "taskFilePreview": "Первые строки",
+  "taskSourceLabel": "Источник",
+  "taskEditorSoon": "Редактор кода, запуск и отправка ответа появятся на следующем этапе",
+  "unitKilobytes": "{value} КБ",
+  "@unitKilobytes": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "unitBytes": "{value} Б",
+  "@unitBytes": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

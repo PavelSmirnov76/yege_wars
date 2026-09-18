@@ -6,6 +6,9 @@ abstract final class AppRoutes {
   /// Имя маршрута каталога.
   static const String catalogName = 'catalog';
 
+  /// Имя маршрута страницы задачи.
+  static const String taskName = 'task';
+
   /// Путь справочника.
   static const String reference = '/reference';
 

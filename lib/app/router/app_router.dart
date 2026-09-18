@@ -14,6 +14,7 @@ import 'package:yege_wars/features/profile/presentation/screens/profile_screen.d
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/features/reference/presentation/screens/reference_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
+import 'package:yege_wars/features/tasks/presentation/screens/task_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -59,6 +60,15 @@ GoRouter appRouter(Ref ref) {
                 path: AppRoutes.catalog,
                 name: AppRoutes.catalogName,
                 builder: (context, state) => const CatalogScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'task/:${AppRoutes.slugParam}',
+                    name: AppRoutes.taskName,
+                    builder: (context, state) => TaskScreen(
+                      slug: state.pathParameters[AppRoutes.slugParam]!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
