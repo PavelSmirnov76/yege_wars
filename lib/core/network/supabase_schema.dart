@@ -120,14 +120,29 @@ abstract final class TaskReferenceColumns {
 
 /// Колонки таблицы [SupabaseTables.submissions].
 abstract final class SubmissionColumns {
+  /// Идентификатор попытки.
+  static const String id = 'id';
+
   /// Автор попытки.
   static const String userId = 'user_id';
 
   /// Задача.
   static const String taskId = 'task_id';
 
+  /// Отправленный ответ.
+  static const String answer = 'answer';
+
+  /// Код решения.
+  static const String code = 'code';
+
   /// Верна ли попытка.
   static const String isCorrect = 'is_correct';
+
+  /// Опубликовано ли решение для других решивших.
+  static const String isPublished = 'is_published';
+
+  /// Когда отправлена.
+  static const String createdAt = 'created_at';
 }
 
 /// Поля результата функции `get_task_stats`.
@@ -152,4 +167,10 @@ abstract final class SupabaseRpc {
 
   /// Статистика решений по опубликованным задачам.
   static const String getTaskStats = 'get_task_stats';
+
+  /// Отправка ответа на проверку.
+  static const String submitSolution = 'submit_solution';
+
+  /// Публикация своего верного решения.
+  static const String setSolutionPublished = 'set_solution_published';
 }

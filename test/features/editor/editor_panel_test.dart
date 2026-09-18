@@ -47,7 +47,12 @@ void main() {
     );
     containerOf(tester).read(appRouterProvider).go('/task/${testTask24.slug}');
     await tester.pumpAndSettle();
-    await tester.tap(find.text(l10n.editorTitle));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(TabBar),
+        matching: find.text(l10n.editorTitle),
+      ),
+    );
     await tester.pumpAndSettle();
   }
 

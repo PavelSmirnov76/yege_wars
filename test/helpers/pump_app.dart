@@ -5,11 +5,13 @@ import 'package:yege_wars/core/python_runtime/python_runtime_provider.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/editor/editor_providers.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
+import 'package:yege_wars/features/submissions/submissions_providers.dart';
 import 'package:yege_wars/features/tasks/tasks_providers.dart';
 
 import 'fake_auth_repository.dart';
 import 'fake_python_runtime.dart';
 import 'fake_reference_repository.dart';
+import 'fake_submissions_repository.dart';
 import 'fake_tasks_repository.dart';
 
 /// Собирает приложение с подменённым репозиторием авторизации.
@@ -27,6 +29,7 @@ Future<void> pumpApp(
   FakeTasksRepository? tasks,
   FakePythonRuntime? runtime,
   FakeDraftStorage? drafts,
+  FakeSubmissionsRepository? submissions,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -42,6 +45,9 @@ Future<void> pumpApp(
           runtime ?? FakePythonRuntime(),
         ),
         draftStorageProvider.overrideWithValue(drafts ?? FakeDraftStorage()),
+        submissionsRepositoryProvider.overrideWithValue(
+          submissions ?? FakeSubmissionsRepository(),
+        ),
       ],
       child: const YegeWarsApp(),
     ),

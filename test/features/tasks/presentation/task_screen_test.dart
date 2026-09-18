@@ -24,6 +24,19 @@ void main() {
 
   tearDown(() => auth.dispose());
 
+  /// Переключает вкладку, доскроллив до неё: вкладок больше, чем влезает.
+  Future<void> openTab(WidgetTester tester, String title) async {
+    await tester.dragUntilVisible(
+      find.descendant(of: find.byType(TabBar), matching: find.text(title)),
+      find.byType(TabBar),
+      const Offset(-120, 0),
+    );
+    await tester.tap(
+      find.descendant(of: find.byType(TabBar), matching: find.text(title)),
+    );
+    await tester.pumpAndSettle();
+  }
+
   /// Открывает страницу задачи на узком экране (вкладки).
   Future<void> openTask(WidgetTester tester, {Size? surface}) async {
     if (surface != null) {
@@ -60,13 +73,11 @@ void main() {
 
     expect(find.byType(TabBar), findsOneWidget);
 
-    await tester.tap(find.text(l10n.taskFilesTitle));
-    await tester.pumpAndSettle();
+    await openTab(tester, l10n.taskFilesTitle);
     expect(find.text('24.txt'), findsOneWidget);
     expect(find.byType(TaskFilesPanel), findsOneWidget);
 
-    await tester.tap(find.text(l10n.taskHelpTitle).first);
-    await tester.pumpAndSettle();
+    await openTab(tester, l10n.taskHelpTitle);
     expect(find.text('Проход по строке окном'), findsOneWidget);
   });
 
@@ -75,8 +86,7 @@ void main() {
   ) async {
     await openTask(tester, surface: const Size(390, 800));
 
-    await tester.tap(find.text(l10n.taskFilesTitle));
-    await tester.pumpAndSettle();
+    await openTab(tester, l10n.taskFilesTitle);
     await tester.tap(find.text('24.txt'));
     await tester.pumpAndSettle();
 
@@ -87,8 +97,7 @@ void main() {
   testWidgets('из справки к задаче можно перейти в статью', (tester) async {
     await openTask(tester, surface: const Size(390, 800));
 
-    await tester.tap(find.text(l10n.taskHelpTitle).first);
-    await tester.pumpAndSettle();
+    await openTab(tester, l10n.taskHelpTitle);
     await tester.tap(find.widgetWithText(FilledButton, l10n.taskHelpTitle));
     await tester.pumpAndSettle();
 

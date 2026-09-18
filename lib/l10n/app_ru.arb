@@ -130,5 +130,33 @@
   },
   "editorCodePlaceholder": "# Твоё решение на Python",
   "editorClearConsole": "Очистить",
-  "taskFileDownload": "Скачать"
+  "taskFileDownload": "Скачать",
+  "submitAnswerLabel": "Ответ",
+  "submitAnswerHint": "То, что нужно записать в бланк",
+  "submitButton": "Отправить ответ",
+  "submitSending": "Отправляю…",
+  "submitTakeFromOutput": "Взять из вывода",
+  "submitCorrect": "Верно!",
+  "submitWrong": "Неверно. Попробуй ещё раз",
+  "submitSolvedTitle": "Задача решена!",
+  "submitPublish": "Опубликовать решение",
+  "submitNotNow": "Не сейчас",
+  "submitPublishedHint": "Опубликованное решение увидят те, кто решил задачу",
+  "attemptsTitle": "Мои попытки",
+  "attemptsEmpty": "Попыток пока не было",
+  "attemptPublishedSwitch": "Опубликовано",
+  "solutionsTitle": "Решения",
+  "solutionsLocked": "Решения других откроются после твоего верного ответа",
+  "solutionsEmpty": "Пока никто не опубликовал своё решение",
+  "solutionAuthor": "{author}, {date}",
+  "@solutionAuthor": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -10,6 +10,7 @@ import 'package:yege_wars/features/editor/presentation/controllers/run_controlle
 import 'package:yege_wars/features/editor/presentation/widgets/code_editor.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/console_view.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/python_editing_controller.dart';
+import 'package:yege_wars/features/submissions/presentation/widgets/submit_panel.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
 /// Панель решения задачи: редактор, ввод, запуск и консоль.
@@ -165,6 +166,11 @@ class _EditorPanelState extends ConsumerState<EditorPanel> {
         ),
         const SizedBox(height: AppSpacing.sm),
         ConsoleView(state: runState),
+        const Divider(height: AppSpacing.xxl),
+        SubmitPanel(
+          task: widget.task,
+          codeOf: () => _codeController.text,
+        ),
       ],
     );
   }

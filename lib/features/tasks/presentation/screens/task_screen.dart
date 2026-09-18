@@ -10,6 +10,8 @@ import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/editor_panel.dart';
 import 'package:yege_wars/features/reference/presentation/controllers/reference_controllers.dart';
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
+import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
+import 'package:yege_wars/features/submissions/presentation/widgets/solutions_list.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/presentation/controllers/catalog_controllers.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/difficulty_badge.dart';
@@ -99,7 +101,7 @@ class _TaskTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Column(
         children: [
           TabBar(
@@ -108,6 +110,7 @@ class _TaskTabs extends StatelessWidget {
             tabs: [
               Tab(text: l10n.taskStatementTitle),
               Tab(text: l10n.editorTitle),
+              Tab(text: l10n.solutionsTitle),
               Tab(text: l10n.taskHelpTitle),
               Tab(text: l10n.taskFilesTitle),
             ],
@@ -122,6 +125,10 @@ class _TaskTabs extends StatelessWidget {
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: EditorPanel(task: task),
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: _TaskSolutions(task: task),
                 ),
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -219,6 +226,10 @@ class _TaskSidePanels extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         EditorPanel(task: task),
         const SizedBox(height: AppSpacing.lg),
+        Text(l10n.solutionsTitle, style: theme.textTheme.titleMedium),
+        const SizedBox(height: AppSpacing.sm),
+        _TaskSolutions(task: task),
+        const SizedBox(height: AppSpacing.lg),
         Text(l10n.taskHelpTitle, style: theme.textTheme.titleMedium),
         const SizedBox(height: AppSpacing.sm),
         TaskHelpPanel(articles: task.articles),
@@ -228,5 +239,19 @@ class _TaskSidePanels extends StatelessWidget {
         TaskFilesPanel(files: task.files),
       ],
     );
+  }
+}
+
+/// Решения других учеников: открываются после своего верного ответа.
+class _TaskSolutions extends ConsumerWidget {
+  const _TaskSolutions({required this.task});
+
+  final TaskDetail task;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final attempts = ref.watch(myAttemptsProvider(task.brief.id)).value;
+    final isSolved = attempts?.any((attempt) => attempt.isCorrect) ?? false;
+    return SolutionsList(taskId: task.brief.id, isUnlocked: isSolved);
   }
 }
