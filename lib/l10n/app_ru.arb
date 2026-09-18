@@ -91,7 +91,6 @@
   "taskFileCopied": "Файл скопирован в буфер обмена",
   "taskFilePreview": "Первые строки",
   "taskSourceLabel": "Источник",
-  "taskEditorSoon": "Редактор кода, запуск и отправка ответа появятся на следующем этапе",
   "unitKilobytes": "{value} КБ",
   "@unitKilobytes": {
     "placeholders": {
@@ -107,5 +106,29 @@
         "type": "int"
       }
     }
-  }
+  },
+  "editorTitle": "Код",
+  "editorRun": "Запустить",
+  "editorStop": "Стоп",
+  "editorRunHint": "Ctrl+Enter — запустить",
+  "editorStdinTitle": "Ввод (stdin)",
+  "editorStdinHint": "Данные, которые прочитает input()",
+  "editorConsoleTitle": "Консоль",
+  "editorConsoleEmpty": "Здесь появится вывод программы",
+  "editorLoadingRuntime": "Загружаю Python — это разовая загрузка, потерпите",
+  "editorRunning": "Выполняется…",
+  "editorStopped": "Остановлено",
+  "editorTimedOut": "Не уложилось в отведённое время",
+  "editorFailed": "Программа завершилась ошибкой",
+  "editorFinished": "Готово за {seconds} с",
+  "@editorFinished": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "editorCodePlaceholder": "# Твоё решение на Python",
+  "editorClearConsole": "Очистить",
+  "taskFileDownload": "Скачать"
 }

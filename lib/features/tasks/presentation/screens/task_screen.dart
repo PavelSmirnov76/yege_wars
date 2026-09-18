@@ -7,6 +7,7 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/markdown/app_markdown.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/editor/presentation/widgets/editor_panel.dart';
 import 'package:yege_wars/features/reference/presentation/controllers/reference_controllers.dart';
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
@@ -98,12 +99,15 @@ class _TaskTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Column(
         children: [
           TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             tabs: [
               Tab(text: l10n.taskStatementTitle),
+              Tab(text: l10n.editorTitle),
               Tab(text: l10n.taskHelpTitle),
               Tab(text: l10n.taskFilesTitle),
             ],
@@ -114,6 +118,10 @@ class _TaskTabs extends StatelessWidget {
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: _TaskStatement(task: task),
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: EditorPanel(task: task),
                 ),
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -207,17 +215,9 @@ class _TaskSidePanels extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Text(
-              l10n.taskEditorSoon,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ),
-        ),
+        Text(l10n.editorTitle, style: theme.textTheme.titleMedium),
+        const SizedBox(height: AppSpacing.sm),
+        EditorPanel(task: task),
         const SizedBox(height: AppSpacing.lg),
         Text(l10n.taskHelpTitle, style: theme.textTheme.titleMedium),
         const SizedBox(height: AppSpacing.sm),

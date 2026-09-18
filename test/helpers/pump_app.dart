@@ -1,11 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/app.dart';
+import 'package:yege_wars/core/python_runtime/python_runtime_provider.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
+import 'package:yege_wars/features/editor/editor_providers.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
 import 'package:yege_wars/features/tasks/tasks_providers.dart';
 
 import 'fake_auth_repository.dart';
+import 'fake_python_runtime.dart';
 import 'fake_reference_repository.dart';
 import 'fake_tasks_repository.dart';
 
@@ -13,14 +16,17 @@ import 'fake_tasks_repository.dart';
 ///
 /// [initialUserId] эмитится в поток сессии сразу после первого кадра:
 /// `null` — пользователь не вошёл, иначе восстановленная сессия.
-/// [reference] и [tasks] подменяют репозитории справочника и каталога.
-/// Подменяются всегда: иначе экраны полезли бы в настоящий Supabase.
+/// [reference], [tasks], [runtime] и [drafts] подменяют репозитории,
+/// среду выполнения Python и хранилище черновиков. Подменяются всегда:
+/// иначе экраны полезли бы в настоящий Supabase и в браузерные API.
 Future<void> pumpApp(
   WidgetTester tester, {
   required FakeAuthRepository repository,
   String? initialUserId,
   FakeReferenceRepository? reference,
   FakeTasksRepository? tasks,
+  FakePythonRuntime? runtime,
+  FakeDraftStorage? drafts,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -32,6 +38,10 @@ Future<void> pumpApp(
         tasksRepositoryProvider.overrideWithValue(
           tasks ?? FakeTasksRepository(),
         ),
+        pythonRuntimeProvider.overrideWithValue(
+          runtime ?? FakePythonRuntime(),
+        ),
+        draftStorageProvider.overrideWithValue(drafts ?? FakeDraftStorage()),
       ],
       child: const YegeWarsApp(),
     ),

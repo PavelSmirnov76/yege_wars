@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
+import 'package:yege_wars/core/download/file_download.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_file.dart';
 import 'package:yege_wars/l10n/gen/app_localizations.dart';
@@ -94,10 +95,23 @@ class TaskFilesPanel extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: OutlinedButton.icon(
-                    onPressed: () => _copy(context, file),
-                    icon: const Icon(Icons.copy_all_outlined),
-                    label: Text(l10n.taskFileCopy),
+                  child: Wrap(
+                    spacing: AppSpacing.sm,
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: () => _copy(context, file),
+                        icon: const Icon(Icons.copy_all_outlined),
+                        label: Text(l10n.taskFileCopy),
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: () => downloadTextFile(
+                          filename: file.filename,
+                          content: file.content,
+                        ),
+                        icon: const Icon(Icons.download_outlined),
+                        label: Text(l10n.taskFileDownload),
+                      ),
+                    ],
                   ),
                 ),
               ],
