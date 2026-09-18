@@ -22,6 +22,11 @@ const PYODIDE_MIRRORS = [
   'https://unpkg.com/pyodide@' + PYODIDE_VERSION + '/',
 ];
 
+// Сколько символов вывода отдаём приложению. Ученик легко печатает файл
+// целиком (миллион символов), и тогда рисование такого текста вешает
+// интерфейс намертво — обрезаем на стороне воркера.
+const OUTPUT_LIMIT = 20000;
+
 /** Загрузка Pyodide начинается при первом запуске и переиспользуется. */
 let pyodidePromise = null;
 
@@ -109,6 +114,20 @@ function bindStreams(pyodide, stdin, stdout, stderr) {
   pyodide.setStderr({ batched: (text) => stderr.push(text) });
 }
 
+/** Склеивает вывод и обрезает его до разумного размера. */
+function joinOutput(parts) {
+  const text = parts.join('\n');
+  if (text.length <= OUTPUT_LIMIT) {
+    return text;
+  }
+  const hidden = text.length - OUTPUT_LIMIT;
+  return (
+    text.slice(0, OUTPUT_LIMIT) +
+    '\n\n… показаны первые ' + OUTPUT_LIMIT + ' символов, скрыто ' +
+    hidden + '. Печатай ответ, а не весь файл.'
+  );
+}
+
 self.onmessage = async (event) => {
   const message = event.data || {};
   if (message.type !== 'run') {
@@ -119,16 +138,19 @@ self.onmessage = async (event) => {
   const stderr = [];
   try {
     const pyodide = await ensurePyodide();
+    const startedAt = Date.now();
     writeFiles(pyodide, message.files);
+    log('файлы записаны за ' + (Date.now() - startedAt) + ' мс');
     bindStreams(pyodide, message.stdin, stdout, stderr);
 
     await pyodide.runPythonAsync(message.code || '');
+    log('программа отработала за ' + (Date.now() - startedAt) + ' мс');
 
     self.postMessage({
       id: message.id,
       type: 'result',
-      stdout: stdout.join('\n'),
-      stderr: stderr.join('\n'),
+      stdout: joinOutput(stdout),
+      stderr: joinOutput(stderr),
       failed: false,
     });
   } catch (error) {
@@ -138,8 +160,8 @@ self.onmessage = async (event) => {
     self.postMessage({
       id: message.id,
       type: 'result',
-      stdout: stdout.join('\n'),
-      stderr: [stderr.join('\n'), text].filter(Boolean).join('\n'),
+      stdout: joinOutput(stdout),
+      stderr: joinOutput([joinOutput(stderr), text].filter(Boolean)),
       failed: true,
     });
   }

@@ -65,10 +65,15 @@ final class PyodideRuntime implements PythonRuntime {
 
     try {
       _lastRequestId++;
+      final bytes = files.values.fold<int>(
+        0,
+        (total, content) => total + content.length,
+      );
       AppLogger.info(
         'Запуск программы: ${code.length} символов кода, '
-        'файлов ${files.length}',
+        'файлов ${files.length} на $bytes символов',
       );
+      final sending = Stopwatch()..start();
       _ensureWorker().postMessage(
         <String, Object?>{
           'id': _lastRequestId,
@@ -77,6 +82,9 @@ final class PyodideRuntime implements PythonRuntime {
           'stdin': stdin,
           'files': files,
         }.jsify(),
+      );
+      AppLogger.info(
+        'Задание отправлено воркеру за ${sending.elapsedMilliseconds} мс',
       );
     } on Object catch (error) {
       _pending = null;
@@ -162,6 +170,10 @@ final class PyodideRuntime implements PythonRuntime {
           _setState(PythonRuntimeState.ready);
         }
       case 'result':
+        AppLogger.info(
+          'Ответ воркера: вывод ${(data['stdout'] as String? ?? '').length} '
+          'символов, ошибки ${(data['stderr'] as String? ?? '').length}',
+        );
         _finish(
           RunResult(
             outcome: data['failed'] == true
