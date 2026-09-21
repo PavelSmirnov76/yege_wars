@@ -36,4 +36,12 @@ abstract final class Env {
   /// `true`, если заданы оба значения окружения.
   static bool get isConfigured =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
+
+  /// Начало адреса публичного файла в Supabase Storage.
+  ///
+  /// К нему дописывается путь вида `task-assets/fipi/images/…`: именно так
+  /// вложения записаны в условиях задач, чтобы разметка не зависела
+  /// от конкретного проекта Supabase.
+  static String get storagePublicBase =>
+      '$supabaseUrl/storage/v1/object/public/';
 }

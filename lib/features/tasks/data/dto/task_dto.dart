@@ -25,7 +25,7 @@ abstract final class TaskDto {
     return TaskBrief(
       id: id,
       slug: slug,
-      egeNumber: egeNumber is num ? egeNumber.toInt() : 0,
+      egeNumber: egeNumber is num ? egeNumber.toInt() : null,
       title: title,
       difficulty: TaskDifficulty.fromValue(
         (json[TaskColumns.difficulty] as num?)?.toInt(),

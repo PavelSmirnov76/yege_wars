@@ -5,6 +5,7 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_radius.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
+import 'package:yege_wars/core/config/env.dart';
 import 'package:yege_wars/core/markdown/code_block.dart';
 import 'package:yege_wars/core/markdown/wiki_link_syntax.dart';
 
@@ -59,6 +60,9 @@ class AppMarkdown extends StatelessWidget {
       ),
       data: data,
       selectable: selectable,
+      // Картинки условий записаны относительным путём внутри Storage,
+      // поэтому адрес проекта подставляется при отрисовке.
+      imageDirectory: Env.storagePublicBase,
       styleSheet: _styleSheet(context),
       extensionSet: md.ExtensionSet.gitHubFlavored,
       inlineSyntaxes: [WikiLinkSyntax((slug) => articleTitles[slug])],

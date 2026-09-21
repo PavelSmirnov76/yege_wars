@@ -14,6 +14,7 @@ import 'package:yege_wars/features/submissions/presentation/controllers/submissi
 import 'package:yege_wars/features/submissions/presentation/widgets/solutions_list.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/presentation/controllers/catalog_controllers.dart';
+import 'package:yege_wars/features/tasks/presentation/ege_group_label.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/difficulty_badge.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_files_panel.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_help_panel.dart';
@@ -168,7 +169,7 @@ class _TaskStatement extends ConsumerWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
-              l10n.catalogEgeGroup(task.brief.egeNumber),
+              egeGroupLabel(l10n, task.brief.egeNumber),
               style: theme.textTheme.labelLarge?.copyWith(
                 color: AppColors.textSecondary,
               ),

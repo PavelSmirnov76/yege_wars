@@ -20,8 +20,8 @@ final class TaskBrief {
   /// Человекочитаемый идентификатор.
   final String slug;
 
-  /// Номер задания ЕГЭ.
-  final int egeNumber;
+  /// Номер задания ЕГЭ; `null`, если задание к структуре КИМ не отнесено.
+  final int? egeNumber;
 
   /// Название задачи.
   final String title;

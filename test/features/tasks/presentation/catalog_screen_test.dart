@@ -45,6 +45,16 @@ void main() {
     expect(find.text(l10n.catalogEgeGroup(24)), findsOneWidget);
   });
 
+  testWidgets('задача без номера КИМ попадает в группу «Без номера»', (
+    tester,
+  ) async {
+    tasks.catalogResult = const Ok([testNoNumberItem]);
+    await openCatalog(tester);
+
+    expect(find.text(testTaskNoNumber.title), findsOneWidget);
+    expect(find.text(l10n.catalogEgeGroupNone), findsOneWidget);
+  });
+
   testWidgets('показывает статус и статистику', (tester) async {
     await openCatalog(tester);
 

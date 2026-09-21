@@ -1443,6 +1443,192 @@ end
 $$;
 
 -- =============================================================================
+-- (о) Темы кодификатора: связь с заданиями и справка через темы
+-- =============================================================================
+
+-- Подготовка: тема, статья по теме и две задачи — с темой и без темы.
+do $$
+declare
+  v_admin uuid;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  -- Раздел делает несколько записей подряд, поэтому лимит частоты снимаем.
+  update public.app_settings set value = '1000'::jsonb
+   where key = 'content_writes_per_minute';
+
+  insert into public.themes (code, title, section_code, section_title, level, sort_order)
+  values ('9.9', 'Тестовая тема', '9', 'Тестовый раздел', 'УУ', 1)
+  on conflict (code) do nothing;
+
+  perform tests.login(v_admin);
+
+  perform public.admin_upsert_article(jsonb_build_object(
+    'slug',         'kes-9-9',
+    'title',        'Статья тестовой темы',
+    'summary',      'Одна тема — одна статья.',
+    'content_md',   repeat('Содержимое статьи тестовой темы. ', 10),
+    'theme_code',   '9.9',
+    'is_published', true
+  ));
+
+  -- Задача банка: без номера, без ответа, происхождение fipi.
+  perform public.admin_upsert_task(jsonb_build_object(
+    'slug',          'fipi-test01',
+    'title',         'Задание банка без номера и ответа',
+    'statement_md',  'Условие достаточной длины для прохождения проверки минимума.',
+    'difficulty',    3,
+    'answer_format', 'string',
+    'origin',        'fipi',
+    'themes',        jsonb_build_array('9.9')
+  ));
+
+  -- Задача, которой тему не задали вовсе.
+  perform public.admin_upsert_task(jsonb_build_object(
+    'slug',          'fipi-test02',
+    'title',         'Задание без темы',
+    'statement_md',  'Условие достаточной длины для прохождения проверки минимума.',
+    'difficulty',    1,
+    'answer_format', 'single',
+    'origin',        'fipi'
+  ));
+
+  perform tests.logout();
+end
+$$;
+
+-- Проверки: отложенный триггер срабатывает на границе транзакции, поэтому
+-- результат смотрим уже следующей командой.
+do $$
+declare
+  v_admin uuid;
+  v_task  uuid;
+  v_cnt   bigint;
+  v_code  text;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  select t.id into v_task from public.tasks t where t.slug = 'fipi-test01';
+  select count(*) into v_cnt from public.task_themes where task_id = v_task;
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): тема задачи не сохранилась (%)', v_cnt;
+  end if;
+  raise notice 'OK: (о) admin_upsert_task сохраняет темы задачи';
+
+  if (select ege_number from public.tasks where id = v_task) is not null then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): задача без номера получила номер';
+  end if;
+  if (select origin from public.tasks where id = v_task) <> 'fipi' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): origin fipi не сохранился';
+  end if;
+  if exists (select 1 from public.task_answers where task_id = v_task) then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): у задачи без ответа появился ответ';
+  end if;
+  raise notice 'OK: (о) задача банка сохраняется без номера и без ответа';
+
+  select count(*) into v_cnt from public.task_articles where task_id = v_task;
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): справка по теме не выводится (%)', v_cnt;
+  end if;
+  raise notice 'OK: (о) task_articles отдаёт статью задачи по её теме';
+
+  -- Задача, которой тему не задали, получает служебную none.
+  select tt.theme_code into v_code
+    from public.task_themes tt
+    join public.tasks t on t.id = tt.task_id
+   where t.slug = 'fipi-test02';
+  if v_code is distinct from 'none' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): задача без темы не получила none (%)', v_code;
+  end if;
+  raise notice 'OK: (о) задача без темы получает служебную тему none';
+
+  -- Тема, которой нет в кодификаторе, не принимается.
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_upsert_task(jsonb_build_object(
+      'slug',          'fipi-test01',
+      'title',         'Задание банка без номера и ответа',
+      'statement_md',  'Условие достаточной длины для прохождения проверки минимума.',
+      'difficulty',    3,
+      'answer_format', 'string',
+      'origin',        'fipi',
+      'themes',        jsonb_build_array('42.42')
+    ));
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): принята тема вне кодификатора';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (о) тема вне кодификатора отклонена (%)', sqlerrm;
+  end;
+  perform tests.logout();
+end
+$$;
+
+-- Снятие последней темы возвращает служебную none.
+do $$
+declare
+  v_task uuid;
+begin
+  select id into v_task from public.tasks where slug = 'fipi-test01';
+  delete from public.task_themes where task_id = v_task;
+end
+$$;
+
+do $$
+declare
+  v_code text;
+begin
+  select tt.theme_code into v_code
+    from public.task_themes tt
+    join public.tasks t on t.id = tt.task_id
+   where t.slug = 'fipi-test01';
+  if v_code is distinct from 'none' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): после снятия тем задача осталась без темы (%)',
+      coalesce(v_code, 'нет строк');
+  end if;
+  raise notice 'OK: (о) последнюю тему снять нельзя — вместо неё встаёт none';
+
+  update public.app_settings set value = '60'::jsonb
+   where key = 'content_writes_per_minute';
+end
+$$;
+
+-- Что видно ученику
+do $$
+declare
+  v_alice uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  perform tests.login(v_alice);
+
+  select count(*) into v_cnt from public.themes;
+  if v_cnt = 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): кодификатор ученику не виден';
+  end if;
+  raise notice 'OK: (о) кодификатор тем виден ученику';
+
+  select count(*) into v_cnt
+    from public.task_themes tt
+    join public.tasks t on t.id = tt.task_id
+   where t.slug = 'fipi-test01';
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): ученику видны темы черновика (%)', v_cnt;
+  end if;
+  raise notice 'OK: (о) темы неопубликованной задачи ученику не видны';
+
+  begin
+    insert into public.task_themes (task_id, theme_code)
+    select t.id, '9.9' from public.tasks t where t.slug = 'ege24-demo-01';
+    raise exception 'ТЕСТ ПРОВАЛЕН (о): ученик записал тему напрямую';
+  exception when insufficient_privilege then
+    raise notice 'OK: (о) прямая запись в task_themes под учеником — permission denied';
+  end;
+
+  perform tests.logout();
+end
+$$;
+
+-- =============================================================================
 -- Итог
 -- =============================================================================
 do $$

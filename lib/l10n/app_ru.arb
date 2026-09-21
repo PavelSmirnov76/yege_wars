@@ -66,6 +66,10 @@
       }
     }
   },
+  "catalogEgeGroupNone": "Без номера",
+  "@catalogEgeGroupNone": {
+    "description": "Группа задач, которые не отнесены ни к одному номеру КИМ"
+  },
   "catalogSolvedPercent": "Решили {percent}%",
   "@catalogSolvedPercent": {
     "placeholders": {

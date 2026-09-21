@@ -31,6 +31,16 @@ const TaskBrief testTask17 = TaskBrief(
   difficulty: TaskDifficulty.easy,
 );
 
+/// Задача банка ФИПИ без номера КИМ.
+const TaskBrief testTaskNoNumber = TaskBrief(
+  id: 'task-none',
+  slug: 'fipi-48f84f',
+  egeNumber: null,
+  title: 'Задание банка без номера',
+  difficulty: TaskDifficulty.hard,
+  tags: ['3.13'],
+);
+
 /// Строка каталога: решённая задача 17.
 const CatalogItem testSolvedItem = CatalogItem(
   task: testTask17,
@@ -40,6 +50,9 @@ const CatalogItem testSolvedItem = CatalogItem(
 
 /// Строка каталога: нерешённая задача 24.
 const CatalogItem testFreshItem = CatalogItem(task: testTask24);
+
+/// Строка каталога: задача без номера КИМ.
+const CatalogItem testNoNumberItem = CatalogItem(task: testTaskNoNumber);
 
 /// Задача целиком с файлом и статьёй справочника.
 const TaskDetail testTaskDetail = TaskDetail(

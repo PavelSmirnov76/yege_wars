@@ -10,6 +10,7 @@ import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 import 'package:yege_wars/features/tasks/domain/entities/catalog_item.dart';
 import 'package:yege_wars/features/tasks/presentation/controllers/catalog_controllers.dart';
+import 'package:yege_wars/features/tasks/presentation/ege_group_label.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/catalog_filters_bar.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_card.dart';
 
@@ -145,7 +146,7 @@ class _CatalogList extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 child: Text(
-                  l10n.catalogEgeGroup(item.task.egeNumber),
+                  egeGroupLabel(l10n, item.task.egeNumber),
                   style: theme.textTheme.titleSmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
