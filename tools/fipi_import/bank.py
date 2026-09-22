@@ -13,6 +13,7 @@ import os
 import re
 
 from .html_to_md import html_to_markdown
+from .image_size import image_size
 
 # Бакет Supabase Storage, куда заливаются вложения банка.
 STORAGE_BUCKET = 'task-assets'
@@ -41,7 +42,17 @@ THEME_LEVELS = {'БУ': 1, 'БУ, УУ': 2, 'УУ': 3}
 EGE_NUMBER_SOURCE = 'fipi-spec-2026'
 
 # Служебная фраза банка, которая не может быть названием задачи.
-ATTACHMENT_NOTICE = 'Задание выполняется с использованием прилагаемых файлов'
+# Формулировки две: «прилагаемых файлов» и «прилагаемых к заданию файлов».
+ATTACHMENT_NOTICE_RE = re.compile(
+    r'выполняется\s+с\s+использованием\s+прилагаемых', re.IGNORECASE)
+
+# Значок интерфейса банка — картинка размером со строку текста: значок
+# вложения 49x43, кнопка «Открыть файл» 200x44. Самая мелкая иллюстрация
+# в выгрузке — 224x157, формула-картинка — 445x23, так что по ширине и
+# высоте они разделяются без натяжек. Числу повторов верить нельзя:
+# граф из 3488 байт приезжает в семь заданий, а значок — в одно.
+CHROME_IMAGE_WIDTH = 256
+CHROME_IMAGE_HEIGHT = 64
 
 MAX_TITLE_LENGTH = 80
 MAX_SUMMARY_LENGTH = 300
@@ -49,7 +60,17 @@ MAX_SUMMARY_LENGTH = 300
 # Сколько знаков читатель проходит за минуту — для оценки времени чтения.
 CHARS_PER_MINUTE = 1200
 
-_SENTENCE_END_RE = re.compile(r'(?<=[.!?])\s+')
+_SENTENCE_BREAK_RE = re.compile(r'[.!?]\s+')
+
+# Одна заглавная буква перед точкой — инициал («М.А. Иванов»), а не конец
+# предложения. Точка перед буквой допустима: инициалы идут цепочкой.
+_INITIAL_RE = re.compile(r'(?:^|[\s(.])[А-ЯЁA-Z]$')
+
+# Сокращения, после которых точка не заканчивает предложение.
+_ABBREVIATIONS = ('т.д', 'т.п', 'т.е', 'т.к', 'и.о', 'см', 'рис', 'табл',
+                  'стр', 'напр', 'др')
+_ABBREVIATION_RE = re.compile(
+    r'(?:^|[\s(])(?:%s)$' % '|'.join(_ABBREVIATIONS), re.IGNORECASE)
 _WHITESPACE_RE = re.compile(r'\s+')
 _MARKDOWN_MARKS_RE = re.compile(r'[*_`\\]')
 
@@ -120,12 +141,29 @@ def shorten(text, limit):
     return cut.rstrip(' ,;:-–—') + '…'
 
 
+def split_sentences(text):
+    """Предложения текста; точка после инициала концом не считается."""
+    sentences = []
+    start = 0
+    for match in _SENTENCE_BREAK_RE.finditer(text):
+        head = text[start:match.start() + 1]
+        head_text = text[:match.start()]
+        if _INITIAL_RE.search(head_text) or _ABBREVIATION_RE.search(head_text):
+            continue
+        if head.strip():
+            sentences.append(head.strip())
+        start = match.end()
+    tail = text[start:].strip()
+    if tail:
+        sentences.append(tail)
+    return sentences
+
+
 def make_title(condition_text):
     """Название задачи: первое предложение условия без служебной фразы."""
     text = _WHITESPACE_RE.sub(' ', condition_text or '').strip()
-    sentences = [s.strip() for s in _SENTENCE_END_RE.split(text) if s.strip()]
-    for sentence in sentences:
-        if ATTACHMENT_NOTICE.lower() in sentence.lower():
+    for sentence in split_sentences(text):
+        if ATTACHMENT_NOTICE_RE.search(sentence):
             continue
         return shorten(sentence, MAX_TITLE_LENGTH)
     return shorten(text, MAX_TITLE_LENGTH) if text else 'Задание банка ФИПИ'
@@ -186,6 +224,7 @@ class Bank:
             'missing_asset_files': [],
             'files_on_disk': 0,
             'assets_orphaned': 0,
+            'chrome_images': 0,
             'parents': 0,
             'duplicates': 0,
             'incomplete': 0,
@@ -255,9 +294,42 @@ class Bank:
                 return THEME_LEVELS[level]
         return 1
 
+    def _chrome_images(self):
+        """Вложения, которые в условие вставлять не надо.
+
+        Это оформление сайта банка: значок вложения и кнопка «Открыть
+        файл». В условии от них только шум, а в `task_files` они
+        остаются: там перечень того, что отдал банк, а не того, что
+        показывается ученику.
+        """
+        chrome = set()
+        for task in self.tasks:
+            for asset in task.get('assets') or []:
+                if asset.get('kind') != 'image':
+                    continue
+                path = asset['local_path']
+                if asset.get('role') == 'preview':
+                    chrome.add(path)
+                    continue
+                size = image_size(os.path.join(self.root, path))
+                if size is None:
+                    continue
+                width, height = size
+                if width <= CHROME_IMAGE_WIDTH and height <= CHROME_IMAGE_HEIGHT:
+                    chrome.add(path)
+        return chrome
+
     def _asset_url_factory(self):
-        """Адрес вложения в Storage — он же подставляется в условие."""
+        """Адрес вложения в Storage — он же подставляется в условие.
+
+        Пустая строка означает «в условие не вставлять».
+        """
+        chrome = self._chrome_images()
+        self.stats['chrome_images'] = len(chrome)
+
         def resolve(local_path):
+            if local_path in chrome:
+                return ''
             return '{}/{}'.format(STORAGE_BUCKET, storage_path(local_path))
         return resolve
 
