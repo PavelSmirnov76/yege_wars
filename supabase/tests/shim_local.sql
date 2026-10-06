@@ -72,6 +72,23 @@ grant usage on schema extensions to anon, authenticated, service_role;
 -- доступ к ней есть только у security definer функций.
 
 -- -----------------------------------------------------------------------------
+-- Права по умолчанию на новые объекты в public (как в Supabase)
+--
+-- Supabase выдаёт anon, authenticated и service_role все права на каждую
+-- таблицу, представление, последовательность и функцию, которые postgres
+-- создаёт в public. Снято с боевой базы запросом к pg_default_acl
+-- 2026-10-06; взяты только строки владельца postgres (под ним применяются
+-- миграции) и схемы public. Без этого лишние права, не снятые миграциями,
+-- локально не видны.
+-- -----------------------------------------------------------------------------
+alter default privileges for role postgres in schema public
+  grant all on tables to postgres, anon, authenticated, service_role;
+alter default privileges for role postgres in schema public
+  grant all on sequences to postgres, anon, authenticated, service_role;
+alter default privileges for role postgres in schema public
+  grant all on functions to postgres, anon, authenticated, service_role;
+
+-- -----------------------------------------------------------------------------
 -- Схема tests: хелперы для тестового сценария
 -- -----------------------------------------------------------------------------
 create schema if not exists tests;

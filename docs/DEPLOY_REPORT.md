@@ -323,3 +323,180 @@ HTTP 401
 * **Навигации по темам в интерфейсе нет** — сделана только серверная часть.
 * Права на запись у `task_articles` (расхождение 5) и тема для ручной задачи
   (расхождение 6) — отдельными миграциями.
+
+## Хвосты закрыты (2026-10-06)
+
+Задание — `docs/PROMPT_CLOSE_IMPORT.md`. Закрыты расхождения 5 и 6.
+Подробности по коду — `docs/STATE.md`, раздел «Закрытие импорта банка».
+
+Лишние права нашлись не только у `task_articles`. Шим локальных тестов теперь
+повторяет права по умолчанию, которые Supabase выдаёт на новые объекты
+в `public`. С ним стало видно, что `authenticated` сохранил запись в
+`profiles`, `app_settings` и `tasks_public`, TRUNCATE, REFERENCES, TRIGGER
+и MAINTAIN на всех таблицах, а обе роли — права на `audit_log_id_seq` и
+EXECUTE на служебные функции. По решению пользователя одна миграция снимает
+всё это и выдаёт заново задуманное.
+
+| Время (местное, UTC+3) | Шаг | Итог |
+|---|---|---|
+| 13:38:21 | `pg_dump --schema=public --no-owner` (с правами) | 6,96 МБ, `dump complete` |
+| 13:39:58 | миграция `20261006100000_revoke_excess_privileges.sql` | код 0 |
+| 13:40:05–13:40:08 | `import_repo_tasks.py --slug e24-longest-run` | обновлена, эталон сверен, `published` |
+
+Дамп до изменений: `~/backups/yege_wars/before-close-import-20261006-133821.sql`
+(вне репозитория). В отличие от дампа 2026-09-22, в нём есть права
+(117 `GRANT`, 29 `REVOKE`): миграция меняет именно их. Дамп проверен
+восстановлением во временный PostgreSQL 17: 2476 задач, 7071 связь,
+1572 файла, `e24-longest-run` опубликована. Ошибки только средовые:
+12 — нет роли `supabase_admin`, 1 — пустая локальная `auth.users`.
+
+Перед перезаливкой содержимое `e24-longest-run` в базе сверено с тем, что
+отправляет скрипт: заголовок, условие, номер, сложность, формат, теги,
+источник, эталон, ответ и файл совпали. Изменились только темы и отметка
+проверки эталона.
+
+### До
+
+```
++---------------+--------+--------+--------+--------+----------+------------+---------+
+|     role      | SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER |
++---------------+--------+--------+--------+--------+----------+------------+---------+
+| anon          | f      | f      | f      | f      | f        | f          | f       |
+| authenticated | t      | t      | t      | t      | t        | t          | t       |
++---------------+--------+--------+--------+--------+----------+------------+---------+
+(2 rows)
+
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+|                  id                  |  status   |     reference_verified_at     | themes | submissions |
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+| 52fa5be5-5dba-4d2b-b77c-a9c3bcf381c7 | published | 2026-09-18 08:11:43.483156+00 | {}     |           0 |
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+(1 row)
+```
+
+### После
+
+```
++---------------+--------+--------+--------+--------+----------+------------+---------+
+|     role      | SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER |
++---------------+--------+--------+--------+--------+----------+------------+---------+
+| anon          | f      | f      | f      | f      | f        | f          | f       |
+| authenticated | t      | f      | f      | f      | f        | f          | f       |
++---------------+--------+--------+--------+--------+----------+------------+---------+
+(2 rows)
+
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+|                  id                  |  status   |     reference_verified_at     | themes | submissions |
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+| 52fa5be5-5dba-4d2b-b77c-a9c3bcf381c7 | published | 2026-10-06 10:40:08.407364+00 | {3.9}  |           0 |
++--------------------------------------+-----------+-------------------------------+--------+-------------+
+(1 row)
+```
+
+`id` тот же, попыток было и осталось 0, тема `3.9`, статус `published`,
+отметка проверки эталона обновлена при сверке.
+
+### Полная матрица прав `anon` и `authenticated` на `public`
+
+52 строки до, 37 после; после — ровно то, что ждёт тест `rls_tests.sql` (п).
+Ушло и изменилось:
+
+```
+<  assert_content_admin() | authenticated | EXECUTE
+<  check_registration_open() | authenticated | EXECUTE
+<  ensure_task_has_theme(uuid) | anon | EXECUTE
+<  ensure_task_has_theme(uuid) | authenticated | EXECUTE
+<  handle_new_user() | authenticated | EXECUTE
+<  task_files_set_size() | anon | EXECUTE
+<  task_files_set_size() | authenticated | EXECUTE
+<  task_theme_guard_delete() | anon | EXECUTE
+<  task_theme_guard_delete() | authenticated | EXECUTE
+<  task_theme_guard_insert() | anon | EXECUTE
+<  task_theme_guard_insert() | authenticated | EXECUTE
+<  touch_updated_at() | anon | EXECUTE
+<  touch_updated_at() | authenticated | EXECUTE
+<  app_settings | authenticated | DELETE,INSERT,MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE
+<  audit_log | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  profiles | authenticated | DELETE,INSERT,MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE
+<  reference_articles | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  submissions | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  task_articles | authenticated | DELETE,INSERT,MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE
+<  task_files | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  task_references | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  task_themes | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  tasks_public | authenticated | DELETE,INSERT,MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE
+<  themes | authenticated | MAINTAIN,REFERENCES,SELECT,TRIGGER,TRUNCATE
+<  audit_log_id_seq | anon | SELECT,UPDATE,USAGE
+<  audit_log_id_seq | authenticated | SELECT,UPDATE,USAGE
+>  app_settings | authenticated | SELECT,UPDATE
+>  audit_log | authenticated | SELECT
+>  profiles | authenticated | SELECT
+>  reference_articles | authenticated | SELECT
+>  submissions | authenticated | SELECT
+>  task_articles | authenticated | SELECT
+>  task_files | authenticated | SELECT
+>  task_references | authenticated | SELECT
+>  task_themes | authenticated | SELECT
+>  tasks_public | authenticated | SELECT
+>  themes | authenticated | SELECT
+```
+
+### `import_checks.sql` на боевой
+
+Параметры те же, что вычисляет `run_import_check.sh`: `files_on_disk=1571`,
+`kim24=57`. Файл теперь сверяет с выгрузкой только банк, а инварианты считает
+по всей базе (колонка «Охват»), поэтому ручная задача его больше не сбивает.
+
+```
++----+-------------------------------------------------------------+----------+-----------+------------+------+
+| №  |                            Пункт                            |  Охват   | Ожидалось | Получилось | Итог |
++----+-------------------------------------------------------------+----------+-----------+------------+------+
+|  1 | Заданий с origin = fipi                                     | банк     | 2475      | 2475       | OK   |
+|  2 | Тем в кодификаторе (45 ФИПИ + none)                         | вся база | 46        | 46         | OK   |
+|  3 | Связей задание-тема всего (7056 из выгрузки + 15 служебных) | банк     | 7071      | 7071       | OK   |
+|  4 | Связей задание-тема из выгрузки (тема не none)              | банк     | 7056      | 7056       | OK   |
+|  5 | Заданий без единой темы                                     | вся база | 0         | 0          | OK   |
+|  6 | Тем ФИПИ без статьи справочника                             | вся база | 0         | 0          | OK   |
+|  7 | Статей справочника с темой                                  | банк     | 45        | 45         | OK   |
+|  8 | От темы к заданиям: тема 3.13                               | банк     | 178       | 178        | OK   |
+|  9 | Заданий с темой, но без справки в task_articles             | вся база | 0         | 0          | OK   |
+| 10 | Заданий с номером КИМ                                       | банк     | 2018      | 2018       | OK   |
+| 11 | Заданий без номера КИМ                                      | банк     | 457       | 457        | OK   |
+| 12 | Номеров вне диапазона 1-27                                  | вся база | 0         | 0          | OK   |
+| 13 | Заданий с источником номера fipi-spec-2026                  | банк     | 2018      | 2018       | OK   |
+| 14 | Фильтр по номеру: заданий с номером 24                      | банк     | 57        | 57         | OK   |
+| 15 | Заданий с parent_task_id                                    | банк     | 85        | 85         | OK   |
+| 16 | Битых ссылок parent_task_id                                 | вся база | 0         | 0          | OK   |
+| 17 | Заданий, помеченных дублем                                  | банк     | 2         | 2          | OK   |
+| 18 | Заданий с неполным условием                                 | банк     | 3         | 3          | OK   |
+| 19 | Вложений в task_files                                       | банк     | 1571      | 1571       | OK   |
+| 20 | Заданий с вложениями                                        | банк     | 668       | 668        | OK   |
+| 21 | Вложений без адреса в Storage                               | банк     | 0         | 0          | OK   |
+| 22 | Вложений из выгрузки, лежащих на диске                      | банк     | 1571      | 1571       | OK   |
+| 23 | Опубликованных задач                                        | банк     | 0         | 0          | OK   |
+| 24 | Импортированных задач с ответом                             | банк     | 0         | 0          | OK   |
+| 25 | Задач вне статуса draft среди импортированных               | банк     | 0         | 0          | OK   |
+| 26 | Опубликованных статей справочника                           | банк     | 45        | 45         | OK   |
++----+-------------------------------------------------------------+----------+-----------+------------+------+
+(26 rows)
+
+DO
+```
+
+### Живая проверка через REST
+
+```
+аноним  rpc is_registration_open: (200, 'true')
+аноним  task_articles:            (401, '{"code":"42501","details":null,"hint":null,"message":"permission denied for view task_articles"}')
+админ   GET /rest/v1/themes              HTTP 206 rows 0-0/46
+админ   GET /rest/v1/tasks_public        HTTP 200 rows 0-0/1
+админ   GET /rest/v1/task_articles       HTTP 206 rows 0-0/7057
+админ   GET /rest/v1/profiles            HTTP 200 rows 0-0/1
+админ   GET /rest/v1/app_settings        HTTP 206 rows 0-0/3
+```
+
+В `task_articles` теперь 7057 строк: 7056 у заданий банка и одна у
+`e24-longest-run` (тема 3.9 → статья `kes-3-9`). Попытка записи в
+`task_articles` (POST администратором) отбивается кодом `55000` «представление
+не обновляемо» — эта ошибка возникает раньше проверки прав, поэтому снятие
+прав проверяется матрицей, а не попыткой записи.

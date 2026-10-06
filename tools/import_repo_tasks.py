@@ -134,12 +134,27 @@ def run_reference_solution(slug: str, task_dir: Path) -> str:
     return result.stdout.strip()
 
 
+def parse_themes(slug: str, value: Any) -> List[str]:
+    """Проверяет темы задачи: непустой список кодов КЭС, первая — основная.
+
+    Без тем база молча поставила бы служебную `none`, и задача выпала бы из
+    навигации по темам. Поэтому пустой список — ошибка подготовки.
+    """
+    if not isinstance(value, list) or not value:
+        raise ImportError_(
+            f"{slug}: в task.yaml нет тем (themes) — нужен хотя бы один "
+            "код КЭС, иначе задача получит служебную тему none"
+        )
+    return [str(code) for code in value]
+
+
 def collect_task(task_dir: Path, answers: Dict[str, str]) -> Dict[str, Any]:
     """Собирает payload задачи и проверяет его локально."""
     meta = parse_task_yaml(task_dir / "task.yaml")
     slug = meta.get("slug")
     if not slug:
         raise ImportError_(f"{task_dir}: в task.yaml нет slug")
+    themes = parse_themes(slug, meta.get("themes"))
 
     statement = (task_dir / "statement.md").read_text(encoding="utf-8")
 
@@ -178,6 +193,7 @@ def collect_task(task_dir: Path, answers: Dict[str, str]) -> Dict[str, Any]:
             "origin": "human",
             "source": meta.get("source"),
             "tags": meta.get("tags", []),
+            "themes": themes,
             "files": files,
         },
         "output": output,

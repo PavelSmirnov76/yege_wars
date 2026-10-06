@@ -1629,6 +1629,178 @@ end
 $$;
 
 -- =============================================================================
+-- (п) Права клиентских ролей
+--
+-- Шим повторяет права по умолчанию Supabase, поэтому лишнее, что миграции
+-- забыли снять, здесь видно так же, как на боевой базе.
+-- =============================================================================
+
+-- task_articles: ученику только чтение, анониму ничего.
+do $$
+declare
+  v_priv  text;
+  v_extra text[] := '{}';
+begin
+  foreach v_priv in array array[
+    'SELECT', 'INSERT', 'UPDATE', 'DELETE',
+    'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN'
+  ] loop
+    if v_priv <> 'SELECT'
+       and has_table_privilege('authenticated', 'public.task_articles', v_priv) then
+      v_extra := v_extra || ('authenticated ' || v_priv);
+    end if;
+    if has_table_privilege('anon', 'public.task_articles', v_priv) then
+      v_extra := v_extra || ('anon ' || v_priv);
+    end if;
+  end loop;
+
+  if cardinality(v_extra) > 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (п): лишние права на task_articles: %',
+      array_to_string(v_extra, ', ');
+  end if;
+  if not has_table_privilege('authenticated', 'public.task_articles', 'SELECT') then
+    raise exception 'ТЕСТ ПРОВАЛЕН (п): ученик не может читать task_articles';
+  end if;
+  raise notice 'OK: (п) task_articles: ученику только select, анониму ничего';
+end
+$$;
+
+do $$
+begin
+  perform set_config('role', 'anon', false);
+  begin
+    perform 1 from public.task_articles limit 1;
+    raise exception 'ТЕСТ ПРОВАЛЕН (п): аноним прочитал task_articles';
+  exception when insufficient_privilege then
+    raise notice 'OK: (п) аноним читает task_articles — permission denied';
+  end;
+  perform set_config('role', 'none', false);
+end
+$$;
+
+-- Полная матрица прав anon и authenticated на объекты public. Новая таблица,
+-- представление или функция, у которой миграция не сняла выданное Supabase
+-- по умолчанию, этот тест не пройдёт.
+do $$
+declare
+  v_extra   text;
+  v_missing text;
+begin
+  create temp table privileges_actual on commit drop as
+  with roles(role) as (values ('anon'), ('authenticated'))
+  -- таблицы и представления
+  select c.relname::text as obj, r.role,
+         string_agg(p.priv, ',' order by p.priv) as privs
+    from pg_class c
+   cross join roles r
+   cross join unnest(array[
+     'SELECT', 'INSERT', 'UPDATE', 'DELETE',
+     'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN'
+   ]) as p(priv)
+   where c.relnamespace = 'public'::regnamespace
+     and c.relkind in ('r', 'v', 'm', 'p', 'f')
+     and has_table_privilege(r.role, c.oid, p.priv)
+   group by 1, 2
+  union all
+  -- последовательности
+  select c.relname::text, r.role,
+         string_agg(p.priv, ',' order by p.priv)
+    from pg_class c
+   cross join roles r
+   cross join unnest(array['SELECT', 'UPDATE', 'USAGE']) as p(priv)
+   where c.relnamespace = 'public'::regnamespace
+     and c.relkind = 'S'
+     and has_sequence_privilege(r.role, c.oid, p.priv)
+   group by 1, 2
+  union all
+  -- права на отдельные колонки (grant select (…) on …)
+  select c.relname::text, x.grantee::regrole::text,
+         format('%s(%s)', x.privilege_type,
+                string_agg(a.attname::text, ',' order by a.attname))
+    from pg_class c
+    join pg_attribute a on a.attrelid = c.oid and a.attacl is not null
+   cross join aclexplode(a.attacl) as x
+   where c.relnamespace = 'public'::regnamespace
+     and x.grantee in ('anon'::regrole, 'authenticated'::regrole)
+   group by c.relname, x.grantee, x.privilege_type
+  union all
+  -- функции
+  select format('%s(%s)', p.proname, oidvectortypes(p.proargtypes)), r.role,
+         'EXECUTE'
+    from pg_proc p
+   cross join roles r
+   where p.pronamespace = 'public'::regnamespace
+     and has_function_privilege(r.role, p.oid, 'EXECUTE');
+
+  create temp table privileges_expected (obj text, role text, privs text)
+    on commit drop;
+  insert into privileges_expected values
+    ('app_settings',       'authenticated', 'SELECT,UPDATE'),
+    ('audit_log',          'authenticated', 'SELECT'),
+    ('profiles',           'authenticated', 'SELECT'),
+    ('reference_articles', 'authenticated', 'SELECT'),
+    ('submissions',        'authenticated', 'SELECT'),
+    ('task_articles',      'authenticated', 'SELECT'),
+    ('task_files',         'authenticated', 'SELECT'),
+    ('task_references',    'authenticated', 'SELECT'),
+    ('task_themes',        'authenticated', 'SELECT'),
+    ('tasks_public',       'authenticated', 'SELECT'),
+    ('themes',             'authenticated', 'SELECT'),
+    ('tasks',              'authenticated',
+     'SELECT(answer_format,created_at,difficulty,ege_number,id,origin,slug,'
+     'source,statement_md,status,tags,title,updated_at)'),
+    ('is_registration_open()', 'anon',          'EXECUTE'),
+    ('is_registration_open()', 'authenticated', 'EXECUTE'),
+    ('is_admin()',                              'authenticated', 'EXECUTE'),
+    ('is_task_visible(uuid)',                   'authenticated', 'EXECUTE'),
+    ('is_article_visible(uuid)',                'authenticated', 'EXECUTE'),
+    ('has_solved_task(uuid)',                   'authenticated', 'EXECUTE'),
+    ('normalize_answer(text, text)',            'authenticated', 'EXECUTE'),
+    ('submit_solution(uuid, text, text)',       'authenticated', 'EXECUTE'),
+    ('set_solution_published(uuid, boolean)',   'authenticated', 'EXECUTE'),
+    ('get_user_progress(uuid)',                 'authenticated', 'EXECUTE'),
+    ('get_task_stats()',                        'authenticated', 'EXECUTE'),
+    ('admin_get_task_answer(uuid)',             'authenticated', 'EXECUTE'),
+    ('admin_reset_password(uuid, text)',        'authenticated', 'EXECUTE'),
+    ('admin_set_role(uuid, text)',              'authenticated', 'EXECUTE'),
+    ('admin_list_students(text, integer, integer)', 'authenticated', 'EXECUTE'),
+    ('admin_student_overview(uuid)',            'authenticated', 'EXECUTE'),
+    ('admin_task_attempts(uuid, uuid)',         'authenticated', 'EXECUTE'),
+    ('admin_recent_submissions(uuid, smallint, uuid, boolean, '
+     'timestamp with time zone, timestamp with time zone, integer, integer)',
+                                                'authenticated', 'EXECUTE'),
+    ('admin_check_slug_available(text)',        'authenticated', 'EXECUTE'),
+    ('admin_upsert_task(jsonb)',                'authenticated', 'EXECUTE'),
+    ('admin_upsert_article(jsonb)',             'authenticated', 'EXECUTE'),
+    ('admin_verify_reference(text, text)',      'authenticated', 'EXECUTE'),
+    ('admin_set_task_status(text, text)',       'authenticated', 'EXECUTE'),
+    ('admin_delete_task(text)',                 'authenticated', 'EXECUTE'),
+    ('admin_list_tasks(jsonb)',                 'authenticated', 'EXECUTE'),
+    ('admin_get_task(text)',                    'authenticated', 'EXECUTE');
+
+  select string_agg(format('%s %s: %s', d.role, d.obj, d.privs), '; '
+                    order by d.obj, d.role)
+    into v_extra
+    from (select * from privileges_actual
+          except
+          select * from privileges_expected) d;
+
+  select string_agg(format('%s %s: %s', d.role, d.obj, d.privs), '; '
+                    order by d.obj, d.role)
+    into v_missing
+    from (select * from privileges_expected
+          except
+          select * from privileges_actual) d;
+
+  if v_extra is not null or v_missing is not null then
+    raise exception 'ТЕСТ ПРОВАЛЕН (п): матрица прав разошлась. Сверх ожидаемого: %. Не хватает: %',
+      coalesce(v_extra, 'ничего'), coalesce(v_missing, 'ничего');
+  end if;
+  raise notice 'OK: (п) права anon и authenticated на public совпадают с задуманными';
+end
+$$;
+
+-- =============================================================================
 -- Итог
 -- =============================================================================
 do $$
