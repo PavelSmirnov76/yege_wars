@@ -1776,7 +1776,8 @@ begin
     ('admin_set_task_status(text, text)',       'authenticated', 'EXECUTE'),
     ('admin_delete_task(text)',                 'authenticated', 'EXECUTE'),
     ('admin_list_tasks(jsonb)',                 'authenticated', 'EXECUTE'),
-    ('admin_get_task(text)',                    'authenticated', 'EXECUTE');
+    ('admin_get_task(text)',                    'authenticated', 'EXECUTE'),
+    ('admin_set_task_answer(jsonb)',            'authenticated', 'EXECUTE');
 
   select string_agg(format('%s %s: %s', d.role, d.obj, d.privs), '; '
                     order by d.obj, d.role)
@@ -1797,6 +1798,377 @@ begin
       coalesce(v_extra, 'ничего'), coalesce(v_missing, 'ничего');
   end if;
   raise notice 'OK: (п) права anon и authenticated на public совпадают с задуманными';
+end
+$$;
+
+-- =============================================================================
+-- (р) admin_set_task_answer: ответ, формат и эталон без остального
+-- =============================================================================
+
+-- Подготовка: черновик банка с вложением в Storage, картинкой и двумя темами
+-- и опубликованная задача со сверенным эталоном.
+do $$
+declare
+  v_task uuid;
+begin
+  -- Раздел делает несколько записей подряд, поэтому лимит частоты снимаем.
+  update public.app_settings set value = '1000'::jsonb
+   where key = 'content_writes_per_minute';
+
+  insert into public.themes (code, title, section_code, section_title, level, sort_order)
+  values ('9.8', 'Ещё одна тестовая тема', '9', 'Тестовый раздел', 'УУ', 2)
+  on conflict (code) do nothing;
+
+  insert into public.tasks (
+    slug, ege_number, title, statement_md, difficulty, answer_format,
+    status, origin, fipi_id, fipi_short_id, reference_solution,
+    answer_explanation, reference_verified_at
+  )
+  values (
+    'fipi-ans001', 17, 'Задание банка с вложением',
+    'Условие задания банка: файл с числами лежит в архиве.', 2, 'string',
+    'draft', 'fipi', 'ANS001TESTANS001TESTANS001TEST00', 'ANS001',
+    'print(1)', 'Старый разбор', now()
+  )
+  returning id into v_task;
+
+  insert into public.task_files (
+    task_id, filename, storage_bucket, storage_path, size_bytes, kind, sort_order
+  )
+  values
+    (v_task, 'ans001_1.zip', 'task-assets', 'files/ans001_1.zip', 1234, 'file', 0),
+    (v_task, 'ans001_1.png', 'task-assets', 'images/ans001_1.png', 567, 'image', 1);
+
+  insert into public.task_themes (task_id, theme_code, sort_order)
+  values (v_task, '9.8', 0), (v_task, '9.9', 1);
+
+  insert into public.tasks (
+    slug, ege_number, title, statement_md, difficulty, answer_format,
+    status, origin, reference_solution, reference_verified_at
+  )
+  values (
+    'ans-published', 5, 'Опубликованная задача',
+    'Условие опубликованной задачи достаточной длины.', 1, 'single',
+    'published', 'human', 'print(5)', now()
+  )
+  returning id into v_task;
+
+  insert into public.task_answers (task_id, answer) values (v_task, '5');
+  insert into public.task_themes (task_id, theme_code) values (v_task, '9.9');
+
+  raise notice 'OK: (р) сетап: черновик банка с вложениями и темами, опубликованная задача';
+end
+$$;
+
+-- Ученику — [forbidden], анониму — permission denied.
+do $$
+declare
+  v_alice uuid;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  perform tests.login(v_alice);
+  begin
+    perform public.admin_set_task_answer(jsonb_build_object(
+      'slug', 'fipi-ans001', 'answer_format', 'single', 'answer', '1',
+      'reference_solution', 'print(1)'));
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик задал ответ задаче';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[forbidden]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (р): ученику отказано не тем кодом: %', sqlerrm;
+    end if;
+    raise notice 'OK: (р) admin_set_task_answer под учеником — [forbidden]';
+  end;
+  perform tests.logout();
+
+  perform set_config('role', 'anon', false);
+  begin
+    perform public.admin_set_task_answer('{}'::jsonb);
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): аноним вызвал admin_set_task_answer';
+  exception when insufficient_privilege then
+    raise notice 'OK: (р) admin_set_task_answer под анонимом — permission denied';
+  end;
+  perform set_config('role', 'none', false);
+end
+$$;
+
+-- Администратор задаёт ответ: меняются только ответ, формат, эталон, разбор
+-- и отметка сверки. Снимок задачи до и после — от суперпользователя.
+create temp table set_answer_before as
+select (to_jsonb(t) - array['answer_format', 'reference_solution',
+                            'answer_explanation', 'reference_verified_at',
+                            'updated_at']) as task_row,
+       (select jsonb_agg(jsonb_build_object(
+                 'filename', f.filename, 'storage_bucket', f.storage_bucket,
+                 'storage_path', f.storage_path, 'size_bytes', f.size_bytes,
+                 'kind', f.kind, 'sort_order', f.sort_order)
+               order by f.filename)
+          from public.task_files f where f.task_id = t.id) as files,
+       (select jsonb_agg(jsonb_build_object(
+                 'theme_code', tt.theme_code, 'sort_order', tt.sort_order)
+               order by tt.theme_code)
+          from public.task_themes tt where tt.task_id = t.id) as themes
+  from public.tasks t
+ where t.slug = 'fipi-ans001';
+
+do $$
+declare
+  v_admin uuid;
+  v_res   jsonb;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  v_res := public.admin_set_task_answer(jsonb_build_object(
+    'slug',               'fipi-ans001',
+    'answer_format',      'multi',
+    'answer',             '10 20 30 40',
+    'reference_solution', 'print(10, 20, 30, 40)',
+    'answer_explanation', 'Новый разбор'
+  ));
+  if v_res is distinct from jsonb_build_object(
+       'slug', 'fipi-ans001', 'status', 'draft', 'answer_format', 'multi') then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): неожиданный ответ функции: %', v_res;
+  end if;
+
+  perform tests.logout();
+  raise notice 'OK: (р) admin_set_task_answer вернул slug, статус и формат';
+end
+$$;
+
+do $$
+declare
+  v_task  public.tasks;
+  v_ans   text;
+  v_cnt   bigint;
+  v_files jsonb;
+  v_thems jsonb;
+begin
+  select * into v_task from public.tasks where slug = 'fipi-ans001';
+  select answer into v_ans from public.task_answers where task_id = v_task.id;
+
+  if v_ans is distinct from '10 20 30 40' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ответ не записан';
+  end if;
+  if v_task.answer_format <> 'multi'
+     or v_task.reference_solution <> 'print(10, 20, 30, 40)'
+     or v_task.answer_explanation <> 'Новый разбор' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): формат, эталон или разбор не записаны';
+  end if;
+  if v_task.reference_verified_at is not null then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): отметка сверки эталона не сброшена';
+  end if;
+  if v_task.status <> 'draft' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): черновик сменил статус на %', v_task.status;
+  end if;
+  raise notice 'OK: (р) ответ, формат, эталон и разбор записаны, сверка сброшена, черновик — draft';
+
+  select count(*) into v_cnt
+    from public.tasks t, set_answer_before b
+   where t.slug = 'fipi-ans001'
+     and (to_jsonb(t) - array['answer_format', 'reference_solution',
+                              'answer_explanation', 'reference_verified_at',
+                              'updated_at']) = b.task_row;
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): изменились поля задачи помимо ответа';
+  end if;
+  raise notice 'OK: (р) условие, номер, статус и прочие поля задачи не изменились';
+
+  select jsonb_agg(jsonb_build_object(
+           'filename', f.filename, 'storage_bucket', f.storage_bucket,
+           'storage_path', f.storage_path, 'size_bytes', f.size_bytes,
+           'kind', f.kind, 'sort_order', f.sort_order)
+         order by f.filename)
+    into v_files
+    from public.task_files f where f.task_id = v_task.id;
+  if v_files is distinct from (select files from set_answer_before)
+     or jsonb_array_length(v_files) <> 2 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): файлы задачи изменились: %', v_files;
+  end if;
+  raise notice 'OK: (р) файлы задачи те же: число, имена, адреса в Storage';
+
+  select jsonb_agg(jsonb_build_object(
+           'theme_code', tt.theme_code, 'sort_order', tt.sort_order)
+         order by tt.theme_code)
+    into v_thems
+    from public.task_themes tt where tt.task_id = v_task.id;
+  if v_thems is distinct from (select themes from set_answer_before)
+     or jsonb_array_length(v_thems) <> 2 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): темы задачи изменились: %', v_thems;
+  end if;
+  raise notice 'OK: (р) темы задачи те же';
+
+  select count(*) into v_cnt
+    from public.audit_log
+   where action = 'set_answer' and entity_slug = 'fipi-ans001';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): записей set_answer в журнале: %', v_cnt;
+  end if;
+  raise notice 'OK: (р) вызов записан в audit_log как set_answer';
+end
+$$;
+
+drop table set_answer_before;
+
+-- Без ключа answer_explanation разбор не меняется; опубликованная задача
+-- уходит в review.
+do $$
+declare
+  v_admin uuid;
+  v_res   jsonb;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  perform public.admin_set_task_answer(jsonb_build_object(
+    'slug', 'fipi-ans001', 'answer_format', 'multi', 'answer', '10 20 30 40',
+    'reference_solution', 'print(10, 20, 30, 40)'));
+
+  v_res := public.admin_set_task_answer(jsonb_build_object(
+    'slug', 'ans-published', 'answer_format', 'single', 'answer', '6',
+    'reference_solution', 'print(6)'));
+  if v_res ->> 'status' is distinct from 'review' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): функция вернула статус % вместо review', v_res ->> 'status';
+  end if;
+
+  perform tests.logout();
+
+  if (select answer_explanation from public.tasks where slug = 'fipi-ans001')
+     is distinct from 'Новый разбор' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): разбор стёрт вызовом без answer_explanation';
+  end if;
+  raise notice 'OK: (р) без ключа answer_explanation разбор не меняется';
+
+  if (select status from public.tasks where slug = 'ans-published') <> 'review' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): опубликованная задача не ушла в review';
+  end if;
+  if (select reference_verified_at from public.tasks where slug = 'ans-published')
+     is not null then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): у опубликованной задачи не сброшена сверка';
+  end if;
+  raise notice 'OK: (р) опубликованная задача после смены ответа — review';
+end
+$$;
+
+-- Ошибки: каждая со своим кодом, ничего не записывается.
+do $$
+declare
+  v_admin uuid;
+  v_base  jsonb;
+  v_case  record;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  perform tests.login(v_admin);
+
+  v_base := jsonb_build_object(
+    'slug',               'fipi-ans001',
+    'answer_format',      'single',
+    'answer',             '77',
+    'reference_solution', 'print(77)'
+  );
+
+  for v_case in
+    select * from (values
+      ('bad_payload',                '[]'::jsonb,                                    'payload не объект'),
+      ('bad_payload',                'null'::jsonb,                                  'payload — JSON null'),
+      ('not_found',                  v_base || '{"slug": "no-such-task"}',           'нет такой задачи'),
+      ('not_found',                  v_base - 'slug',                                'нет slug'),
+      ('bad_answer_format',          v_base || '{"answer_format": "table"}',         'формат вне списка'),
+      ('bad_answer_format',          v_base - 'answer_format',                       'нет формата'),
+      ('bad_answer',                 v_base || '{"answer": "   "}',                  'пустой ответ'),
+      ('bad_answer',                 v_base - 'answer',                              'нет ответа'),
+      ('bad_answer',                 v_base || '{"answer_format": "string", "answer": "a\nb"}', 'строка с переводом строки'),
+      ('bad_answer',                 v_base || '{"answer": "сорок два"}',            'не число для single'),
+      ('bad_answer',                 v_base || '{"answer_format": "pair", "answer": "1"}', 'одно число для pair'),
+      ('missing_reference_solution', v_base || '{"reference_solution": "  "}',       'пустой эталон'),
+      ('missing_reference_solution', v_base - 'reference_solution',                  'нет эталона')
+    ) as c(code, payload, what)
+  loop
+    begin
+      perform public.admin_set_task_answer(v_case.payload);
+      raise exception 'ТЕСТ ПРОВАЛЕН (р): принят вызов «%»', v_case.what;
+    exception when others then
+      if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+      if sqlerrm not like '[' || v_case.code || ']%' then
+        raise exception 'ТЕСТ ПРОВАЛЕН (р): «%» — ожидался [%], получено: %',
+          v_case.what, v_case.code, sqlerrm;
+      end if;
+      raise notice 'OK: (р) % — [%]', v_case.what, v_case.code;
+    end;
+  end loop;
+
+  perform tests.logout();
+
+  -- Неудачные вызовы ничего не изменили.
+  if (select answer from public.task_answers ta
+        join public.tasks t on t.id = ta.task_id
+       where t.slug = 'fipi-ans001') is distinct from '10 20 30 40'
+     or (select answer_format from public.tasks where slug = 'fipi-ans001') <> 'multi' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): отклонённый вызов изменил задачу';
+  end if;
+  raise notice 'OK: (р) отклонённые вызовы задачу не меняют';
+end
+$$;
+
+-- Ученик по-прежнему не видит ни ответа, ни эталона. Задачу публикуем
+-- штатно: сверка эталона и смена статуса.
+do $$
+declare
+  v_admin uuid;
+  v_alice uuid;
+  v_cnt   bigint;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  select id into v_alice from public.profiles where username = 'alice';
+
+  perform tests.login(v_admin);
+  if (public.admin_verify_reference('fipi-ans001', E'10 20\n30 40') ->> 'matches')::boolean
+     is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): вывод эталона не сверился с новым ответом';
+  end if;
+  perform public.admin_set_task_status('fipi-ans001', 'published');
+  perform tests.logout();
+
+  perform tests.login(v_alice);
+
+  select count(*) into v_cnt from public.tasks_public where slug = 'fipi-ans001';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): опубликованная задача не видна ученику';
+  end if;
+
+  begin
+    perform 1 from public.task_answers;
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик прочитал task_answers';
+  exception when insufficient_privilege then
+    raise notice 'OK: (р) task_answers под учеником — permission denied';
+  end;
+
+  begin
+    perform reference_solution from public.tasks where slug = 'fipi-ans001';
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик прочитал reference_solution';
+  exception when insufficient_privilege then
+    raise notice 'OK: (р) reference_solution под учеником — permission denied';
+  end;
+
+  begin
+    perform answer_explanation from public.tasks where slug = 'fipi-ans001';
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик прочитал answer_explanation';
+  exception when insufficient_privilege then
+    raise notice 'OK: (р) answer_explanation под учеником — permission denied';
+  end;
+
+  begin
+    perform public.admin_get_task('fipi-ans001');
+    raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик получил задачу через admin_get_task';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    raise notice 'OK: (р) admin_get_task под учеником — отказ (%)', sqlerrm;
+  end;
+
+  perform tests.logout();
+
+  update public.app_settings set value = '60'::jsonb
+   where key = 'content_writes_per_minute';
 end
 $$;
 

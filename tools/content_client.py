@@ -184,6 +184,10 @@ class ContentClient:
         """Создаёт или полностью обновляет задачу."""
         return self.rpc("admin_upsert_task", {"payload": payload})
 
+    def set_answer(self, payload: Dict[str, Any]) -> Any:
+        """Задаёт ответ, формат и эталон, не трогая файлы, темы и условие."""
+        return self.rpc("admin_set_task_answer", {"payload": payload})
+
     def verify_reference(self, slug: str, output: str) -> Any:
         """Сверяет вывод эталонного решения с сохранённым ответом."""
         return self.rpc(

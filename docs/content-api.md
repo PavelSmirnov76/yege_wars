@@ -68,6 +68,13 @@ Content-Type: application/json
 и связи со справочником **заменяются целиком**. Любой вызов снимает отметку проверки
 эталона.
 
+> **Задачам банка ФИПИ (`origin = 'fipi'`) этот вызов стирает вложения.**
+> Файлы банка лежат в Storage: в `task_files` у них адрес (`storage_bucket`,
+> `storage_path`) без `content`. `admin_upsert_task` принимает файлы только
+> с `content` и удаляет все прежние строки `task_files`, поэтому ссылки на
+> архивы и картинки задачи пропадут. Перезаписываются и все остальные поля.
+> Ответ, формат и эталон задаче банка задаются через `admin_set_task_answer`.
+
 ```json
 {
   "slug": "ege24-podstroka-abc-01",
@@ -95,16 +102,17 @@ Content-Type: application/json
 | Поле | Обязательно | Правило |
 |---|---|---|
 | `slug` | да | `^[a-z0-9-]{3,64}$`, уникален |
-| `ege_number` | да | 1–27 |
+| `ege_number` | нет | 1–27; у части заданий банка ФИПИ номера нет |
+| `ege_number_source` | нет | `fipi-spec-2026` или `manual` — откуда взят номер |
 | `title` | да | непустой |
 | `statement_md` | да | не короче 40 символов, markdown |
 | `difficulty` | да | 1, 2 или 3 |
 | `answer_format` | да | `single`, `pair`, `multi`, `string` |
-| `answer` | да | соответствует формату (см. ниже) |
+| `answer` | при `status` ≠ `draft` | соответствует формату (см. ниже); присланный пустой — ошибка |
 | `reference_solution` | при `status` ≠ `draft` | Python |
 | `answer_explanation` | нет | короткий разбор для админа |
 | `status` | нет (по умолчанию `draft`) | `draft` или `review`; `published` — только через `admin_set_task_status` |
-| `origin` | нет (по умолчанию `human`) | `human` или `ai` — агент ставит `ai` |
+| `origin` | нет (по умолчанию `human`) | `human`, `ai` или `fipi` — агент ставит `ai`, `fipi` — импорт банка |
 | `tags` | нет | массив строк |
 | `themes` | нет, но без него тема `none` | массив кодов КЭС строками, первый — основная тема |
 | `files` | нет | `filename` `^[A-Za-z0-9_.-]{1,64}$` без путей, ≤ 4 МБ файл, ≤ 8 МБ на задачу |
@@ -127,6 +135,9 @@ Content-Type: application/json
 `references` нужны только для исключений — статьи, которой по теме не
 полагается.
 
+**Ответ.** Без ключа `answer` задача сохраняется только черновиком, а
+прежний ответ задачи удаляется. Пустой или пробельный ответ — `[bad_answer]`.
+
 Форматы ответа: `single` — одно целое число; `pair` — два числа через пробел;
 `multi` — одно и более чисел через пробел; `string` — строка без переносов.
 Сравнение нормализованное: лишние пробелы и ведущие нули значения не имеют.
@@ -143,6 +154,48 @@ Content-Type: application/json
 но что-то стоит доделать. Например, «У задачи нет ни статьи по теме, ни связи
 с relevance = primary.» — значит, по темам справки нет и `references` тоже
 пусты.
+
+### `admin_set_task_answer(payload jsonb) → jsonb`
+
+Задаёт ответ, формат и эталон существующей задаче и не трогает остальное:
+файлы (в том числе адреса в Storage), темы, связи со справочником, условие,
+номер, теги. Годится для задачи любого `origin`; для задач банка ФИПИ это
+единственный способ задать ответ, не стерев вложения.
+
+```json
+{
+  "slug": "fipi-xxxxxx",
+  "answer_format": "multi",
+  "answer": "12 7 30 4",
+  "reference_solution": "…",
+  "answer_explanation": "…"
+}
+```
+
+| Поле | Обязательно | Правило |
+|---|---|---|
+| `slug` | да | задача должна существовать |
+| `answer_format` | да | `single`, `pair`, `multi`, `string` |
+| `answer` | да | непустой, проходит нормализацию формата; `string` — в одну строку |
+| `reference_solution` | да | непустой |
+| `answer_explanation` | нет | нет ключа — разбор не меняется; `null` — стирается |
+
+Что меняет вызов: `tasks.answer_format`, `reference_solution`,
+`answer_explanation`, ответ в `task_answers`. Отметка сверки эталона
+снимается — ответ нужно сверить заново (`admin_verify_reference`).
+**Опубликованная задача уходит в `review`**: публиковать без сверки нельзя.
+Черновик и `review` статус не меняют. Действие пишется в `audit_log` как
+`set_answer` и считается в лимите записей.
+
+Ответ функции:
+
+```json
+{ "slug": "fipi-xxxxxx", "status": "draft", "answer_format": "multi" }
+```
+
+Ошибки: `bad_payload` (не объект), `not_found` (нет задачи или `slug`),
+`bad_answer_format`, `bad_answer`, `missing_reference_solution`. Сам ответ
+в текст ошибки не попадает.
 
 ### `admin_upsert_article(payload jsonb) → jsonb`
 
@@ -232,7 +285,7 @@ Content-Type: application/json
 | `short_statement`, `short_content` | слишком короткий текст |
 | `bad_number`, `bad_ege_number`, `bad_difficulty` | числа вне диапазона |
 | `bad_answer_format`, `bad_answer` | формат и ответ не согласуются |
-| `bad_status`, `bad_origin`, `bad_relevance`, `bad_level` | значение вне списка |
+| `bad_status`, `bad_origin`, `bad_relevance`, `bad_level`, `bad_number_source` | значение вне списка |
 | `missing_reference_solution` | `review`/`published` без эталона |
 | `not_verified` | публикация без сверки эталона |
 | `bad_filename`, `file_too_large`, `files_too_large` | нарушены правила файлов |
@@ -284,7 +337,9 @@ response = requests.post(
 response.raise_for_status()
 ```
 
-Проще пользоваться готовой обёрткой `tools/content_client.py`:
+Проще пользоваться готовой обёрткой `tools/content_client.py` (в Python —
+класс `ContentClient`, у него метод на каждую функцию, например
+`set_answer(payload)`):
 
 ```sh
 python3 tools/content_client.py list --status review

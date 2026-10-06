@@ -146,9 +146,11 @@ done
 echo "Заливаю выгрузку…"
 run_sql -f "$IMPORT_SQL"
 
+# Сразу после импорта у банка нет ни ответов, ни публикаций.
 echo
 echo "Проверки импорта:"
 run_sql -v "files_on_disk=$FILES_ON_DISK" -v "kim24=$KIM24" \
+  -v "published_fipi=0" -v "answered_fipi=0" \
   -f "$SCRIPT_DIR/import_checks.sql"
 
 echo
