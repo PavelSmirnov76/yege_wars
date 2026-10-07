@@ -38,7 +38,10 @@ lib/
 ## Требования
 
 - [fvm](https://fvm.app/) — менеджер версий Flutter;
-- Flutter **3.41.0** — версия закреплена в `.fvmrc`.
+- Flutter **3.41.0** — версия закреплена в `.fvmrc`;
+- PostgreSQL 17 (например, из Homebrew) — для RLS-тестов базы: они поднимают
+  временный сервер, Docker и Supabase CLI не нужны;
+- Python 3.9 — для скриптов `tools/` и их тестов.
 
 ## Локальный запуск
 
@@ -72,25 +75,35 @@ dart run custom_lint
 
 # Тесты
 flutter test
+
+# Проверка форматирования без изменений
+find lib test -name '*.dart' -not -name '*.g.dart' -not -path 'lib/l10n/gen/*' \
+  -print0 | xargs -0 dart format --output=none --set-exit-if-changed
+
+# Миграции и RLS-тесты на временном PostgreSQL → RLS OK
+bash supabase/tests/run_local.sh
+
+# Миграции, импорт банка ФИПИ и его приёмка → IMPORT OK
+bash supabase/tests/run_import_check.sh
+
+# Тесты скриптов tools/
+python3 -m unittest discover -s tools/tests -t .
 ```
+
+Команды контентных скриптов — в `tools/README.md`.
 
 Генерённые файлы (`*.g.dart`, `lib/l10n/gen/`) в git не коммитятся —
 перед анализом и запуском их нужно сгенерировать локально.
 
 ## Статус
 
-- [x] Этап 1. Каркас
-- [x] Этап 2. Supabase
-- [x] Этап 3. Авторизация
-- [x] Доработка «контент в базе»: схема, Content API, документация, импорт
-- [x] Доработка «справочник»: схема, раздел «Справочник», рендеринг разметки
-- [x] Этап 4. Каталог и страница задачи
-- [x] Этап 5. Python runtime
-- [x] Этап 6. Отправка и проверка
-- [ ] **Этап 7. Профиль и прогресс** — следующий
-- [ ] Этап 8. Админка
-- [ ] Этап 9. Деплой
-- [ ] Этап 10. Полировка
+Разработка идёт через SDLC-конвейер `sdlc/` (`sdlc/README.md`). Очередь работы
+— `sdlc/1-business-tasks/planning/INDEX.md`, задания — `sdlc/4-tasks/INDEX.md`,
+выполнение требований — `sdlc/6-eval/DASHBOARD.md`.
+
+До конвейера сделаны этапы 1–6 ТЗ и доработки «контент в базе» и
+«справочник». Их история — в `sdlc/0-vibes/raw/2026-10-08/` (`STATE.md`,
+промты и отчёты).
 
 ## Добавление задач
 

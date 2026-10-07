@@ -3,7 +3,7 @@
 
 Ответы задач банка решены вне репозитория: в `solutions.json` выгрузки
 (`~/projects/ege-informatics-2027`, не под git) 199 записей с
-`verified: true` — их подтвердил банк ФИПИ (docs/SOLVE_REPORT.md). Скрипт
+`verified: true` — их подтвердил банк ФИПИ (sdlc/0-vibes/raw/2026-10-08/SOLVE_REPORT.md). Скрипт
 переносит их в базу. Для каждой подтверждённой задачи:
 
 1. `admin_set_task_answer` — ответ, формат, эталон и разбор. Файлы, темы,
