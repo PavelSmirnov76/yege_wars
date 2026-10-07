@@ -236,3 +236,21 @@ GET /rest/v1/reference_articles?select=slug%2Ctitle%2Csummary%2Clevel%2Creading_
   передаётся в ответ явно (с комментарием).
 
 ## 6. Коммит
+
+Хэш `60b6db3630764955c37791b225d8fdd154125863`, заголовок «Явный порядок сортировки в запросах клиента».
+
+```text
+60b6db3630764955c37791b225d8fdd154125863
+Явный порядок сортировки в запросах клиента
+
+ CLAUDE.md                                          |   4 +-
+ docs/PROMPT_SORT_ORDER.md                          | 148 +++++++++++++
+ docs/SORT_ORDER_REPORT.md                          | 238 +++++++++++++++++++++
+ docs/STATE.md                                      |  32 ++-
+ .../supabase_reference_remote_data_source.dart     |   5 +-
+ .../supabase_tasks_remote_data_source.dart         |   9 +-
+ ...supabase_reference_remote_data_source_test.dart |  29 +++
+ .../supabase_tasks_remote_data_source_test.dart    |  49 +++++
+ test/helpers/recording_supabase_client.dart        |  40 ++++
+ 9 files changed, 543 insertions(+), 11 deletions(-)
+```
