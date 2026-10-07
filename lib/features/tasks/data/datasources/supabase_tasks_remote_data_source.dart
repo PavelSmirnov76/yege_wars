@@ -57,7 +57,10 @@ final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
       query = query.ilike(TaskColumns.title, '%$search%');
     }
 
-    return query.order(TaskColumns.egeNumber).order(TaskColumns.title);
+    // В postgrest `order()` по умолчанию сортирует по убыванию.
+    return query
+        .order(TaskColumns.egeNumber, ascending: true)
+        .order(TaskColumns.title, ascending: true);
   }
 
   @override
@@ -75,7 +78,7 @@ final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
         '${TaskFileColumns.sizeBytes}',
       )
       .eq(TaskFileColumns.taskId, taskId)
-      .order(TaskFileColumns.sortOrder);
+      .order(TaskFileColumns.sortOrder, ascending: true);
 
   @override
   Future<List<Map<String, dynamic>>> fetchArticleLinks(String taskId) => _client
@@ -123,7 +126,7 @@ final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
   Future<List<Map<String, dynamic>>> fetchEgeNumbers() => _client
       .from(SupabaseTables.tasksPublic)
       .select(TaskColumns.egeNumber)
-      .order(TaskColumns.egeNumber);
+      .order(TaskColumns.egeNumber, ascending: true);
 
   @override
   Future<List<Map<String, dynamic>>> fetchStats() =>

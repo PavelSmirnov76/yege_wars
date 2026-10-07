@@ -60,7 +60,10 @@ final class SupabaseReferenceRemoteDataSource
       );
     }
 
-    return query.order(ArticleColumns.level).order(ArticleColumns.title);
+    // В postgrest `order()` по умолчанию сортирует по убыванию.
+    return query
+        .order(ArticleColumns.level, ascending: true)
+        .order(ArticleColumns.title, ascending: true);
   }
 
   @override
