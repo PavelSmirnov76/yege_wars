@@ -5,12 +5,12 @@ import 'package:yege_wars/core/network/supabase_schema.dart';
 import 'package:yege_wars/features/tasks/data/datasources/tasks_remote_data_source.dart';
 import 'package:yege_wars/features/tasks/data/dto/task_dto.dart';
 import 'package:yege_wars/features/tasks/domain/entities/catalog_item.dart';
-import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_filter.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_progress.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_stats.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:yege_wars/features/tasks/domain/task_help_rules.dart';
 
 /// Реализация [TasksRepository] поверх [TasksRemoteDataSource].
 final class TasksRepositoryImpl implements TasksRepository {
@@ -64,13 +64,25 @@ final class TasksRepositoryImpl implements TasksRepository {
       final responses = await Future.wait([
         _dataSource.fetchFiles(taskId),
         _dataSource.fetchArticleLinks(taskId),
+        _dataSource.fetchThemeArticles(taskId),
       ]);
+      // Справка — статьи по темам задачи плюс ручные связи.
+      final themeRows = responses[2];
+      final articles = TaskHelpRules.merge(
+        byTheme: TaskDto.toThemeArticles(
+          themeRows,
+          await _articlesOf(themeRows),
+        ),
+        manual: [
+          for (final link in responses[1]) ?TaskDto.toArticleLink(link),
+        ],
+      );
 
       return Ok<TaskDetail>(
         TaskDto.toDetail(
           row,
           files: [for (final file in responses[0]) TaskDto.toFile(file)],
-          articles: _articleLinks(responses[1]),
+          articles: articles,
         ),
       );
     } on Object catch (error) {
@@ -123,15 +135,17 @@ final class TasksRepositoryImpl implements TasksRepository {
     };
   }
 
-  /// Связи со статьями: сначала главные по теме.
-  static List<TaskArticleLink> _articleLinks(List<Map<String, dynamic>> rows) {
-    return <TaskArticleLink>[
-      for (final row in rows) ?TaskDto.toArticleLink(row),
-    ]..sort((a, b) {
-      if (a.isPrimary == b.isPrimary) {
-        return 0;
-      }
-      return a.isPrimary ? -1 : 1;
-    });
+  /// Карточки статей, на которые ссылаются строки тем [themeRows].
+  ///
+  /// Без статей по темам второй запрос не нужен: пустой `in.()` базе
+  /// не отправляется.
+  Future<List<Map<String, dynamic>>> _articlesOf(
+    List<Map<String, dynamic>> themeRows,
+  ) async {
+    final ids = <String>{
+      for (final row in themeRows)
+        if (row[TaskArticleColumns.articleId] case final String id) id,
+    }.toList();
+    return ids.isEmpty ? const [] : _dataSource.fetchArticles(ids);
   }
 }

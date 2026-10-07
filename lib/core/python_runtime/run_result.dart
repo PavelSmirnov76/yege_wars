@@ -40,13 +40,4 @@ final class RunResult {
 
   /// `true`, если программа отработала без ошибок.
   bool get isSuccess => outcome == RunOutcome.finished;
-
-  /// Последняя непустая строка вывода — то, что обычно и есть ответ.
-  String get lastLine {
-    final lines = stdout
-        .split('\n')
-        .map((line) => line.trim())
-        .where((line) => line.isNotEmpty);
-    return lines.isEmpty ? '' : lines.last;
-  }
 }

@@ -1,6 +1,7 @@
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_brief.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_level.dart';
+import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
 import 'package:yege_wars/features/tasks/domain/entities/catalog_item.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_brief.dart';
@@ -58,7 +59,7 @@ const CatalogItem testNoNumberItem = CatalogItem(task: testTaskNoNumber);
 const TaskDetail testTaskDetail = TaskDetail(
   brief: testTask24,
   statementMd: '## Условие\n\nНайдите наибольший фрагмент.',
-  answerFormat: 'single',
+  answerFormat: AnswerFormat.single,
   source: 'Оригинальная задача',
   files: [
     TaskFile(filename: '24.txt', content: 'ABCABC\nBBB\n', sizeBytes: 11),

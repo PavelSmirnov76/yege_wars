@@ -7,6 +7,8 @@ import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/features/editor/presentation/controllers/run_controller.dart';
+import 'package:yege_wars/features/submissions/domain/answer_rules.dart';
+import 'package:yege_wars/features/submissions/presentation/answer_format_hint.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/attempts_list.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/verdict_banner.dart';
@@ -64,11 +66,15 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
     final theme = Theme.of(context);
     final taskId = widget.task.brief.id;
     final submit = ref.watch(submitControllerProvider(taskId));
-    // Ответ обычно печатает сама программа — предлагаем последнюю строку.
-    final output = ref
+    final format = widget.task.answerFormat;
+    // Ответ обычно печатает сама программа — предлагаем его по формату.
+    final stdout = ref
         .watch(runControllerProvider(widget.task.brief.slug))
         .result
-        ?.lastLine;
+        ?.stdout;
+    final output = stdout == null
+        ? null
+        : AnswerRules.fromOutput(stdout, format);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,7 +88,8 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
                 style: AppTypography.code(),
                 decoration: InputDecoration(
                   labelText: l10n.submitAnswerLabel,
-                  hintText: l10n.submitAnswerHint,
+                  helperText: answerFormatHint(l10n, format),
+                  helperMaxLines: 3,
                 ),
                 onSubmitted: (_) => unawaited(_submit()),
               ),

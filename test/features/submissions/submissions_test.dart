@@ -159,6 +159,25 @@ void main() {
       expect(repository.lastAnswer, '446');
       expect(repository.lastCode, 'print(446)');
     });
+
+    test('ответ уходит без пробельных краёв, включая переводы строк', () async {
+      await SubmitAnswerUseCase(repository)(
+        taskId: 'task-25',
+        answer: ' \t108 54 136 68\r\n\n',
+      );
+
+      expect(repository.lastAnswer, '108 54 136 68');
+    });
+
+    test('ответ из одних переводов строк считается пустым', () async {
+      final result = await SubmitAnswerUseCase(repository)(
+        taskId: 'task-24',
+        answer: '\n\r\n\t',
+      );
+
+      expect(result.failureOrNull, isA<ValidationFailure>());
+      expect(repository.submitCalls, 0);
+    });
   });
 
   group('SubmitController', () {

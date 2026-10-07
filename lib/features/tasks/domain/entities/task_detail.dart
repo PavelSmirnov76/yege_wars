@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_brief.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_file.dart';
@@ -22,8 +23,8 @@ final class TaskDetail {
   /// Условие в markdown.
   final String statementMd;
 
-  /// Формат ответа: `single`, `pair`, `multi` или `string`.
-  final String answerFormat;
+  /// Формат ответа.
+  final AnswerFormat answerFormat;
 
   /// Файлы данных.
   final List<TaskFile> files;

@@ -6,8 +6,12 @@ abstract final class SupabaseTables {
   /// Статьи справочника.
   static const String referenceArticles = 'reference_articles';
 
-  /// Связь «задача — статья справочника».
+  /// Связь «задача — статья справочника», проставленная вручную.
   static const String taskReferences = 'task_references';
+
+  /// Представление: статьи справочника, которые полагаются задаче по её
+  /// темам.
+  static const String taskArticles = 'task_articles';
 
   /// Опубликованные задачи без эталона и разбора — то, что видит ученик.
   static const String tasksPublic = 'tasks_public';
@@ -33,6 +37,9 @@ abstract final class ProfileColumns {
 
 /// Колонки таблицы [SupabaseTables.referenceArticles].
 abstract final class ArticleColumns {
+  /// Идентификатор статьи.
+  static const String id = 'id';
+
   /// Человекочитаемый идентификатор статьи.
   static const String slug = 'slug';
 
@@ -115,6 +122,18 @@ abstract final class TaskReferenceColumns {
   static const String relevance = 'relevance';
 
   /// Порядок показа.
+  static const String sortOrder = 'sort_order';
+}
+
+/// Колонки представления [SupabaseTables.taskArticles].
+abstract final class TaskArticleColumns {
+  /// Задача.
+  static const String taskId = 'task_id';
+
+  /// Статья справочника.
+  static const String articleId = 'article_id';
+
+  /// Порядок темы у задачи; 0 — основная тема.
   static const String sortOrder = 'sort_order';
 }
 

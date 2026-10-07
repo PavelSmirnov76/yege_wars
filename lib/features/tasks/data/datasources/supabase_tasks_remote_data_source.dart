@@ -18,14 +18,18 @@ final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
       '$_briefColumns, ${TaskColumns.statementMd}, '
       '${TaskColumns.answerFormat}, ${TaskColumns.source}';
 
-  /// Вложенная выборка статьи справочника вместе со связью.
-  static const String _articleLinkColumns =
-      '${TaskReferenceColumns.relevance}, ${TaskReferenceColumns.sortOrder}, '
-      '${SupabaseTables.referenceArticles}('
+  /// Колонки карточки статьи справочника: одни и те же для ручных связей
+  /// и для статей по темам.
+  static const String _articleBriefColumns =
       '${ArticleColumns.slug}, ${ArticleColumns.title}, '
       '${ArticleColumns.summary}, ${ArticleColumns.level}, '
       '${ArticleColumns.readingMinutes}, ${ArticleColumns.egeNumbers}, '
-      '${ArticleColumns.tags})';
+      '${ArticleColumns.tags}';
+
+  /// Вложенная выборка статьи справочника вместе с ручной связью.
+  static const String _articleLinkColumns =
+      '${TaskReferenceColumns.relevance}, ${TaskReferenceColumns.sortOrder}, '
+      '${SupabaseTables.referenceArticles}($_articleBriefColumns)';
 
   /// Символы, ломающие синтаксис фильтра PostgREST.
   static final RegExp _unsafeSearchChars = RegExp(r'[,()*%\\"\x27]');
@@ -78,8 +82,28 @@ final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
       .from(SupabaseTables.taskReferences)
       .select(_articleLinkColumns)
       .eq(TaskReferenceColumns.taskId, taskId)
-      .order(TaskReferenceColumns.relevance)
-      .order(TaskReferenceColumns.sortOrder);
+      // Главные первыми ставит слияние справки, здесь — только порядок связей.
+      .order(TaskReferenceColumns.sortOrder, ascending: true);
+
+  // Встроить reference_articles в выборку из представления нельзя: у
+  // представления нет внешнего ключа, и PostgREST отвечает PGRST200.
+  // Поэтому статьи по темам читаются двумя запросами.
+  @override
+  Future<List<Map<String, dynamic>>> fetchThemeArticles(String taskId) =>
+      _client
+          .from(SupabaseTables.taskArticles)
+          .select(
+            '${TaskArticleColumns.articleId}, ${TaskArticleColumns.sortOrder}',
+          )
+          .eq(TaskArticleColumns.taskId, taskId)
+          .order(TaskArticleColumns.sortOrder, ascending: true);
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchArticles(List<String> articleIds) =>
+      _client
+          .from(SupabaseTables.referenceArticles)
+          .select('${ArticleColumns.id}, $_articleBriefColumns')
+          .inFilter(ArticleColumns.id, articleIds);
 
   @override
   Future<List<Map<String, dynamic>>> fetchMyAttempts() async {

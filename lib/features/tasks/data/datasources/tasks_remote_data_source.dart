@@ -11,8 +11,15 @@ abstract interface class TasksRemoteDataSource {
   /// Файлы задачи.
   Future<List<Map<String, dynamic>>> fetchFiles(String taskId);
 
-  /// Связи задачи со статьями справочника вместе со статьями.
+  /// Ручные связи задачи со статьями справочника вместе со статьями.
   Future<List<Map<String, dynamic>>> fetchArticleLinks(String taskId);
+
+  /// Статьи, которые полагаются задаче по её темам: идентификатор статьи
+  /// и порядок темы.
+  Future<List<Map<String, dynamic>>> fetchThemeArticles(String taskId);
+
+  /// Карточки статей справочника по идентификаторам [articleIds].
+  Future<List<Map<String, dynamic>>> fetchArticles(List<String> articleIds);
 
   /// Мои попытки: задача и признак верного ответа.
   Future<List<Map<String, dynamic>>> fetchMyAttempts();

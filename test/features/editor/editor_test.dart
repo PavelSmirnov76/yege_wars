@@ -21,19 +21,12 @@ import '../../helpers/fake_python_runtime.dart';
 void main() {
   final l10n = AppLocalizationsRu();
 
+  // Какой ответ брать из вывода, решает формат ответа — тесты правила
+  // в test/features/submissions/answer_rules_test.dart.
   group('RunResult', () {
-    test('ответом считается последняя непустая строка вывода', () {
-      const result = RunResult(
-        outcome: RunOutcome.finished,
-        stdout: 'отладка\n446\n\n',
-      );
-
-      expect(result.lastLine, '446');
-      expect(result.isSuccess, isTrue);
-    });
-
-    test('у пустого вывода ответа нет', () {
-      expect(const RunResult(outcome: RunOutcome.finished).lastLine, isEmpty);
+    test('успешен только запуск, завершившийся сам', () {
+      expect(const RunResult(outcome: RunOutcome.finished).isSuccess, isTrue);
+      expect(const RunResult(outcome: RunOutcome.failed).isSuccess, isFalse);
     });
   });
 

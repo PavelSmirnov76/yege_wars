@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
+import 'package:yege_wars/features/tasks/data/datasources/tasks_remote_data_source.dart';
+import 'package:yege_wars/features/tasks/data/repositories/tasks_repository_impl.dart';
+import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/task_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_files_panel.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
@@ -11,6 +15,8 @@ import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 import '../../../helpers/fake_auth_repository.dart';
 import '../../../helpers/fake_tasks_repository.dart';
 import '../../../helpers/pump_app.dart';
+
+class _MockDataSource extends Mock implements TasksRemoteDataSource {}
 
 void main() {
   final l10n = AppLocalizationsRu();
@@ -38,7 +44,13 @@ void main() {
   }
 
   /// Открывает страницу задачи на узком экране (вкладки).
-  Future<void> openTask(WidgetTester tester, {Size? surface}) async {
+  ///
+  /// [repository] подменяет репозиторий задач вместо [tasks].
+  Future<void> openTask(
+    WidgetTester tester, {
+    Size? surface,
+    TasksRepository? repository,
+  }) async {
     if (surface != null) {
       await tester.binding.setSurfaceSize(surface);
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -47,7 +59,7 @@ void main() {
       tester,
       repository: auth,
       initialUserId: testStudent.id,
-      tasks: tasks,
+      tasks: repository ?? tasks,
     );
     containerOf(tester)
         .read(appRouterProvider)
@@ -79,6 +91,58 @@ void main() {
 
     await openTab(tester, l10n.taskHelpTitle);
     expect(find.text('Проход по строке окном'), findsOneWidget);
+  });
+
+  testWidgets('без ручных связей справка показывает статью по теме', (
+    tester,
+  ) async {
+    // Настоящий репозиторий поверх заглушки datasource: так проверяется,
+    // что справка собирается из task_articles, а не только из ручных связей.
+    final dataSource = _MockDataSource();
+    when(() => dataSource.fetchTask(testTask24.slug)).thenAnswer(
+      (_) async => {
+        'id': testTask24.id,
+        'slug': testTask24.slug,
+        'ege_number': 24,
+        'title': testTask24.title,
+        'difficulty': 2,
+        'statement_md': 'Найдите наибольший фрагмент.',
+        'answer_format': 'single',
+      },
+    );
+    when(() => dataSource.fetchFiles(testTask24.id)).thenAnswer(
+      (_) async => [],
+    );
+    when(() => dataSource.fetchArticleLinks(testTask24.id)).thenAnswer(
+      (_) async => [],
+    );
+    when(() => dataSource.fetchThemeArticles(testTask24.id)).thenAnswer(
+      (_) async => [
+        {'article_id': 'a-39', 'sort_order': 0},
+      ],
+    );
+    when(() => dataSource.fetchArticles(['a-39'])).thenAnswer(
+      (_) async => [
+        {
+          'id': 'a-39',
+          'slug': 'kes-3-9',
+          'title': 'Обработка строк',
+          'summary': 'Статья основной темы задания.',
+          'level': 1,
+          'reading_minutes': 8,
+        },
+      ],
+    );
+    await openTask(
+      tester,
+      surface: const Size(390, 800),
+      repository: TasksRepositoryImpl(dataSource),
+    );
+    await openTab(tester, l10n.taskHelpTitle);
+
+    expect(find.text('Обработка строк'), findsOneWidget);
+    // Статья основной темы — главная: раскрыта и ведёт в справочник.
+    expect(find.widgetWithText(FilledButton, l10n.taskHelpTitle), findsOne);
   });
 
   testWidgets('файл разворачивается и показывает первые строки', (

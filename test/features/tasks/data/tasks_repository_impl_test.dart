@@ -33,13 +33,21 @@ void main() {
   late _MockDataSource dataSource;
   late TasksRepositoryImpl repository;
 
-  setUpAll(() => registerFallbackValue(const TaskFilter()));
+  setUpAll(() {
+    registerFallbackValue(const TaskFilter());
+    registerFallbackValue(<String>[]);
+  });
 
   setUp(() {
     dataSource = _MockDataSource();
     repository = TasksRepositoryImpl(dataSource);
     when(() => dataSource.fetchStats()).thenAnswer((_) async => []);
     when(() => dataSource.fetchMyAttempts()).thenAnswer((_) async => []);
+    when(() => dataSource.fetchFiles(any())).thenAnswer((_) async => []);
+    when(() => dataSource.fetchArticleLinks(any())).thenAnswer((_) async => []);
+    when(
+      () => dataSource.fetchThemeArticles(any()),
+    ).thenAnswer((_) async => []);
   });
 
   group('listCatalog', () {
@@ -178,6 +186,63 @@ void main() {
       // Главные по теме статьи идут первыми.
       expect(task.articles.first.relevance, ArticleRelevance.primary);
       expect(task.primaryArticles.single.article.slug, 'string-scan');
+    });
+
+    test('справка по темам: статьи вторым запросом, ручные — следом', () async {
+      when(
+        () => dataSource.fetchTask('e24-longest-run'),
+      ).thenAnswer((_) async => {..._task24, 'answer_format': 'single'});
+      when(() => dataSource.fetchThemeArticles('task-24')).thenAnswer(
+        (_) async => [
+          {'article_id': 'a-39', 'sort_order': 0},
+          {'article_id': 'a-32', 'sort_order': 1},
+        ],
+      );
+      when(() => dataSource.fetchArticles(any())).thenAnswer(
+        (_) async => [
+          {'id': 'a-32', 'slug': 'kes-3-2', 'title': 'Тема 3.2'},
+          {'id': 'a-39', 'slug': 'kes-3-9', 'title': 'Тема 3.9'},
+        ],
+      );
+      when(() => dataSource.fetchArticleLinks('task-24')).thenAnswer(
+        (_) async => [
+          {
+            'relevance': 'primary',
+            'sort_order': 0,
+            'reference_articles': {'slug': 'kes-3-2', 'title': 'Тема 3.2'},
+          },
+          {
+            'relevance': 'related',
+            'sort_order': 1,
+            'reference_articles': {
+              'slug': 'file-reading',
+              'title': 'Чтение файлов',
+            },
+          },
+        ],
+      );
+
+      final task = (await repository.getTask('e24-longest-run')).valueOrNull!;
+
+      expect(
+        [
+          for (final link in task.articles)
+            '${link.article.slug}: ${link.relevance.name}',
+        ],
+        ['kes-3-9: primary', 'kes-3-2: primary', 'file-reading: related'],
+      );
+      verify(() => dataSource.fetchArticles(['a-39', 'a-32'])).called(1);
+    });
+
+    test('без тем со статьями второй запрос не уходит', () async {
+      when(
+        () => dataSource.fetchTask('e24-longest-run'),
+      ).thenAnswer((_) async => {..._task24, 'answer_format': 'single'});
+
+      final task = (await repository.getTask('e24-longest-run')).valueOrNull!;
+
+      expect(task.articles, isEmpty);
+      verifyNever(() => dataSource.fetchArticles(any()));
     });
 
     test('неизвестная задача — понятная ошибка', () async {

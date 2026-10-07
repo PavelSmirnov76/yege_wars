@@ -1,14 +1,16 @@
 import 'package:yege_wars/core/network/supabase_schema.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_brief.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_level.dart';
+import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_brief.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_difficulty.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_file.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_stats.dart';
+import 'package:yege_wars/features/tasks/domain/entities/theme_article.dart';
 
-/// Разбор строк задач, файлов, связей со справочником и статистики.
+/// Разбор строк задач, файлов, справки и статистики.
 ///
 /// Ошибка формата — расхождение контракта с базой, поэтому наружу летит
 /// [FormatException], а репозиторий превращает её в понятное сообщение.
@@ -42,7 +44,9 @@ abstract final class TaskDto {
   }) => TaskDetail(
     brief: toBrief(json),
     statementMd: json[TaskColumns.statementMd] as String? ?? '',
-    answerFormat: json[TaskColumns.answerFormat] as String? ?? 'single',
+    answerFormat: AnswerFormat.fromValue(
+      json[TaskColumns.answerFormat] as String?,
+    ),
     files: files,
     articles: articles,
     source: json[TaskColumns.source] as String?,
@@ -63,33 +67,70 @@ abstract final class TaskDto {
     );
   }
 
-  /// Связь со статьёй справочника (вложенная выборка).
+  /// Ручная связь со статьёй справочника (вложенная выборка).
   static TaskArticleLink? toArticleLink(Map<String, dynamic> json) {
     final article = json[SupabaseTables.referenceArticles];
     if (article is! Map<String, dynamic>) {
       return null;
     }
-    final slug = article[ArticleColumns.slug];
-    final title = article[ArticleColumns.title];
-    if (slug is! String || title is! String) {
+    final brief = toArticleBrief(article);
+    if (brief == null) {
       return null;
     }
     return TaskArticleLink(
-      article: ArticleBrief(
-        slug: slug,
-        title: title,
-        summary: article[ArticleColumns.summary] as String? ?? '',
-        level: ArticleLevel.fromValue(
-          (article[ArticleColumns.level] as num?)?.toInt(),
-        ),
-        readingMinutes:
-            (article[ArticleColumns.readingMinutes] as num?)?.toInt() ?? 0,
-        egeNumbers: _intList(article[ArticleColumns.egeNumbers]),
-        tags: _stringList(article[ArticleColumns.tags]),
-      ),
+      article: brief,
       relevance: ArticleRelevance.fromValue(
         json[TaskReferenceColumns.relevance] as String?,
       ),
+    );
+  }
+
+  /// Статьи по темам задачи: строки `task_articles` [themeRows], к которым
+  /// по идентификатору приложены карточки статей [articleRows].
+  ///
+  /// Строка темы без статьи (статья скрыта или строка повреждена)
+  /// пропускается.
+  static List<ThemeArticle> toThemeArticles(
+    List<Map<String, dynamic>> themeRows,
+    List<Map<String, dynamic>> articleRows,
+  ) {
+    final briefs = <String, ArticleBrief>{
+      for (final row in articleRows)
+        if ((row[ArticleColumns.id], toArticleBrief(row)) case (
+          final String id,
+          final ArticleBrief brief,
+        ))
+          id: brief,
+    };
+    return [
+      for (final row in themeRows)
+        if ((
+              briefs[row[TaskArticleColumns.articleId]],
+              row[TaskArticleColumns.sortOrder],
+            )
+            case (final ArticleBrief brief, final num order))
+          ThemeArticle(article: brief, themeOrder: order.toInt()),
+    ];
+  }
+
+  /// Карточка статьи справочника; `null`, если нет `slug` или заголовка.
+  static ArticleBrief? toArticleBrief(Map<String, dynamic> json) {
+    final slug = json[ArticleColumns.slug];
+    final title = json[ArticleColumns.title];
+    if (slug is! String || title is! String) {
+      return null;
+    }
+    return ArticleBrief(
+      slug: slug,
+      title: title,
+      summary: json[ArticleColumns.summary] as String? ?? '',
+      level: ArticleLevel.fromValue(
+        (json[ArticleColumns.level] as num?)?.toInt(),
+      ),
+      readingMinutes:
+          (json[ArticleColumns.readingMinutes] as num?)?.toInt() ?? 0,
+      egeNumbers: _intList(json[ArticleColumns.egeNumbers]),
+      tags: _stringList(json[ArticleColumns.tags]),
     );
   }
 

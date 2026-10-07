@@ -6,6 +6,7 @@ import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/editor/editor_providers.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
 import 'package:yege_wars/features/submissions/submissions_providers.dart';
+import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:yege_wars/features/tasks/tasks_providers.dart';
 
 import 'fake_auth_repository.dart';
@@ -21,12 +22,14 @@ import 'fake_tasks_repository.dart';
 /// [reference], [tasks], [runtime] и [drafts] подменяют репозитории,
 /// среду выполнения Python и хранилище черновиков. Подменяются всегда:
 /// иначе экраны полезли бы в настоящий Supabase и в браузерные API.
+/// [tasks] — любой репозиторий задач: например, настоящий поверх
+/// заглушки datasource, когда проверяется сборка данных.
 Future<void> pumpApp(
   WidgetTester tester, {
   required FakeAuthRepository repository,
   String? initialUserId,
   FakeReferenceRepository? reference,
-  FakeTasksRepository? tasks,
+  TasksRepository? tasks,
   FakePythonRuntime? runtime,
   FakeDraftStorage? drafts,
   FakeSubmissionsRepository? submissions,
