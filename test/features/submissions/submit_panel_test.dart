@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/core/python_runtime/run_result.dart';
+import 'package:yege_wars/features/submissions/domain/entities/submission.dart';
 import 'package:yege_wars/features/submissions/domain/entities/submit_result.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/verdict_banner.dart';
@@ -298,13 +300,27 @@ void main() {
     submissions.attemptsResult = const Err(failure);
     await openSolve(tester);
 
+    // Экран пути: заголовок есть, списка и сообщения нет.
+    void expectNoAttempts() {
+      expect(find.text(l10n.attemptsTitle), findsOneWidget);
+      expect(find.text(l10n.attemptsEmpty), findsNothing);
+      expect(find.byType(Switch), findsNothing);
+      expect(find.text(failure.message), findsNothing);
+    }
+
+    // Пока Riverpod повторяет загрузку — AsyncLoading с ошибкой внутри.
+    final attempts = myAttemptsProvider(testTask24.id);
+    final retrying = containerOf(tester).read(attempts);
+    expect(retrying, isA<AsyncLoading<List<Submission>>>());
+    expect(retrying.error, failure);
+    expectNoAttempts();
+
+    // После последнего повтора — AsyncError.
+    await pumpUntilRetriesEnd(tester, attempts);
     expect(
-      containerOf(tester).read(myAttemptsProvider(testTask24.id)).error,
-      failure,
+      containerOf(tester).read(attempts),
+      isA<AsyncError<List<Submission>>>(),
     );
-    expect(find.text(l10n.attemptsTitle), findsOneWidget);
-    expect(find.text(l10n.attemptsEmpty), findsNothing);
-    expect(find.byType(Switch), findsNothing);
-    expect(find.text(failure.message), findsNothing);
+    expectNoAttempts();
   });
 }

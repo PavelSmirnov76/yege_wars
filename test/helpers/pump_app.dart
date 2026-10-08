@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/app.dart';
 import 'package:yege_wars/app/router/app_router.dart';
@@ -67,6 +68,27 @@ ProviderContainer containerOf(WidgetTester tester) => ProviderScope.containerOf(
   tester.element(find.byType(YegeWarsApp)),
   listen: false,
 );
+
+/// Прокручивает время, пока упавший [provider] не исчерпает автоповторы
+/// Riverpod и не перейдёт в `AsyncError`; не дольше [limit].
+///
+/// Пока идут повторы, провайдер в `AsyncLoading` с ошибкой внутри, а
+/// `AsyncError` наступает после последнего: по умолчанию 10 повторов с
+/// паузами от 0,2 до 6,4 с, около 38 с. `pumpAndSettle` повторов не
+/// дожидается: между ними кадров нет.
+Future<void> pumpUntilRetriesEnd<T>(
+  WidgetTester tester,
+  ProviderListenable<AsyncValue<T>> provider, {
+  Duration limit = const Duration(minutes: 1),
+}) async {
+  const step = Duration(seconds: 1);
+  var elapsed = Duration.zero;
+  while (containerOf(tester).read(provider) is! AsyncError<T> &&
+      elapsed < limit) {
+    await tester.pump(step);
+    elapsed += step;
+  }
+}
 
 /// Адрес открытой страницы приложения — с параметрами запроса.
 String currentLocation(WidgetTester tester) => containerOf(

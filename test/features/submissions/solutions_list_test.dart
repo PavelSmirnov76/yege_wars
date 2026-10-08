@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/core/markdown/code_block.dart';
+import 'package:yege_wars/features/submissions/domain/entities/submission.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/solutions_list.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
@@ -101,20 +103,32 @@ void main() {
       ..solutionsResult = const Err(failure);
     await openSolutions(tester, settle: false);
 
+    // Экран пути: вместо списка индикатор загрузки, сообщения нет.
+    void expectSpinnerOnly() {
+      expect(
+        find.descendant(
+          of: find.byType(SolutionsList),
+          matching: find.byType(CircularProgressIndicator),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text(failure.message), findsNothing);
+      expect(find.text(l10n.solutionsEmpty), findsNothing);
+    }
+
+    // Пока Riverpod повторяет загрузку — AsyncLoading с ошибкой внутри.
+    final solutions = publishedSolutionsProvider(testTask24.id);
+    final retrying = containerOf(tester).read(solutions);
+    expect(retrying, isA<AsyncLoading<List<Submission>>>());
+    expect(retrying.error, failure);
+    expectSpinnerOnly();
+
+    // После последнего повтора — AsyncError.
+    await pumpUntilRetriesEnd(tester, solutions);
     expect(
-      containerOf(
-        tester,
-      ).read(publishedSolutionsProvider(testTask24.id)).error,
-      failure,
+      containerOf(tester).read(solutions),
+      isA<AsyncError<List<Submission>>>(),
     );
-    expect(
-      find.descendant(
-        of: find.byType(SolutionsList),
-        matching: find.byType(CircularProgressIndicator),
-      ),
-      findsOneWidget,
-    );
-    expect(find.text(failure.message), findsNothing);
-    expect(find.text(l10n.solutionsEmpty), findsNothing);
+    expectSpinnerOnly();
   });
 }
