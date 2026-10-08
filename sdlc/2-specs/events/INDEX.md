@@ -14,3 +14,12 @@
 | [EVT-8](EVT-8-ROLE-CHANGED-IN-MANAGEMENT.md) | Роль изменена | [ENT-2](../entities/ENT-2-PROFILE-IN-AUTH.md) |
 | [EVT-9](EVT-9-PASSWORD-RESET-IN-MANAGEMENT.md) | Пароль задан администратором | [ENT-1](../entities/ENT-1-ACCOUNT-IN-AUTH.md) |
 | [EVT-10](EVT-10-APP-STARTED-IN-CONFIG.md) | Приложение запущено | [ENT-5](../entities/ENT-5-BUILD-CONFIG-IN-CONFIG.md) |
+| [EVT-11](EVT-11-CATALOG-OPENED-IN-CATALOG.md) | Каталог открыт | [ENT-6](../entities/ENT-6-PROBLEM-IN-CATALOG.md) |
+| [EVT-12](EVT-12-PROBLEM-OPENED-IN-CATALOG.md) | Задача открыта | [ENT-6](../entities/ENT-6-PROBLEM-IN-CATALOG.md) |
+| [EVT-13](EVT-13-CODE-EDITED-IN-EDITOR.md) | Код изменён | [ENT-8](../entities/ENT-8-CODE-IN-EDITOR.md) |
+| [EVT-14](EVT-14-RUN-STARTED-IN-EDITOR.md) | Запуск начат | [ENT-9](../entities/ENT-9-RUN-IN-EDITOR.md) |
+| [EVT-15](EVT-15-OUTPUT-TAKEN-IN-SUBMISSION.md) | Ответ взят из вывода | [ENT-9](../entities/ENT-9-RUN-IN-EDITOR.md) |
+| [EVT-16](EVT-16-ANSWER-SUBMITTED-IN-SUBMISSION.md) | Ответ отправлен | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
+| [EVT-17](EVT-17-PUBLICATION-SWITCHED-IN-SUBMISSION.md) | Публикация изменена | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
+| [EVT-18](EVT-18-ANSWER-KEY-REQUESTED-IN-SUBMISSION.md) | Запрошен эталон | [ENT-10](../entities/ENT-10-ANSWER-KEY-IN-SUBMISSION.md) |
+| [EVT-19](EVT-19-ATTEMPT-WRITTEN-IN-SUBMISSION.md) | Попытка записана напрямую | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
