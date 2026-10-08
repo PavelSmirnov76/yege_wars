@@ -84,6 +84,10 @@ _GIT_OPTIONS = (
     '-c', 'commit.gpgsign=false',
     '-c', 'core.autocrlf=false',
     '-c', f'core.hooksPath={os.devnull}',
+    # Без фонового обслуживания: после коммита git дописывает в .git
+    # отдельным процессом, и удаление временного репозитория падает.
+    '-c', 'maintenance.auto=false',
+    '-c', 'gc.auto=0',
 )
 _TEMPLATE: Optional[str] = None
 
