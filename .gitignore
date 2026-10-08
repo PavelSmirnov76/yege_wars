@@ -58,3 +58,6 @@ supabase/seed/local/
 **/answers.local.json
 *.env
 .env*
+
+# Внешние материалы владельца — вне работы, в репозиторий не попадают
+/reference/
