@@ -68,11 +68,6 @@ jobs:
           python-version: '3.9'
 
       - name: Тесты скрипта конвейера
-        env:
-          GIT_AUTHOR_NAME: ci
-          GIT_AUTHOR_EMAIL: ci@example.invalid
-          GIT_COMMITTER_NAME: ci
-          GIT_COMMITTER_EMAIL: ci@example.invalid
         run: python3 -m unittest discover -s sdlc_tool/tests -t .
 
       - name: Проверка конвейера
