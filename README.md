@@ -88,7 +88,14 @@ bash supabase/tests/run_import_check.sh
 
 # Тесты скриптов tools/
 python3 -m unittest discover -s tools/tests -t .
+
+# Конвейер sdlc/: пересборка индексов и проверка — перед каждым коммитом
+python3 -m sdlc_tool views
+python3 -m sdlc_tool check
 ```
+
+Остальные команды скрипта конвейера (`next`, `entomb`, `snapshot-prd`, `run`) —
+в `sdlc_tool/README.md`.
 
 Команды контентных скриптов — в `tools/README.md`.
 

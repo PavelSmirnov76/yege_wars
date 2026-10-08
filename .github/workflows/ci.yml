@@ -53,3 +53,34 @@ jobs:
         with:
           name: coverage
           path: coverage/lcov.info
+
+  sdlc:
+    # Скрипт конвейера sdlc_tool: свои тесты и проверка дерева sdlc/.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Проверке нужна база для сравнения — полная история.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Тесты скрипта конвейера
+        env:
+          GIT_AUTHOR_NAME: ci
+          GIT_AUTHOR_EMAIL: ci@example.invalid
+          GIT_COMMITTER_NAME: ci
+          GIT_COMMITTER_EMAIL: ci@example.invalid
+        run: python3 -m unittest discover -s sdlc_tool/tests -t .
+
+      - name: Проверка конвейера
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          # Первый push ветки приходит с нулевой базой — сравнивать не с чем.
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            BASE=none
+          fi
+          python3 -m sdlc_tool check --base "$BASE"
