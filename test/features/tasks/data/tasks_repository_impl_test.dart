@@ -51,7 +51,7 @@ void main() {
   });
 
   group('listCatalog', () {
-    test('собирает карточки, прогресс и статистику', () async {
+    test('UC-14-P-01: собирает карточки, прогресс и статистику', () async {
       when(
         () => dataSource.fetchTasks(any()),
       ).thenAnswer((_) async => [_task17, _task24]);
@@ -87,7 +87,7 @@ void main() {
       expect(items.first.stats.isEmpty, isTrue);
     });
 
-    test('задача без моих попыток — не начата', () async {
+    test('UC-14-P-01: задача без моих попыток — не начата', () async {
       when(
         () => dataSource.fetchTasks(any()),
       ).thenAnswer((_) async => [_task24]);
@@ -99,7 +99,7 @@ void main() {
       expect(items.single.progress, TaskProgress.notStarted);
     });
 
-    test('отбор по прогрессу выполняется на клиенте', () async {
+    test('UC-14-P-02: отбор по прогрессу выполняется на клиенте', () async {
       when(
         () => dataSource.fetchTasks(any()),
       ).thenAnswer((_) async => [_task17, _task24]);
@@ -116,7 +116,7 @@ void main() {
       expect(items.single.task.slug, 'e17-pairs-file');
     });
 
-    test('фильтр уходит в datasource без изменений', () async {
+    test('UC-14-P-02: фильтр уходит в datasource без изменений', () async {
       const filter = TaskFilter(egeNumber: 24, difficulty: TaskDifficulty.hard);
       when(() => dataSource.fetchTasks(any())).thenAnswer((_) async => []);
 
@@ -137,7 +137,7 @@ void main() {
   });
 
   group('getTask', () {
-    test('собирает условие, файлы и справку', () async {
+    test('UC-15-P-01: собирает условие, файлы и справку', () async {
       when(() => dataSource.fetchTask('e24-longest-run')).thenAnswer(
         (_) async => {
           ..._task24,
@@ -245,7 +245,7 @@ void main() {
       verifyNever(() => dataSource.fetchArticles(any()));
     });
 
-    test('неизвестная задача — понятная ошибка', () async {
+    test('UC-15-P-02: неизвестная задача — понятная ошибка', () async {
       when(() => dataSource.fetchTask('нет')).thenAnswer((_) async => null);
 
       final result = await repository.getTask('нет');
@@ -255,7 +255,8 @@ void main() {
     });
   });
 
-  test('номера заданий приходят без повторов и по порядку', () async {
+  test('UC-14-P-02: номера заданий приходят без повторов и по '
+      'порядку', () async {
     when(() => dataSource.fetchEgeNumbers()).thenAnswer(
       (_) async => [
         {'ege_number': 24},

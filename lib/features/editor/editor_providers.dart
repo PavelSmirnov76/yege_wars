@@ -12,6 +12,8 @@ DraftStorage draftStorage(Ref ref) => const PreferencesDraftStorage();
 ///
 /// Читается один раз при открытии задачи; дальше правки сохраняются
 /// редактором с задержкой.
+///
+/// Реализует UC-16.
 @riverpod
 Future<String> taskDraft(Ref ref, String taskSlug) async =>
     await ref.watch(draftStorageProvider).read(taskSlug) ?? '';

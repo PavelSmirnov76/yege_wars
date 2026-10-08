@@ -9,6 +9,8 @@ import 'package:yege_wars/features/tasks/presentation/widgets/difficulty_badge.d
 import 'package:yege_wars/features/tasks/presentation/widgets/progress_badge.dart';
 
 /// Фильтры каталога: номер задания, сложность и состояние решения.
+///
+/// Реализует UC-14.
 class CatalogFiltersBar extends ConsumerWidget {
   /// Создаёт панель фильтров.
   const CatalogFiltersBar({super.key});

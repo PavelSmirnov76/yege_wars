@@ -10,6 +10,8 @@ import 'package:yege_wars/core/markdown/python_highlighter.dart';
 /// Прокрутка обязательна: длинная строка кода не должна ломать вёрстку
 /// на экране шириной 360 px и не должна переноситься — в коде перенос
 /// меняет смысл отступов.
+///
+/// Воплощает COMP-11.
 class CodeBlock extends StatelessWidget {
   /// Создаёт блок кода.
   const CodeBlock({required this.code, this.language, super.key});

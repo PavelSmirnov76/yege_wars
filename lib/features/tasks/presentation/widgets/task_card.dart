@@ -7,6 +7,8 @@ import 'package:yege_wars/features/tasks/presentation/widgets/difficulty_badge.d
 import 'package:yege_wars/features/tasks/presentation/widgets/progress_badge.dart';
 
 /// Карточка задачи в каталоге.
+///
+/// Воплощает COMP-5.
 class TaskCard extends StatelessWidget {
   /// Создаёт карточку для строки каталога [item].
   const TaskCard({required this.item, required this.onTap, super.key});

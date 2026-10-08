@@ -4,6 +4,8 @@ import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 
 /// Сообщение об ошибке с кнопкой повтора.
+///
+/// Воплощает COMP-12.
 class ReferenceErrorView extends StatelessWidget {
   /// Создаёт сообщение по ошибке [error].
   const ReferenceErrorView({

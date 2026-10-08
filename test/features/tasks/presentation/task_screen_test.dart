@@ -69,7 +69,9 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('показывает условие и подсказку про справку', (tester) async {
+  testWidgets('UC-15-P-01: показывает условие и подсказку про справку', (
+    tester,
+  ) async {
     await openTask(tester);
 
     expect(find.byType(TaskScreen), findsOneWidget);
@@ -78,7 +80,8 @@ void main() {
     expect(find.text(l10n.taskHelpHint), findsOneWidget);
   });
 
-  testWidgets('на узком экране условие, справка и файлы — вкладки', (
+  testWidgets('UC-15-P-01: на узком экране условие, справка и файлы — '
+      'вкладки', (
     tester,
   ) async {
     await openTask(tester, surface: const Size(390, 800));
@@ -145,7 +148,7 @@ void main() {
     expect(find.widgetWithText(FilledButton, l10n.taskHelpTitle), findsOne);
   });
 
-  testWidgets('файл разворачивается и показывает первые строки', (
+  testWidgets('UC-15-P-01: файл разворачивается и показывает первые строки', (
     tester,
   ) async {
     await openTask(tester, surface: const Size(390, 800));
@@ -168,7 +171,9 @@ void main() {
     expect(find.byType(ArticleScreen), findsOneWidget);
   });
 
-  testWidgets('ошибка загрузки показывается с повтором', (tester) async {
+  testWidgets('UC-15-P-02: ошибка загрузки показывается с повтором', (
+    tester,
+  ) async {
     tasks.taskResult = const Err(
       DatabaseFailure(message: 'Задача не найдена или ещё не открыта.'),
     );
@@ -176,6 +181,18 @@ void main() {
 
     expect(find.text('Задача не найдена или ещё не открыта.'), findsOneWidget);
     expect(find.text(l10n.commonRetry), findsOneWidget);
+  });
+
+  testWidgets('UC-15-P-03: сбой связи показывается сообщением с повтором', (
+    tester,
+  ) async {
+    const failure = NetworkFailure();
+    tasks.taskResult = const Err(failure);
+    await openTask(tester);
+
+    expect(find.text(failure.message), findsOneWidget);
+    expect(find.widgetWithText(OutlinedButton, l10n.commonRetry), findsOne);
+    expect(find.byType(TaskFilesPanel), findsNothing);
   });
 
   group('filePreview', () {

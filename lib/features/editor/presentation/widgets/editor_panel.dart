@@ -15,7 +15,9 @@ import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
 /// Панель решения задачи: редактор, ввод, запуск и консоль.
 ///
-/// Отправка ответа появится на следующем этапе.
+/// Под консолью — отправка ответа, [SubmitPanel].
+///
+/// Реализует UC-16 и UC-17.
 class EditorPanel extends ConsumerStatefulWidget {
   /// Создаёт панель для задачи [task].
   const EditorPanel({required this.task, super.key});

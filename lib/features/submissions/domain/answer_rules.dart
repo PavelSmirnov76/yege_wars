@@ -1,6 +1,8 @@
 import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
 
 /// Правила ответа, которые клиент применяет до отправки.
+///
+/// Реализует UC-18.
 abstract final class AnswerRules {
   /// Ответ, который кнопка «Взять из вывода» берёт из вывода [stdout].
   ///

@@ -4,6 +4,8 @@ import 'package:yege_wars/features/submissions/domain/entities/submit_result.dar
 import 'package:yege_wars/features/submissions/domain/repositories/submissions_repository.dart';
 
 /// Отправка ответа с проверкой ввода.
+///
+/// Реализует UC-19.
 final class SubmitAnswerUseCase {
   /// Создаёт use case поверх [SubmissionsRepository].
   const SubmitAnswerUseCase(this._repository);

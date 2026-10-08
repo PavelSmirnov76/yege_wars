@@ -17,6 +17,8 @@ String progressLabel(TaskProgress progress, AppLocalizations l10n) =>
 ///
 /// Нерешённые задачи метки не получают: в каталоге их большинство, и
 /// подпись «не начата» у каждой карточки была бы шумом.
+///
+/// Воплощает COMP-7.
 class ProgressBadge extends StatelessWidget {
   /// Создаёт метку для состояния [progress].
   const ProgressBadge(this.progress, {super.key});

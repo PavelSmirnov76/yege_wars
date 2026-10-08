@@ -8,6 +8,8 @@ import 'package:yege_wars/features/submissions/domain/repositories/submissions_r
 
 /// Реализация [SubmissionsRepository] поверх
 /// [SubmissionsRemoteDataSource].
+///
+/// Реализует UC-19.
 final class SubmissionsRepositoryImpl implements SubmissionsRepository {
   /// Создаёт репозиторий поверх [SubmissionsRemoteDataSource].
   const SubmissionsRepositoryImpl(this._dataSource);

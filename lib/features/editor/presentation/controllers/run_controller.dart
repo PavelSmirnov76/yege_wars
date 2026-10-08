@@ -33,6 +33,8 @@ final class RunState {
 }
 
 /// Запуск кода задачи: держит состояние среды и последний результат.
+///
+/// Реализует UC-17.
 @riverpod
 class RunController extends _$RunController {
   @override

@@ -10,6 +10,8 @@ import 'package:yege_wars/features/editor/presentation/widgets/python_editing_co
 /// Поле ввода кода с подсветкой Python.
 ///
 /// Ctrl/Cmd+Enter запускает программу, не отпуская клавиатуру.
+///
+/// Воплощает COMP-8.
 class CodeEditor extends StatelessWidget {
   /// Создаёт редактор.
   const CodeEditor({

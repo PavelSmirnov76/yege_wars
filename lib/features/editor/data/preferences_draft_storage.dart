@@ -2,6 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yege_wars/features/editor/domain/draft_storage.dart';
 
 /// Черновики в локальном хранилище браузера.
+///
+/// Реализует UC-16.
 final class PreferencesDraftStorage implements DraftStorage {
   /// Создаёт хранилище.
   const PreferencesDraftStorage();

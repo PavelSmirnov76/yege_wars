@@ -36,7 +36,9 @@ void main() {
     expect(find.byType(CatalogScreen), findsOneWidget);
   }
 
-  testWidgets('показывает задачи с группировкой по номеру', (tester) async {
+  testWidgets('UC-14-P-01: показывает задачи с группировкой по номеру', (
+    tester,
+  ) async {
     await openCatalog(tester);
 
     expect(find.text(testTask17.title), findsOneWidget);
@@ -45,7 +47,8 @@ void main() {
     expect(find.text(l10n.catalogEgeGroup(24)), findsOneWidget);
   });
 
-  testWidgets('задача без номера КИМ попадает в группу «Без номера»', (
+  testWidgets('UC-14-P-01: задача без номера КИМ попадает в группу «Без '
+      'номера»', (
     tester,
   ) async {
     tasks.catalogResult = const Ok([testNoNumberItem]);
@@ -55,7 +58,7 @@ void main() {
     expect(find.text(l10n.catalogEgeGroupNone), findsOneWidget);
   });
 
-  testWidgets('показывает статус и статистику', (tester) async {
+  testWidgets('UC-14-P-01: показывает статус и статистику', (tester) async {
     await openCatalog(tester);
 
     // Те же слова есть среди фильтров, поэтому ищем внутри карточек.
@@ -70,14 +73,16 @@ void main() {
     expect(find.text(l10n.catalogNoAttempts), findsOneWidget);
   });
 
-  testWidgets('пустой каталог объясняет себя', (tester) async {
+  testWidgets('UC-14-P-03: пустой каталог объясняет себя', (tester) async {
     tasks.catalogResult = const Ok([]);
     await openCatalog(tester);
 
     expect(find.text(l10n.catalogEmpty), findsOneWidget);
   });
 
-  testWidgets('фильтр по сложности уходит в запрос', (tester) async {
+  testWidgets('UC-14-P-02: фильтр по сложности уходит в запрос', (
+    tester,
+  ) async {
     await openCatalog(tester);
 
     await tester.tap(find.widgetWithText(FilterChip, l10n.difficultyHard));
@@ -86,7 +91,9 @@ void main() {
     expect(tasks.lastFilter?.difficulty, TaskDifficulty.hard);
   });
 
-  testWidgets('фильтр по состоянию решения уходит в запрос', (tester) async {
+  testWidgets('UC-14-P-02: фильтр по состоянию решения уходит в запрос', (
+    tester,
+  ) async {
     await openCatalog(tester);
 
     await tester.tap(find.widgetWithText(FilterChip, l10n.progressSolved));
@@ -95,7 +102,9 @@ void main() {
     expect(tasks.lastFilter?.progress, TaskProgress.solved);
   });
 
-  testWidgets('ошибка каталога показывается с повтором', (tester) async {
+  testWidgets('UC-14-P-04: ошибка каталога показывается с повтором', (
+    tester,
+  ) async {
     tasks.catalogResult = const Err(testNetworkFailure);
     await openCatalog(tester);
 
@@ -111,7 +120,9 @@ void main() {
     expect(find.text(testTask24.title), findsOneWidget);
   });
 
-  testWidgets('нажатие на карточку открывает задачу', (tester) async {
+  testWidgets('UC-14-P-01: нажатие на карточку открывает задачу', (
+    tester,
+  ) async {
     await openCatalog(tester);
 
     await tester.tap(find.text(testTask24.title));

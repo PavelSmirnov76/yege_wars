@@ -7,6 +7,8 @@ import 'package:yege_wars/core/markdown/python_highlighter.dart';
 /// Свой контроллер вместо пакета-редактора: разбор кода на токены уже есть
 /// (им же подсвечиваются примеры в справочнике), а обычное поле ввода
 /// работает в любом мобильном браузере.
+///
+/// Воплощает COMP-8.
 class PythonEditingController extends TextEditingController {
   /// Создаёт контроллер с начальным текстом.
   PythonEditingController({super.text});

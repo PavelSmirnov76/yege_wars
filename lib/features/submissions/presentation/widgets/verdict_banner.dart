@@ -5,6 +5,8 @@ import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 
 /// Крупная понятная индикация «Верно / Неверно».
+///
+/// Воплощает COMP-10.
 class VerdictBanner extends StatelessWidget {
   /// Создаёт индикацию для результата [isCorrect].
   const VerdictBanner({required this.isCorrect, super.key});
