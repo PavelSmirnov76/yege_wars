@@ -1,6 +1,8 @@
-# FIG-14: Статья
+# FIG-18: Статья
 
-**Основание:** [UC-26](../2-specs/use-cases/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md), [UC-28](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
+supersedes: [FIG-14](obsolete/FIG-14-ARTICLE.md)
+
+**Основание:** [UC-37](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md), [UC-28](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
 
 ## Раскладка
 
@@ -20,9 +22,9 @@
 
 ## Состояния
 
-- [UC-26-P-01](../2-specs/use-cases/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-26-p-01) — статья, как в раскладке.
-- [UC-26-P-02](../2-specs/use-cases/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-26-p-02) — индикатор загрузки по центру, пока идут повторы; затем [COMP-12](design-system/COMP-12-ERROR-RETRY.md) с «Статья справочника не найдена.».
-- [UC-26-P-03](../2-specs/use-cases/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-26-p-03) — индикатор загрузки по центру, пока идут повторы; затем [COMP-12](design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
+- [UC-37-P-01](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-01) — статья, как в раскладке.
+- [UC-37-P-02](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-02) — по центру — [COMP-12](design-system/COMP-12-ERROR-RETRY.md) с «Статья справочника не найдена.».
+- [UC-37-P-03](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-03) — по центру — [COMP-12](design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
 - [UC-28-P-01](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-01) — в тексте статьи название другой статьи ссылкой; нажатие открывает её здесь же, в разделе «Справочник».
 - [UC-28-P-02](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-02) — на месте ссылки на статью — slug обычным текстом.
 - [UC-28-P-03](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-03) — обычная ссылка выглядит ссылкой; нажатие ничего не делает.

@@ -1,8 +1,12 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** черновик в базе по пользователю — R44, R45; проход 7
+> **Заменён:** [UC-31](../UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md)
+
 # UC-16: Черновик кода
 
-**Основание:** [R26](../../0-vibes/prd/PRD.md#r26), [BT-10](../../1-business-tasks/planning/BT-10-PLANNING-RUN.md), [MOD-5](../modules/MOD-5-EDITOR.md).
+**Основание:** [R26](../../../0-vibes/prd/PRD.md#r26), [BT-10](../../../1-business-tasks/planning/obsolete/BT-10-PLANNING-RUN.md), [MOD-5](../../modules/obsolete/MOD-5-EDITOR.md).
 
-**Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-13](../events/EVT-13-CODE-EDITED-IN-EDITOR.md), [ENT-8](../entities/ENT-8-CODE-IN-EDITOR.md).
+**Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-13](../../events/obsolete/EVT-13-CODE-EDITED-IN-EDITOR.md), [ENT-8](../../entities/obsolete/ENT-8-CODE-IN-EDITOR.md).
 
 ## Триггер
 

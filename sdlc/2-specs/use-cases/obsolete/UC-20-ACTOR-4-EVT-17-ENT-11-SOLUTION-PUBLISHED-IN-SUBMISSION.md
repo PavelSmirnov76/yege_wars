@@ -1,8 +1,12 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** сбой публикации показывается, повторить можно — R47; проход 7
+> **Заменён:** [UC-33](../UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md)
+
 # UC-20: Публикация решения
 
-**Основание:** [R33](../../0-vibes/prd/PRD.md#r33), [BT-12](../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md), [MOD-6](../modules/MOD-6-SUBMISSION.md).
+**Основание:** [R33](../../../0-vibes/prd/PRD.md#r33), [BT-12](../../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md), [MOD-6](../../modules/MOD-6-SUBMISSION.md).
 
-**Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-17](../events/EVT-17-PUBLICATION-SWITCHED-IN-SUBMISSION.md), [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md).
+**Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-17](../../events/EVT-17-PUBLICATION-SWITCHED-IN-SUBMISSION.md), [ENT-11](../../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md).
 
 ## Триггер
 

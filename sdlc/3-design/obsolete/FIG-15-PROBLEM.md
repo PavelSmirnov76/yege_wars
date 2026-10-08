@@ -1,10 +1,12 @@
-> **Похоронен:** 2026-10-08
-> **Почему:** Проход 6 «как построено»: экран задачи дополнен состояниями справки, подсказки над условием и ссылок на статьи — срез «справочник»
-> **Заменён:** [FIG-15](FIG-15-PROBLEM.md)
+> **Похоронен:** 2026-10-09
+> **Почему:** состояния под UC-31…UC-35; проход 7
+> **Заменён:** [FIG-16](../FIG-16-PROBLEM.md)
 
-# FIG-12: Задача
+# FIG-15: Задача
 
-**Основание:** [UC-15](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md), [UC-16](../../2-specs/use-cases/obsolete/UC-16-ACTOR-4-EVT-13-ENT-8-DRAFT-SAVED-IN-EDITOR.md), [UC-17](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md), [UC-18](../../2-specs/use-cases/UC-18-ACTOR-4-EVT-15-ENT-9-ANSWER-FILLED-IN-SUBMISSION.md), [UC-19](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md), [UC-20](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md), [UC-21](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-22](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md).
+supersedes: [FIG-12](FIG-12-PROBLEM.md)
+
+**Основание:** [UC-15](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md), [UC-16](../../2-specs/use-cases/obsolete/UC-16-ACTOR-4-EVT-13-ENT-8-DRAFT-SAVED-IN-EDITOR.md), [UC-17](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md), [UC-18](../../2-specs/use-cases/UC-18-ACTOR-4-EVT-15-ENT-9-ANSWER-FILLED-IN-SUBMISSION.md), [UC-19](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md), [UC-20](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md), [UC-21](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-22](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md), [UC-27](../../2-specs/use-cases/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md), [UC-28](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
 
 ## Раскладка
 
@@ -13,8 +15,11 @@
 
 Широкий экран — от `AppBreakpoints.tabletMax` — [TOKEN-5](../design-system/TOKEN-5-BREAKPOINT.md#tablet-max):
 две колонки через разделитель, левая шире правой, 3 : 2. Слева — «Задание N»
-или «Без номера» и метка сложности, условие, «Источник: …». Справа сверху
-вниз — разделы «Код», «Решения», «Справка», «Файлы» с заголовками.
+или «Без номера» и метка сложности; подсказка «Не знаешь, с чего начать?
+Загляни в справку» цветом `AppColors.textSecondary` — [TOKEN-1](../design-system/TOKEN-1-COLOR.md#text-secondary),
+если у задачи есть главная статья; условие — [COMP-15](../design-system/COMP-15-MARKDOWN.md);
+«Источник: …». Справа сверху вниз — разделы «Код», «Решения», «Справка»,
+«Файлы» с заголовками.
 
 Узкий экран: вкладки «Условие», «Код», «Решения», «Справка», «Файлы» с
 прокруткой вбок; во вкладке — содержимое одноимённого раздела.
@@ -31,8 +36,11 @@
 
 Раздел «Решения» — список чужих решений.
 
-Раздел «Справка», подсказка над условием и ссылки на статьи в условии —
-срез «справочник»; здесь их состояний нет.
+Раздел «Справка»: карточка на статью — название и под ним описание цветом
+`AppColors.textSecondary` — [TOKEN-1](../design-system/TOKEN-1-COLOR.md#text-secondary);
+карточка раскрывается нажатием, раскрытая показывает сведения о статье
+[COMP-13](../design-system/COMP-13-ARTICLE-META.md) и справа кнопку «Справка».
+Между карточками — `AppSpacing.sm` — [TOKEN-3](../design-system/TOKEN-3-SPACING.md#sm).
 
 ## Состояния
 
@@ -63,6 +71,11 @@
 - [UC-22-P-02](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-02) — «Решения других откроются после твоего верного ответа».
 - [UC-22-P-03](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-03) — «Пока никто не опубликовал своё решение».
 - [UC-22-P-04](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04) — вместо списка индикатор загрузки, сообщения нет.
+- [UC-27-P-01](../../2-specs/use-cases/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-27-p-01) — в разделе «Справка» карточки статей, главные первыми и раскрыты; кнопка «Справка» открывает статью в разделе «Справочник»; над условием — подсказка, если есть главная статья.
+- [UC-27-P-02](../../2-specs/use-cases/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-27-p-02) — в разделе «Справка» — «К этой задаче пока нет статей справочника» цветом `AppColors.textSecondary` — [TOKEN-1](../design-system/TOKEN-1-COLOR.md#text-secondary); подсказки над условием нет.
+- [UC-28-P-01](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-01) — в условии название статьи ссылкой; нажатие открывает статью в разделе «Справочник».
+- [UC-28-P-02](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-02) — в условии на месте ссылки на статью — slug обычным текстом.
+- [UC-28-P-03](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-03) — обычная ссылка в условии выглядит ссылкой; нажатие ничего не делает.
 
 ## Тексты
 
@@ -72,6 +85,13 @@
 | `editorTitle` | Код |
 | `solutionsTitle` | Решения |
 | `taskHelpTitle` | Справка |
+| `taskHelpHint` | Не знаешь, с чего начать? Загляни в справку |
+| `taskHelpEmpty` | К этой задаче пока нет статей справочника |
+| `referenceLevelBasic` | Базовый |
+| `referenceLevelMedium` | Средний |
+| `referenceLevelAdvanced` | Продвинутый |
+| `referenceReadingMinutes` | {minutes} мин |
+| `referenceEgeNumber` | № {number} |
 | `taskFilesTitle` | Файлы |
 | `navCatalog` | Каталог |
 | `catalogEgeGroup` | Задание {number} |
@@ -129,4 +149,4 @@
 
 ## Компоненты
 
-[COMP-4](../design-system/COMP-4-NAVIGATION.md), [COMP-6](../design-system/COMP-6-DIFFICULTY-BADGE.md), [COMP-8](../design-system/COMP-8-CODE-EDITOR.md), [COMP-9](../design-system/COMP-9-CONSOLE.md), [COMP-10](../design-system/COMP-10-VERDICT.md), [COMP-11](../design-system/COMP-11-CODE-BLOCK.md), [COMP-12](../design-system/COMP-12-ERROR-RETRY.md).
+[COMP-4](../design-system/COMP-4-NAVIGATION.md), [COMP-6](../design-system/COMP-6-DIFFICULTY-BADGE.md), [COMP-8](../design-system/COMP-8-CODE-EDITOR.md), [COMP-9](../design-system/COMP-9-CONSOLE.md), [COMP-10](../design-system/COMP-10-VERDICT.md), [COMP-11](../design-system/COMP-11-CODE-BLOCK.md), [COMP-12](../design-system/COMP-12-ERROR-RETRY.md), [COMP-13](../design-system/COMP-13-ARTICLE-META.md), [COMP-15](../design-system/COMP-15-MARKDOWN.md).

@@ -6,10 +6,10 @@
 
 Что исправить:
 
-1. Тесты [UC-21-P-03](../../2-specs/use-cases/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-03)
+1. Тесты [UC-21-P-03](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-03)
    («сбой загрузки попыток — ни списка, ни сообщения»,
    `submit_panel_test.dart`) и
-   [UC-22-P-04](../../2-specs/use-cases/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04)
+   [UC-22-P-04](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04)
    («сбой загрузки решений — индикатор загрузки без сообщения»,
    `solutions_list_test.dart`) смотрят на экран, пока Riverpod повторяет
    загрузку. В момент проверки `myAttempts` и `publishedSolutions` — в
@@ -38,18 +38,18 @@ worktree задания, без незакоммиченных изменени�
 | 1 | Полный набор проверок Dart зелёный, тестов не меньше 291 плюс новые; `run_local.sh` — `RLS OK` вместе с новыми проверками; новые проверки не холостые | `python3 -m sdlc_tool run` в worktree: 10 проверок `PASS`; Dart — 300 тестов (291 и 9 новых), `rls` — `PASS`. Холостота — на копии `81458b7` в scratchpad, порчей кода, а не переворотом ожидания; по одной порче за запуск: 22 порчи, 18 пойманы новыми проверками, 4 — нет. Подробно — ниже, после таблицы. Копия после порч совпадает с веткой (`diff -r`) | нет: UC-21-P-03, UC-22-P-04 |
 | 2 | `git diff main...task/TASK-4` — изменены только тесты и тестовые помощники, комментарии в `lib/` и `web/pyodide_worker.js`, `supabase/tests/` и в `sdlc/` — сдача и производные файлы; `supabase/migrations/` не тронут; в `lib/` нет изменённых строк, кроме комментариев | 51 файл: `lib/` — 35, `test/` — 9, `web/pyodide_worker.js`, `supabase/tests/rls_tests.sql`, `sdlc/` — сдача и 4 производных `INDEX.md`. Все добавленные и удалённые строки `lib/` и `web/` — комментарии `//` и `///`. Миграции, `reference/`, `supabase/seed/`, кодоген не тронуты. Старые тесты: снял метки, склеил разбитые литералы, отформатировал обе версии — удалены только две строки помощника `openSolutions` (параметр `settle`, «Обсуждение», п. 7), тела тестов те же | да |
 | 3 | `python3 -m sdlc_tool check` — 0 ошибок; предупреждений, кроме 6 о записях TASK-1 и RESULT-TASK-1-01, нет | `0 ошибок, 6 предупреждений`: `TASK-1-LABELS-AUTH.md:13` — три, `RESULT-TASK-1-01.md:230–232` — три | да |
-| 4 | `run` в worktree: на сводке у каждого из 33 путей `PASS`, кроме перечисленных в сдаче с причиной; BT-8…BT-12 закрыты, если таких путей нет | В прогоне 33 пути среза, все `PASS`; прочие 30 — `PASS`. В `planning/INDEX.md` [BT-8](../../1-business-tasks/planning/BT-8-PLANNING-CATALOG.md), [BT-9](../../1-business-tasks/planning/BT-9-PLANNING-PROBLEM-PAGE.md), [BT-10](../../1-business-tasks/planning/BT-10-PLANNING-RUN.md), [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [BT-12](../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md) — «да». `PASS` у UC-21-P-03 и UC-22-P-04 стоит на тестах из п. 1 | да |
+| 4 | `run` в worktree: на сводке у каждого из 33 путей `PASS`, кроме перечисленных в сдаче с причиной; BT-8…BT-12 закрыты, если таких путей нет | В прогоне 33 пути среза, все `PASS`; прочие 30 — `PASS`. В `planning/INDEX.md` [BT-8](../../1-business-tasks/planning/BT-8-PLANNING-CATALOG.md), [BT-9](../../1-business-tasks/planning/BT-9-PLANNING-PROBLEM-PAGE.md), [BT-10](../../1-business-tasks/planning/obsolete/BT-10-PLANNING-RUN.md), [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [BT-12](../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md) — «да». `PASS` у UC-21-P-03 и UC-22-P-04 стоит на тестах из п. 1 | да |
 | 5 | Индексы: «Где реализован» — не «не покрыто» у UC-14…UC-22 и COMP-5…COMP-12 | UC-14 — 7 файлов, UC-15 — 4, UC-16 — 4, UC-17 — 5, UC-18 — 2, UC-19 — 5, UC-20 — 3, UC-21 — 2, UC-22 — 2; COMP-5…COMP-12 — по одному файлу, у COMP-8 — два. UC-23 и UC-24 — «не покрыто», как решено при постановке | да |
 | 6 | Doc-комментарии `TaskScreen` и `EditorPanel` не обещают того, что уже сделано | По коду: `_TaskBody` на широком экране справа строит `_TaskSidePanels` — редактор, решения других, справка, файлы; на узком — `_TaskTabs`, пять вкладок. `EditorPanel.build` под `ConsoleView` строит `SubmitPanel`. Новые фразы это и говорят | да |
 | 7 | Сдача по составу `sdlc/5-results/AGENTS.md`; хэш в «Коммите работы» совпадает с `git log` | Все 9 разделов, «нет» написано явно. `git log main..task/TASK-4`: `3798858` — работа (полный хэш и `--stat` в сдаче совпадают с `git show`), `81458b7` — сдача, отдельным коммитом. Неверное утверждение о состоянии провайдера — «Что исправить», п. 2 | да |
 
 Порчи на копии — клиент, 18; запускался файл теста задетого экрана:
 
-- [UC-17-P-01](../../2-specs/use-cases/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-01),
+- [UC-17-P-01](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-01),
   загрузка среды: «Стоп» доступна при загрузке; «Запустить» недоступна при
   загрузке; строка «Выполняется…» вместо «Загружаю Python…» — каждый раз
   падает тест «пока грузится среда»;
-- [UC-17-P-04](../../2-specs/use-cases/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-04):
+- [UC-17-P-04](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-04):
   у таймаута строка «Программа завершилась ошибкой»; текст ошибок таймаута
   не выводится в консоль — падает тест таймаута;
 - [UC-15-P-03](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-03):
@@ -58,13 +58,13 @@ worktree задания, без незакоммиченных изменени�
 - [UC-19-P-06](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-06):
   текст сбоя над кнопкой; `NetworkFailure` не показан — падает тест
   UC-19-P-06;
-- [UC-20-P-03](../../2-specs/use-cases/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-03):
+- [UC-20-P-03](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-03):
   «Не сейчас» публикует; «Не сейчас» не скрывает блок — падает тест
   UC-20-P-03;
-- [UC-20-P-04](../../2-specs/use-cases/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-04):
+- [UC-20-P-04](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-04):
   сбой публикации показан текстом; после сбоя блок «Задача решена!»
   остаётся — падает тест UC-20-P-04;
-- [UC-21-P-02](../../2-specs/use-cases/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-02):
+- [UC-21-P-02](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-02):
   вместо «Попыток пока не было» пусто — падает тест UC-21-P-02;
 - UC-21-P-03: в `AsyncError` «Попыток пока не было»; в `AsyncError` текст
   сбоя — **тесты проходят**;
@@ -134,7 +134,7 @@ worktree задания, без незакоммиченных изменени�
    ответу владельца. Перечень — в сдаче. По коду: в `tasks_public` колонок
    эталона и разбора нет, отказ администратору даёт та же роль
    `authenticated` (раздел (п)); «Остановлено» из
-   [UC-17-P-03](../../2-specs/use-cases/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-03)
+   [UC-17-P-03](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-03)
    тест может проверить, задав подделке исход `stopped`.
 2. Код, который реализует пути, без метки: провайдеры `task` и
    `catalogEgeNumbers`, методы задач и попыток в репозиториях и datasource,

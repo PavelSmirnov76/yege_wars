@@ -1,8 +1,12 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** сбой загрузки — сразу сообщение, без автоповторов, — R46; проход 7
+> **Заменён:** [UC-37](../UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md)
+
 # UC-26: Статья
 
-**Основание:** [R37](../../0-vibes/prd/PRD.md#r37), [R38](../../0-vibes/prd/PRD.md#r38), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [MOD-7](../modules/MOD-7-REFERENCE.md).
+**Основание:** [R37](../../../0-vibes/prd/PRD.md#r37), [R38](../../../0-vibes/prd/PRD.md#r38), [BT-14](../../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [MOD-7](../../modules/MOD-7-REFERENCE.md).
 
-**Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-21](../events/EVT-21-ARTICLE-OPENED-IN-REFERENCE.md), [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md).
+**Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-21](../../events/EVT-21-ARTICLE-OPENED-IN-REFERENCE.md), [ENT-12](../../entities/ENT-12-ARTICLE-IN-REFERENCE.md).
 
 ## Триггер
 

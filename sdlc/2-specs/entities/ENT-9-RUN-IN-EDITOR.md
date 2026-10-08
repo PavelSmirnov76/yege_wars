@@ -1,6 +1,6 @@
 # ENT-9: Запуск
 
-**Модуль:** [MOD-5](../modules/MOD-5-EDITOR.md). **Код:** [ENT-8](ENT-8-CODE-IN-EDITOR.md). **Файлы:** [ENT-7](ENT-7-FILE-IN-CATALOG.md).
+**Модуль:** [MOD-5](../modules/obsolete/MOD-5-EDITOR.md). **Код:** [ENT-8](obsolete/ENT-8-CODE-IN-EDITOR.md). **Файлы:** [ENT-7](ENT-7-FILE-IN-CATALOG.md).
 
 Выполнение кода в браузере. Живёт в памяти вкладки до следующего запуска; в
 базу не попадает.

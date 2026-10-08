@@ -1,8 +1,12 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** «Стоп» доступна весь запуск, включая загрузку Python, — R43; проход 7
+> **Заменён:** [UC-32](../UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md)
+
 # UC-17: Запуск программы
 
-**Основание:** [R24](../../0-vibes/prd/PRD.md#r24), [R25](../../0-vibes/prd/PRD.md#r25), [BT-10](../../1-business-tasks/planning/BT-10-PLANNING-RUN.md), [MOD-5](../modules/MOD-5-EDITOR.md).
+**Основание:** [R24](../../../0-vibes/prd/PRD.md#r24), [R25](../../../0-vibes/prd/PRD.md#r25), [BT-10](../../../1-business-tasks/planning/obsolete/BT-10-PLANNING-RUN.md), [MOD-5](../../modules/obsolete/MOD-5-EDITOR.md).
 
-**Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-14](../events/EVT-14-RUN-STARTED-IN-EDITOR.md), [ENT-9](../entities/ENT-9-RUN-IN-EDITOR.md).
+**Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-14](../../events/EVT-14-RUN-STARTED-IN-EDITOR.md), [ENT-9](../../entities/ENT-9-RUN-IN-EDITOR.md).
 
 ## Триггер
 

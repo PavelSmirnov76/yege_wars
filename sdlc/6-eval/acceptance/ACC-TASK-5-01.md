@@ -23,7 +23,7 @@ worktree задания, без незакоммиченных изменени�
 Порчи на копии, 17; каждый раз запускались `test/features/reference`,
 `test/core/markdown` и `test/features/tasks`:
 
-- [UC-25-P-02](../../2-specs/use-cases/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02):
+- [UC-25-P-02](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02):
   «Сбросить фильтры» оставляет строку поиска — падают тест «Сбросить
   фильтры…» и тест контроллера «сброс очищает все условия»; после сброса поле
   поиска очищается — «Сбросить фильтры…»; поиск без задержки — «строка поиска
@@ -31,13 +31,13 @@ worktree задания, без незакоммиченных изменени�
   тегов — из значений фильтров»; при ошибке — значения фильтров с номером и
   тегом; при ошибке значения фильтров бросают её, и Riverpod дозагружает их
   повтором — оба раза «значения фильтров не загрузились…»;
-- [UC-25-P-03](../../2-specs/use-cases/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-03):
+- [UC-25-P-03](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-03):
   при условиях — текст пустого справочника — «по заданным условиям статей
   нет»;
-- [UC-25-P-04](../../2-specs/use-cases/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-04):
+- [UC-25-P-04](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-04):
   сообщение и «Повторить», пока идут повторы; индикатор после повторов —
   «сбой связи — индикатор, пока идут повторы…»;
-- [UC-26-P-03](../../2-specs/use-cases/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-26-p-03):
+- [UC-26-P-03](../../2-specs/use-cases/obsolete/UC-26-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-26-p-03):
   те же две порчи на странице статьи — «сбой связи — индикатор…»; вторую
   ловит и тест UC-26-P-02;
 - [UC-27-P-02](../../2-specs/use-cases/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-27-p-02):
@@ -101,7 +101,7 @@ worktree задания, без незакоммиченных изменени�
    `TaskDto.toArticleLink`, `TaskDetail.primaryArticles`, маршруты
    `/reference` и `/reference/:slug`. Таблица задания их не называла.
    Источник — сдача; подтверждено по коду.
-3. «До конца сессии» в [UC-25-P-02](../../2-specs/use-cases/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02)
+3. «До конца сессии» в [UC-25-P-02](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02)
    и [UC-28-P-02](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-02)
    расходится с построенным. Сессия по PRD — «от входа до выхода», при
    перезагрузке страницы она сохраняется ([R7](../../0-vibes/prd/PRD.md#r7)).

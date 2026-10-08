@@ -1,6 +1,8 @@
-# UC-21: Мои попытки
+# UC-34: Мои попытки
 
-**Основание:** [R32](../../0-vibes/prd/PRD.md#r32), [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [MOD-6](../modules/MOD-6-SUBMISSION.md).
+supersedes: [UC-21](obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md)
+
+**Основание:** [R32](../../0-vibes/prd/PRD.md#r32), [R46](../../0-vibes/prd/PRD.md#r46), [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [BT-18](../../1-business-tasks/planning/BT-18-PLANNING-LOAD-FAILURES.md), [MOD-6](../modules/MOD-6-SUBMISSION.md).
 
 **Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-12](../events/EVT-12-PROBLEM-OPENED-IN-CATALOG.md), [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md).
 
@@ -15,25 +17,25 @@
 
 ## Пути
 
-### <a id="uc-21-p-01"></a>UC-21-P-01 — попытки есть
+### <a id="uc-34-p-01"></a>UC-34-P-01 — попытки есть
 
 Под заголовком «Мои попытки» — свои попытки по задаче, свежие первыми: значок
 вердикта, ответ и время «ДД.ММ ЧЧ:ММ»; у верных — переключатель
 «Опубликовано». Чужих попыток в списке нет.
 
-**Исход:** UC-21-O-01 — показаны попытки
+**Исход:** UC-34-O-01 — показаны попытки
 
-### <a id="uc-21-p-02"></a>UC-21-P-02 — попыток нет
+### <a id="uc-34-p-02"></a>UC-34-P-02 — попыток нет
 
 «Попыток пока не было».
 
-**Исход:** UC-21-O-02 — показано, что попыток нет
+**Исход:** UC-34-O-02 — показано, что попыток нет
 
-### <a id="uc-21-p-03"></a>UC-21-P-03 — сбой загрузки
+### <a id="uc-34-p-03"></a>UC-34-P-03 — сбой загрузки
 
-Списка нет, сообщения тоже.
+Вместо списка — сообщение об ошибке и кнопка «Повторить».
 
-**Исход:** UC-21-O-03 — попытки не загружены
+**Исход:** UC-34-O-03 — попытки не загружены
 
 ## Постусловия
 

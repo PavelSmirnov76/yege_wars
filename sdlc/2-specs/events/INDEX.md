@@ -16,7 +16,6 @@
 | [EVT-10](EVT-10-APP-STARTED-IN-CONFIG.md) | Приложение запущено | [ENT-5](../entities/ENT-5-BUILD-CONFIG-IN-CONFIG.md) |
 | [EVT-11](EVT-11-CATALOG-OPENED-IN-CATALOG.md) | Каталог открыт | [ENT-6](../entities/ENT-6-PROBLEM-IN-CATALOG.md) |
 | [EVT-12](EVT-12-PROBLEM-OPENED-IN-CATALOG.md) | Задача открыта | [ENT-6](../entities/ENT-6-PROBLEM-IN-CATALOG.md) |
-| [EVT-13](EVT-13-CODE-EDITED-IN-EDITOR.md) | Код изменён | [ENT-8](../entities/ENT-8-CODE-IN-EDITOR.md) |
 | [EVT-14](EVT-14-RUN-STARTED-IN-EDITOR.md) | Запуск начат | [ENT-9](../entities/ENT-9-RUN-IN-EDITOR.md) |
 | [EVT-15](EVT-15-OUTPUT-TAKEN-IN-SUBMISSION.md) | Ответ взят из вывода | [ENT-9](../entities/ENT-9-RUN-IN-EDITOR.md) |
 | [EVT-16](EVT-16-ANSWER-SUBMITTED-IN-SUBMISSION.md) | Ответ отправлен | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
@@ -26,3 +25,11 @@
 | [EVT-20](EVT-20-REFERENCE-OPENED-IN-REFERENCE.md) | Справочник открыт | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
 | [EVT-21](EVT-21-ARTICLE-OPENED-IN-REFERENCE.md) | Статья открыта | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
 | [EVT-22](EVT-22-LINK-SHOWN-IN-REFERENCE.md) | Показана ссылка | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
+| [EVT-23](EVT-23-DRAFT-SAVED-IN-CODE.md) | Черновик сохранён | [EVT-13](obsolete/EVT-13-CODE-EDITED-IN-EDITOR.md), [ENT-15](../entities/ENT-15-DRAFT-IN-CODE.md) |
+| [EVT-24](EVT-24-SITE-DEPLOYED-IN-SITE.md) | Сайт выложен | [ENT-16](../entities/ENT-16-SITE-IN-SITE.md) |
+
+## Похоронены
+
+| Id | Название | Заменён |
+|---|---|---|
+| [EVT-13](obsolete/EVT-13-CODE-EDITED-IN-EDITOR.md) | Код изменён | [EVT-23](EVT-23-DRAFT-SAVED-IN-CODE.md) |

@@ -13,7 +13,7 @@
      `supabase/migrations/20260917130000_content_schema.sql`). Отказ
      администратору в этих колонках даёт та же роль `authenticated`, что и
      ученику, — её проверяет матрица прав, раздел (п). Отдельных проверок нет;
-   - [UC-17-P-03](../../../2-specs/use-cases/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-03):
+   - [UC-17-P-03](../../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-03):
      «Остановлено» на экране не проверено. Подделка `FakePythonRuntime` на
      «Стоп» по умолчанию отдаёт исход `finished`; исход `stopped` тест может
      задать сам через `runResult`.

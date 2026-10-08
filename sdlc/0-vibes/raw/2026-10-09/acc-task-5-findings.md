@@ -7,7 +7,7 @@
    решению владельца при постановке («Как в TASK-4»). Перечень — в сдаче,
    «Найдено вне задания», п. 1. Сверх него: выход и новый вход в той же
    вкладке — его не проверяют тесты
-   [UC-25-P-02](../../../2-specs/use-cases/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02)
+   [UC-25-P-02](../../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02)
    и [UC-28-P-02](../../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-02).
 2. Код, который реализует пути среза, без метки: `articleLevelLabel`
    (уровень в чипах и сведениях, UC-25 и UC-26), `ArticleFilter` (`isEmpty`

@@ -1,6 +1,10 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** черновик хранится в базе по пользователю, а не в браузере; проход 7
+> **Заменён:** [ENT-15](../ENT-15-DRAFT-IN-CODE.md)
+
 # ENT-8: Код
 
-**Модуль:** [MOD-5](../modules/MOD-5-EDITOR.md). **Задача:** [ENT-6](ENT-6-PROBLEM-IN-CATALOG.md).
+**Модуль:** [MOD-5](../../modules/obsolete/MOD-5-EDITOR.md). **Задача:** [ENT-6](../ENT-6-PROBLEM-IN-CATALOG.md).
 
 Программа на Python в редакторе задачи.
 

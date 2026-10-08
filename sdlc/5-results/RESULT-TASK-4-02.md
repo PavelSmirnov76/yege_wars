@@ -37,10 +37,10 @@ ACC-TASK-4-01; остальное приёмка приняла как есть,
 
 ### Что исправить, п. 1: экран и в `AsyncError`
 
-Тесты [UC-21-P-03](../2-specs/use-cases/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-03)
+Тесты [UC-21-P-03](../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-03)
 («сбой загрузки попыток — ни списка, ни сообщения»,
 `submit_panel_test.dart`) и
-[UC-22-P-04](../2-specs/use-cases/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04)
+[UC-22-P-04](../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04)
 («сбой загрузки решений — индикатор загрузки без сообщения»,
 `solutions_list_test.dart`) проверяют экран дважды:
 
