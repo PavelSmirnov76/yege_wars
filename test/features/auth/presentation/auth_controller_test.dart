@@ -41,7 +41,7 @@ void main() {
       expect(repository.currentProfileCalls, 0);
     });
 
-    test('восстановленная сессия загружает профиль', () async {
+    test('UC-10-P-05: восстановленная сессия загружает профиль', () async {
       readState();
       repository.emitUserId(testStudent.id);
       await pumpEventQueue();
@@ -63,7 +63,8 @@ void main() {
       },
     );
 
-    test('ошибка чтения профиля оставляет пользователя снаружи', () async {
+    test('UC-10-P-06: ошибка чтения профиля оставляет '
+        'пользователя снаружи', () async {
       repository.currentProfileResult = const Err(
         DatabaseFailure(message: 'Профиль пользователя не найден.'),
       );
@@ -79,7 +80,8 @@ void main() {
       );
     });
 
-    test('выход из аккаунта в другой вкладке сбрасывает состояние', () async {
+    test('UC-11-P-03: выход из аккаунта в другой вкладке '
+        'сбрасывает состояние', () async {
       readState();
       repository.emitUserId(testStudent.id);
       await pumpEventQueue();
@@ -101,7 +103,7 @@ void main() {
       expect(readState(), const AuthAuthenticated(testStudent));
     });
 
-    test('неуспешный вход не меняет состояние', () async {
+    test('UC-10-P-02: неуспешный вход не меняет состояние', () async {
       repository.signInResult = const Err(
         AuthFailure(message: 'Неверный логин или пароль.'),
       );
@@ -127,7 +129,7 @@ void main() {
       expect(readState(), const AuthAuthenticated(testStudent));
     });
 
-    test('выход возвращает в unauthenticated', () async {
+    test('UC-11-P-01: выход возвращает в unauthenticated', () async {
       readState();
       repository.emitUserId(testStudent.id);
       await pumpEventQueue();
@@ -140,7 +142,7 @@ void main() {
       expect(readState(), isA<AuthUnauthenticated>());
     });
 
-    test('ошибка выхода сохраняет вход', () async {
+    test('UC-11-P-02: ошибка выхода сохраняет вход', () async {
       repository.signOutResult = const Err<void>(
         NetworkFailure(),
       );

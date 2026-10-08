@@ -13,6 +13,8 @@ import 'package:yege_wars/features/auth/presentation/controllers/auth_controller
 /// [StatefulShellRoute] при этом не меняются: админская ветка идёт
 /// последней, поэтому индексы видимых пунктов совпадают с индексами
 /// веток, и скрытие пункта не ломает навигацию.
+///
+/// Реализует UC-5, воплощает COMP-4.
 class AppShell extends ConsumerWidget {
   /// Создаёт оболочку вокруг [navigationShell].
   const AppShell({required this.navigationShell, super.key});

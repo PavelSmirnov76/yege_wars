@@ -1,4 +1,6 @@
 /// Токены скруглений углов.
+///
+/// Воплощает TOKEN-4.
 abstract final class AppRadius {
   /// 6 — мелкие элементы: чипы, бейджи, мелкие кнопки.
   static const double sm = 6;

@@ -124,6 +124,8 @@ GoRouter appRouter(Ref ref) {
 /// шёл пользователь, сохраняется в параметре [AppRoutes.fromQueryParam]
 /// и восстанавливается после проверки сессии (иначе при перезагрузке
 /// страницы терялась бы глубокая ссылка).
+///
+/// Реализует UC-1, UC-5, UC-10 и UC-11.
 String? _guard(AuthState auth, GoRouterState state) {
   final path = state.matchedLocation;
   final isAuthPath = path == AppRoutes.login || path == AppRoutes.register;

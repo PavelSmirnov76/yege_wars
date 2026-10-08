@@ -3,6 +3,8 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 
 /// Сообщение под заголовком формы: ошибка или предупреждение.
+///
+/// Воплощает COMP-2.
 class AuthMessage extends StatelessWidget {
   /// Создаёт сообщение [text].
   ///

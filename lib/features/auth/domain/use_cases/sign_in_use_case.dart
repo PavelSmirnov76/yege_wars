@@ -4,6 +4,8 @@ import 'package:yege_wars/features/auth/domain/entities/user_profile.dart';
 import 'package:yege_wars/features/auth/domain/repositories/auth_repository.dart';
 
 /// Вход по логину и паролю с предварительной проверкой ввода.
+///
+/// Реализует UC-10.
 final class SignInUseCase {
   /// Создаёт use case поверх [AuthRepository].
   const SignInUseCase(this._repository);

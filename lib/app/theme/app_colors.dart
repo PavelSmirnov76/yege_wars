@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// Единственный источник цветов: вне этого класса цвета не хардкодятся.
 /// Палитра — тёмный графит с одним красно-оранжевым акцентом; текстовые
 /// цвета подобраны с контрастом не ниже WCAG AA относительно [background].
+///
+/// Воплощает TOKEN-1.
 abstract final class AppColors {
   /// Основной фон приложения — графитовый.
   static const Color background = Color(0xFF0F1115);

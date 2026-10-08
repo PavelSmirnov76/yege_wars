@@ -4,6 +4,8 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 
 /// Типографика приложения: Inter для интерфейса,
 /// JetBrains Mono для кода.
+///
+/// Воплощает TOKEN-2.
 abstract final class AppTypography {
   /// Размер шрифта кода по умолчанию.
   static const double _defaultCodeFontSize = 14;

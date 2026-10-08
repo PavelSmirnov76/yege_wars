@@ -31,6 +31,8 @@ class AdaptiveDestination {
 ///
 /// Внутри нет логики маршрутов: только индексы и колбэк
 /// [onDestinationSelected].
+///
+/// Воплощает COMP-4.
 class AdaptiveNavigationScaffold extends StatelessWidget {
   /// Создаёт адаптивный каркас навигации.
   const AdaptiveNavigationScaffold({

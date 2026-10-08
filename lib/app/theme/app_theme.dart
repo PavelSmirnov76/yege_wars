@@ -5,6 +5,8 @@ import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
 
 /// Тема приложения (Material 3, тёмная) на основе дизайн-токенов.
+///
+/// Воплощает TOKEN-6.
 abstract final class AppTheme {
   /// Минимальный размер тап-цели (доступность).
   static const double _minTapTarget = 44;

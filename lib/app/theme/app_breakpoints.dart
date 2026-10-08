@@ -2,6 +2,8 @@
 ///
 /// Границы включающие: ширина, равная [mobileMax], — ещё мобильная,
 /// равная [tabletMax] — ещё планшетная.
+///
+/// Воплощает TOKEN-5.
 abstract final class AppBreakpoints {
   /// Максимальная ширина мобильной раскладки.
   static const double mobileMax = 600;

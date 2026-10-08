@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 ///
 /// Показывается вместо целевого экрана, чтобы guard'ы не увели
 /// пользователя на вход раньше, чем станет известен статус авторизации.
+///
+/// Реализует UC-10.
 class SplashScreen extends StatelessWidget {
   /// Создаёт экран ожидания.
   const SplashScreen({super.key});
