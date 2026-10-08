@@ -45,11 +45,16 @@ lib/
 
 ## Локальный запуск
 
+Адреса проекта Supabase и публичного ключа в коде нет: приложение получает
+их только параметрами сборки `--dart-define`. Локальные значения лежат в
+`supabase/.env.local` — файл в `.gitignore`, в репозиторий он не попадает.
+
 ```sh
 fvm use
+set -a; . supabase/.env.local; set +a
 flutter run -d chrome \
-  --dart-define=SUPABASE_URL=... \
-  --dart-define=SUPABASE_ANON_KEY=...
+  --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
 ```
 
 Без этих параметров приложение не падает, а показывает экран
