@@ -7,6 +7,8 @@ import 'package:yege_wars/features/reference/presentation/controllers/reference_
 import 'package:yege_wars/features/reference/presentation/widgets/article_level_label.dart';
 
 /// Фильтры справочника: уровень, номер задания и тема.
+///
+/// Реализует UC-25.
 class ArticleFiltersBar extends ConsumerWidget {
   /// Создаёт панель фильтров.
   const ArticleFiltersBar({super.key});

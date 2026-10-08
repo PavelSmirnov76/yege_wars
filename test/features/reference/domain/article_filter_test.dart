@@ -31,7 +31,7 @@ void main() {
     ArticleFilterController notifier() =>
         container.read(articleFilterControllerProvider.notifier);
 
-    test('повторный выбор снимает условие', () {
+    test('UC-25-P-02: повторный выбор снимает условие', () {
       notifier().toggleLevel(ArticleLevel.medium);
       expect(read().level, ArticleLevel.medium);
 
@@ -39,7 +39,7 @@ void main() {
       expect(read().level, isNull);
     });
 
-    test('выбор другого значения заменяет прежнее', () {
+    test('UC-25-P-02: выбор другого значения заменяет прежнее', () {
       notifier()
         ..toggleEgeNumber(24)
         ..toggleEgeNumber(17);
@@ -47,7 +47,7 @@ void main() {
       expect(read().egeNumber, 17);
     });
 
-    test('сброс очищает все условия', () {
+    test('UC-25-P-02: сброс очищает все условия', () {
       notifier()
         ..toggleEgeNumber(24)
         ..toggleTag('regex')

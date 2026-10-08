@@ -13,6 +13,8 @@ import 'package:yege_wars/features/reference/presentation/widgets/article_filter
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 
 /// Раздел «Справочник»: список статей с поиском и фильтрами.
+///
+/// Реализует UC-25.
 class ReferenceScreen extends ConsumerStatefulWidget {
   /// Создаёт экран справочника.
   const ReferenceScreen({super.key});

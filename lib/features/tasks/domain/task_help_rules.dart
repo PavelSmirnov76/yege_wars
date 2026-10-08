@@ -3,6 +3,8 @@ import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart'
 import 'package:yege_wars/features/tasks/domain/entities/theme_article.dart';
 
 /// Правила справки задачи: статьи по темам и ручные связи в одном списке.
+///
+/// Реализует UC-27.
 abstract final class TaskHelpRules {
   /// Сливает статьи по темам [byTheme] и ручные связи [manual].
   ///

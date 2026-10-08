@@ -4,6 +4,8 @@ import 'package:yege_wars/features/reference/domain/entities/article_filter.dart
 import 'package:yege_wars/features/reference/domain/repositories/reference_repository.dart';
 
 /// Список статей справочника по фильтру.
+///
+/// Реализует UC-25.
 final class ListArticlesUseCase {
   /// Создаёт use case поверх [ReferenceRepository].
   const ListArticlesUseCase(this._repository);

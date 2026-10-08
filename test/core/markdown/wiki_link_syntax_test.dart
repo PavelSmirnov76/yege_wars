@@ -15,7 +15,8 @@ void main() {
   const titles = {'regex-basics': 'Регулярные выражения в Python'};
 
   group('WikiLinkSyntax', () {
-    test('известный slug становится ссылкой с заголовком статьи', () {
+    test('UC-28-P-01: известный slug становится ссылкой с заголовком '
+        'статьи', () {
       final html = render('См. [[regex-basics]] дальше.', titles: titles);
 
       expect(
@@ -26,7 +27,7 @@ void main() {
       );
     });
 
-    test('неизвестный slug остаётся обычным текстом', () {
+    test('UC-28-P-02: неизвестный slug остаётся обычным текстом', () {
       final html = render('См. [[no-such-article]].', titles: titles);
 
       expect(html, contains('no-such-article'));

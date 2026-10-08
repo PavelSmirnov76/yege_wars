@@ -5,6 +5,8 @@ import 'package:yege_wars/features/reference/domain/entities/article_brief.dart'
 import 'package:yege_wars/features/reference/presentation/widgets/article_meta.dart';
 
 /// Карточка статьи в списке справочника.
+///
+/// Воплощает COMP-14.
 class ArticleCard extends StatelessWidget {
   /// Создаёт карточку статьи [brief] с переходом [onTap].
   const ArticleCard({required this.brief, required this.onTap, super.key});

@@ -1,10 +1,15 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
+import 'package:yege_wars/app/router/app_routes.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/core/markdown/app_markdown.dart';
 import 'package:yege_wars/core/markdown/code_block.dart';
 import 'package:yege_wars/features/reference/domain/entities/reference_article.dart';
+import 'package:yege_wars/features/reference/presentation/controllers/reference_controllers.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
@@ -25,7 +30,15 @@ void main() {
   tearDown(() => auth.dispose());
 
   /// Открывает статью по адресу.
-  Future<void> openArticle(WidgetTester tester, String slug) async {
+  ///
+  /// Без [settle] экран открывается конечным числом кадров: пока Riverpod
+  /// повторяет упавший запрос, крутится индикатор, и `pumpAndSettle`
+  /// прокрутил бы все повторы.
+  Future<void> openArticle(
+    WidgetTester tester,
+    String slug, {
+    bool settle = true,
+  }) async {
     await pumpApp(
       tester,
       repository: auth,
@@ -33,10 +46,41 @@ void main() {
       reference: reference,
     );
     containerOf(tester).read(appRouterProvider).go('/reference/$slug');
-    await tester.pumpAndSettle();
+    if (settle) {
+      await tester.pumpAndSettle();
+      return;
+    }
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
   }
 
-  testWidgets('показывает заголовок, сведения и текст', (tester) async {
+  /// Нажимает ссылку с текстом [text] в разметке статьи.
+  ///
+  /// Текст статьи выделяемый, и `tapOnText` подстроку в нём не находит
+  /// (doc-комментарий `AppMarkdown`), поэтому нажатие отдаётся
+  /// распознавателю ссылки — тому же, что сработал бы от пальца.
+  void tapLink(WidgetTester tester, String text) {
+    TapGestureRecognizer? recognizer;
+    for (final widget in tester.widgetList<SelectableText>(
+      find.byType(SelectableText),
+    )) {
+      widget.textSpan?.visitChildren((span) {
+        if (span is TextSpan &&
+            span.text == text &&
+            span.recognizer is TapGestureRecognizer) {
+          recognizer = span.recognizer! as TapGestureRecognizer;
+          return false;
+        }
+        return true;
+      });
+    }
+    expect(recognizer, isNotNull, reason: 'нет ссылки «$text»');
+    recognizer!.onTap!();
+  }
+
+  testWidgets('UC-26-P-01: показывает заголовок, сведения и '
+      'текст', (tester) async {
     reference.articleResult = const Ok(
       ReferenceArticle(
         brief: testFileReading,
@@ -57,7 +101,8 @@ void main() {
     );
   });
 
-  testWidgets('заголовки статей передаются в разметку', (tester) async {
+  testWidgets('UC-28-P-01: заголовки статей передаются в '
+      'разметку', (tester) async {
     reference.articleResult = const Ok(
       ReferenceArticle(
         brief: testFileReading,
@@ -71,7 +116,8 @@ void main() {
     expect(find.textContaining('Регулярные выражения'), findsOneWidget);
   });
 
-  testWidgets('ошибка загрузки показывается с повтором', (tester) async {
+  testWidgets('UC-26-P-02: ошибка загрузки показывается с '
+      'повтором', (tester) async {
     reference.articleResult = const Err(
       DatabaseFailure(message: 'Статья справочника не найдена.'),
     );
@@ -79,5 +125,93 @@ void main() {
 
     expect(find.text('Статья справочника не найдена.'), findsOneWidget);
     expect(find.text(l10n.commonRetry), findsOneWidget);
+  });
+
+  testWidgets('UC-26-P-03: сбой связи — индикатор, пока идут повторы, затем '
+      'сообщение и «Повторить»', (tester) async {
+    reference.articleResult = const Err(testNetworkFailure);
+    await openArticle(tester, testFileReading.slug, settle: false);
+
+    final provider = articleProvider(testFileReading.slug);
+    final spinner = find.descendant(
+      of: find.byType(ArticleScreen),
+      matching: find.byType(CircularProgressIndicator),
+    );
+
+    // Пока Riverpod повторяет запрос — AsyncLoading с ошибкой внутри.
+    final retrying = containerOf(tester).read(provider);
+    expect(retrying, isA<AsyncLoading<ReferenceArticle>>());
+    expect(retrying.error, testNetworkFailure);
+    expect(spinner, findsOneWidget);
+    expect(find.text(testNetworkFailure.message), findsNothing);
+    expect(find.text(l10n.commonRetry), findsNothing);
+
+    // После последнего повтора — AsyncError.
+    await pumpUntilRetriesEnd(tester, provider);
+
+    expect(
+      containerOf(tester).read(provider),
+      isA<AsyncError<ReferenceArticle>>(),
+    );
+    expect(spinner, findsNothing);
+    expect(find.text(testNetworkFailure.message), findsOneWidget);
+    expect(
+      find.widgetWithText(OutlinedButton, l10n.commonRetry),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('UC-28-P-02: словарь заголовков не загрузился — slug текстом '
+      'до конца сессии', (tester) async {
+    reference
+      ..titlesResult = const Err(testNetworkFailure)
+      ..articleResult = const Ok(
+        ReferenceArticle(
+          brief: testFileReading,
+          contentMd: 'Читай [[regex-basics]] дальше.',
+        ),
+      );
+    await openArticle(tester, testFileReading.slug);
+
+    expect(find.textContaining('Читай regex-basics дальше.'), findsOneWidget);
+    expect(find.textContaining('Регулярные выражения'), findsNothing);
+
+    // Связь вернулась, но словарь за сессию больше не запрашивается: ни
+    // сразу, ни после ухода из раздела ссылка не появляется.
+    reference.titlesResult = const Ok({
+      'regex-basics': 'Регулярные выражения',
+    });
+    await tester.pump(const Duration(minutes: 1));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Регулярные выражения'), findsNothing);
+
+    final router = containerOf(tester).read(appRouterProvider)
+      ..go(AppRoutes.catalog);
+    await tester.pumpAndSettle();
+    router.go('/reference/other-article');
+    await tester.pumpAndSettle();
+
+    expect(reference.lastSlug, 'other-article');
+    expect(find.textContaining('Читай regex-basics дальше.'), findsOneWidget);
+    expect(find.textContaining('Регулярные выражения'), findsNothing);
+  });
+
+  testWidgets('UC-28-P-03: обычная ссылка не открывается', (tester) async {
+    reference.articleResult = const Ok(
+      ReferenceArticle(
+        brief: testFileReading,
+        contentMd: 'Подробнее — в [документации](https://docs.python.org/3/).',
+      ),
+    );
+    await openArticle(tester, testFileReading.slug);
+    final location = currentLocation(tester);
+
+    tapLink(tester, 'документации');
+    await tester.pumpAndSettle();
+
+    expect(currentLocation(tester), location);
+    expect(reference.lastSlug, testFileReading.slug);
+    expect(find.byType(ArticleScreen), findsOneWidget);
   });
 }

@@ -6,6 +6,8 @@ import 'package:yege_wars/features/reference/domain/entities/article_brief.dart'
 import 'package:yege_wars/features/reference/presentation/widgets/article_level_label.dart';
 
 /// Строка сведений о статье: уровень, время чтения и номера заданий.
+///
+/// Воплощает COMP-13.
 class ArticleMeta extends StatelessWidget {
   /// Создаёт строку сведений для статьи [brief].
   const ArticleMeta(this.brief, {super.key});

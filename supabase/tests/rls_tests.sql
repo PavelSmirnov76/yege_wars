@@ -1447,6 +1447,7 @@ begin
     raise notice 'OK: (н) прямая запись в task_files под студентом — permission denied';
   end;
 
+  -- UC-25-P-01, UC-26-P-01: опубликованная статья ученику видна
   select count(*) into v_cnt from public.reference_articles where slug = 'file-reading';
   if v_cnt <> 1 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту не видна опубликованная статья';
@@ -1484,6 +1485,7 @@ begin
   perform tests.logout();
 
   perform tests.login(v_alice);
+  -- UC-25-P-01, UC-26-P-02, UC-28-P-02: неопубликованная статья ученику не видна
   select count(*) into v_cnt from public.reference_articles where slug = 'draft-article';
   if v_cnt <> 0 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту видна неопубликованная статья';
@@ -1614,6 +1616,7 @@ begin
   end if;
   raise notice 'OK: (о) задача банка сохраняется без номера и без ответа';
 
+  -- UC-27-P-01: task_articles отдаёт статью задачи по её теме
   select count(*) into v_cnt from public.task_articles where task_id = v_task;
   if v_cnt <> 1 then
     raise exception 'ТЕСТ ПРОВАЛЕН (о): справка по теме не выводится (%)', v_cnt;

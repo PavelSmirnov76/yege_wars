@@ -5,7 +5,7 @@ import 'package:yege_wars/features/tasks/domain/entities/task_filter.dart';
 
 /// Реализация [TasksRemoteDataSource] поверх [SupabaseClient].
 ///
-/// Реализует UC-14.
+/// Реализует UC-14 и UC-27.
 final class SupabaseTasksRemoteDataSource implements TasksRemoteDataSource {
   /// Создаёт datasource поверх клиента [SupabaseClient].
   const SupabaseTasksRemoteDataSource(this._client);
