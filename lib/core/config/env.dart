@@ -1,36 +1,21 @@
 /// Конфигурация окружения приложения.
 ///
-/// Значения по умолчанию — боевой проект Supabase. Адрес и публичный ключ
-/// не являются секретом: ключ рассчитан на публикацию во фронтенде, доступ
-/// к данным ограничивает RLS. Секретный ключ проекта (`sb_secret_…`)
-/// в репозитории отсутствовать обязан.
+/// Адрес проекта Supabase и его публичный ключ приходят только из
+/// параметров сборки `--dart-define`; значений по умолчанию в коде нет.
+/// Локально их берут из `supabase/.env.local`, который в git не попадает, —
+/// команда запуска в README, раздел «Локальный запуск».
 ///
-/// Любое значение можно переопределить при сборке:
-///
-/// ```sh
-/// flutter run \
-///   --dart-define=SUPABASE_URL=https://xyz.supabase.co \
-///   --dart-define=SUPABASE_ANON_KEY=sb_publishable_…
-/// ```
+/// Без них [isConfigured] — `false`, и приложение показывает экран
+/// «Приложение не сконфигурировано». Секретный ключ проекта (`sb_secret_…`)
+/// во фронтенд не передаётся никогда.
 abstract final class Env {
-  /// Адрес проекта Supabase по умолчанию.
-  static const String _defaultSupabaseUrl =
-      'https://hzbfdupqouteerbrrikm.supabase.co';
+  /// URL проекта Supabase; пустой, если не передан при сборке.
+  static const String supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 
-  /// Публичный ключ проекта по умолчанию.
-  static const String _defaultSupabaseAnonKey =
-      'sb_publishable_QWf8q8iT75oEoGoiqAxDQA_DeUDO_Zl';
-
-  /// URL проекта Supabase.
-  static const String supabaseUrl = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: _defaultSupabaseUrl,
-  );
-
-  /// Публичный ключ Supabase (anon или publishable).
+  /// Публичный ключ Supabase (anon или publishable); пустой, если не
+  /// передан при сборке.
   static const String supabaseAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: _defaultSupabaseAnonKey,
   );
 
   /// `true`, если заданы оба значения окружения.

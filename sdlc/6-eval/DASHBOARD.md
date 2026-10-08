@@ -2,7 +2,7 @@
 
 # Сводка проверки
 
-Последний машинный прогон: нет
+Последний машинный прогон: [2026-10-08-5c4c00b](auto/2026-10-08-5c4c00b/summary.md)
 
 | Требование | UC | Путь | Вердикт | Источник |
 |---|---|---|---|---|
@@ -61,11 +61,11 @@
 | [R14](../0-vibes/prd/PRD.md#r14) | [UC-9](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md) | [UC-9-P-01](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md#uc-9-p-01) | НЕ ПРОВЕРЕНО | — |
 | [R14](../0-vibes/prd/PRD.md#r14) | [UC-9](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md) | [UC-9-P-02](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md#uc-9-p-02) | НЕ ПРОВЕРЕНО | — |
 | [R14](../0-vibes/prd/PRD.md#r14) | [UC-9](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md) | [UC-9-P-03](../2-specs/use-cases/UC-9-ACTOR-3-EVT-9-ENT-1-PASSWORD-SET-IN-MANAGEMENT.md#uc-9-p-03) | НЕ ПРОВЕРЕНО | — |
-| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-01](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-01) | НЕ ПРОВЕРЕНО | — |
-| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-02](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-02) | НЕ ПРОВЕРЕНО | — |
-| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-03](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-03) | НЕ ПРОВЕРЕНО | — |
-| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-01](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-01) | НЕ ПРОВЕРЕНО | — |
-| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-02](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-02) | НЕ ПРОВЕРЕНО | — |
-| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-03](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-03) | НЕ ПРОВЕРЕНО | — |
+| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-01](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-01) | PASS | auto 2026-10-08-5c4c00b |
+| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-02](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-02) | PASS | auto 2026-10-08-5c4c00b |
+| [R15](../0-vibes/prd/PRD.md#r15) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-03](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-03) | PASS | auto 2026-10-08-5c4c00b |
+| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-01](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-01) | PASS | auto 2026-10-08-5c4c00b |
+| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-02](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-02) | PASS | auto 2026-10-08-5c4c00b |
+| [R16](../0-vibes/prd/PRD.md#r16) | [UC-12](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md) | [UC-12-P-03](../2-specs/use-cases/UC-12-ACTOR-1-EVT-10-ENT-5-APP-STARTED-IN-CONFIG.md#uc-12-p-03) | PASS | auto 2026-10-08-5c4c00b |
 
-Итого путей: PASS 0, FAIL 0, BLOCKED 0, НЕ ПРОВЕРЕНО 30.
+Итого путей: PASS 3, FAIL 0, BLOCKED 0, НЕ ПРОВЕРЕНО 27.

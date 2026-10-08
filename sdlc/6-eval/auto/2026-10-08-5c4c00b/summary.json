@@ -1,0 +1,1746 @@
+{
+  "commit": "5c4c00b0fa8fd82f1518fcd7a6e06be12a00be09",
+  "commit_short": "5c4c00b",
+  "date": "2026-10-08",
+  "started_at": "2026-10-08T12:02:11+00:00",
+  "finished_at": "2026-10-08T12:03:14+00:00",
+  "dirty": false,
+  "checks": [
+    {
+      "name": "pub_get",
+      "command": "flutter pub get",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "gen_l10n",
+      "command": "flutter gen-l10n",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "build_runner",
+      "command": "dart run build_runner build --delete-conflicting-outputs",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "analyze",
+      "command": "flutter analyze --fatal-infos --fatal-warnings",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "custom_lint",
+      "command": "dart run custom_lint",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "format",
+      "command": "dart format --output=none --set-exit-if-changed <.dart из lib/ и test/ без *.g.dart и lib/l10n/gen/>",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "flutter_test",
+      "command": "flutter test --reporter json",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "rls",
+      "command": "bash supabase/tests/run_local.sh",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "tools_tests",
+      "command": "python3 -m unittest discover -s tools/tests -t .",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "sdlc_tool_tests",
+      "command": "python3 -m unittest discover -s sdlc_tool/tests -t .",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    }
+  ],
+  "tests": [
+    {
+      "file": "test/app/app_test.dart",
+      "name": "smoke: приложение стартует на экране входа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-01: с адресом и ключом bootstrap поднимает Supabase",
+      "label": "UC-12-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: без адреса и ключа bootstrap возвращает понятную ошибку",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: без параметров сборки адреса и ключа проекта нет",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: заглушка объясняет, чего не хватает",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-03: Supabase не поднялся — bootstrap возвращает ошибку подключения",
+      "label": "UC-12-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-03: заглушка показывает переданные подробности",
+      "label": "UC-12-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "админ открывает админку и видит пункт меню",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес, открытый до проверки сессии, восстанавливается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "без авторизации любой путь ведёт на вход",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "неизвестный путь показывает экран 404",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "пока сессия не проверена, показывается заставка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "после входа открывается каталог, после выхода — вход",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "ученика не пускает в админку и прячет пункт меню",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark primary цветовой схемы — AppColors.accent",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark возвращает тёмную тему",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark использует Material 3",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark фон Scaffold — AppColors.background",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.fold для Err вызывает onErr с ошибкой",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.fold для Ok вызывает onOk со значением",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.isOk / isErr Err: isOk false, isErr true",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.isOk / isErr Ok: isOk true, isErr false",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Err сохраняет исходную ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Ok меняет тип значения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Ok преобразует значение",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.valueOrNull / failureOrNull Err возвращает ошибку и null вместо значения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.valueOrNull / failureOrNull Ok возвращает значение и null вместо ошибки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse возвращает null для сообщения без кода",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse игнорирует ведущие пробелы и перенос строки в тексте",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse разбирает формат «[код] Текст»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "нажатие на внутреннюю ссылку отдаёт slug",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "неизвестная ссылка остаётся текстом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "рисует заголовок, абзац и блок кода",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "таблица и цитата не ломают разметку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter имя, похожее на ключевое слово, не подсвечивается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter ключевые слова и встроенные функции",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter комментарий идёт до конца строки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter незакрытая строка не ломает разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter одинарная строка не переносится на следующую строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter пустой код даёт пустой разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter разбор ничего не теряет",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter строки: одинарные, двойные и тройные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter цифра внутри имени числом не считается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter числа: целые, дробные, шестнадцатеричные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter экранированная кавычка не закрывает строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax slug узнаётся по адресу ссылки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax внутри блока кода ссылка не создаётся",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax внутри участка кода ссылка не создаётся",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax известный slug становится ссылкой с заголовком статьи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax неизвестный slug остаётся обычным текстом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "при ширине 1280 показывается развёрнутый NavigationRail без NavigationBar",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "при ширине 400 показывается NavigationBar без NavigationRail",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "тап по пункту NavigationBar вызывает onDestinationSelected с верным индексом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "тап по пункту NavigationRail вызывает onDestinationSelected с верным индексом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth занятая почта — ошибка валидации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth лимит запросов",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth неверные учётные данные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth ошибка триггера при регистрации объясняет причины",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth потерянная сессия",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth слабый пароль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth та же ошибка при входе остаётся непредвиденной",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных неизвестный код БД сохраняет русский текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных ошибка занятого логина — ошибка валидации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных текст «[код] Текст» из RPC показывается пользователю",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее любое другое исключение — непредвиденная ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее неожиданные данные профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее обрыв запроса PostgREST — сетевая ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее обрыв запроса Supabase Auth — сетевая ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее просроченный токен — ошибка авторизации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile без сессии возвращает ошибку авторизации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile битая строка профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile с сессией читает профиль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn возвращает профиль после успешного входа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn вход без пользователя в ответе — ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn неверные учётные данные превращаются в AuthFailure",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn отсутствие строки профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen ошибка RPC состояния регистрации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen ошибка выхода превращается в Failure",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen состояние регистрации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen успешный выход",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp возвращает профиль, созданный триггером",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp ошибка триггера объясняет причины",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp сообщение триггера «[код] Текст» доходит как есть",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "поток сессии проксируется из datasource",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto бросает FormatException без обязательных полей",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto неизвестная роль трактуется как ученик",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto разбирает строку профиля и отдаёт сущность",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto роль без значения трактуется как ученик",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "SupabaseAuthRemoteDataSource.emailFor логин превращается в техническую почту",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "SupabaseAuthRemoteDataSource.emailFor регистр логина в почте не важен",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "вход идёт по технической почте",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "выход делегируется Supabase Auth",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "идентификатор текущей сессии",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "поток сессии отдаёт id и не повторяет одно и то же значение",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "регистрация передаёт логин в метаданные без изменения регистра",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState признаки состояния",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState профиль доступен только в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState равенство состояний",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserProfile в текстовом виде видны логин и роль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserProfile равенство по полям",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserRole признак администратора",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserRole разбирает значения из базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidPassword отклоняет короткий пароль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidPassword принимает пароль от 8 символов",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidUsername отклоняет короткий, длинный и недопустимый логин",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidUsername принимает латиницу, цифры и подчёркивание",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation ничего не возвращает для корректных данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation сначала сообщает об ошибке логина",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation сообщает об ошибке пароля при верном логине",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase не идёт в репозиторий при коротком пароле",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase не идёт в репозиторий при неверном логине",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase передаёт корректные данные в репозиторий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignUpUseCase проверяет ввод до обращения к репозиторию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignUpUseCase регистрирует при корректных данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию GetCurrentProfileUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию IsRegistrationOpenUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию SignOutUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию WatchAuthUserUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя выход возвращает в unauthenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя неуспешный вход не меняет состояние",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя ошибка выхода сохраняет вход",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя успешная регистрация переводит в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя успешный вход переводит в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию восстановленная сессия загружает профиль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию выход из аккаунта в другой вкладке сбрасывает состояние",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию до первого события статус неизвестен",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию ошибка чтения профиля оставляет пользователя снаружи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию повторное событие того же пользователя не грузит профиль заново",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию пустая сессия — пользователь не авторизован",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "не отправляет форму с некорректным вводом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "показывает индикатор на время отправки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "показывает ошибку восстановления сессии",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "показывает ошибку сервера",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "успешный вход ведёт в каталог",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "ошибка проверки регистрации показывается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "ошибка регистрации показывается на экране",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "при закрытой регистрации форма заблокирована",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "успешная регистрация ведёт в каталог",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "во время выполнения «Стоп» доступен, а «Запустить» — нет",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "запуск передаёт код и файлы задачи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "ошибка программы показывается в консоли",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "черновик подставляется и сохраняется",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PreferencesDraftStorage пустой черновик удаляется",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PreferencesDraftStorage сохраняет и читает черновик задачи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PythonEditingController подсвечивает ключевые слова, не теряя текста",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PythonEditingController цвет подбирается по роли фрагмента",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController «Стоп» доходит до среды",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController запуск передаёт код, ввод и файлы задачи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController очистка убирает прошлый вывод",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController ошибка среды попадает в состояние",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController состояние среды приходит из потока",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunResult успешен только запуск, завершившийся сам",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel до первого запуска строка пустая",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel итог запуска называется своими словами",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel состояния среды важнее прошлого результата",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "кнопка «Выйти» возвращает на экран входа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "ошибка выхода показывается сообщением",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "показывает логин и роль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto без обязательных полей и без текста — FormatException",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto пропуски в необязательных полях не ломают разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto разбирает карточку статьи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto статья целиком содержит текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto чужеродные значения в массивах отбрасываются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "SupabaseReferenceRemoteDataSource.escapeSearch обычный запрос не меняется",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "SupabaseReferenceRemoteDataSource.escapeSearch убирает символы, ломающие фильтр PostgREST",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "articleTitles собирает словарь «slug — заголовок»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "articleTitles строки без нужных полей пропускаются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "getArticle возвращает статью с текстом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "getArticle отсутствующая статья — понятная ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles битая строка — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles возвращает карточки статей",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles обрыв связи превращается в сетевую ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles фильтр передаётся в datasource без изменений",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/supabase_reference_remote_data_source_test.dart",
+      "name": "статьи идут по уровню, затем по названию — по возрастанию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilter copyWith меняет одно поле и сбрасывает по признаку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilter пустой фильтр не задаёт условий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController выбор другого значения заменяет прежнее",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController повторный выбор снимает условие",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController сброс очищает все условия",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "заголовки статей передаются в разметку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "ошибка загрузки показывается с повтором",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "показывает заголовок, сведения и текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "выбор уровня уходит в запрос",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "нажатие на карточку открывает статью",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "ошибка списка показывается с кнопкой повтора",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "показывает список статей",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "пункт «Справочник» есть в навигации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "пустой справочник объясняет себя",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerFormat.fromValue знает все форматы базы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerFormat.fromValue неизвестное или пустое значение — строка, без падения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput multi: пустые строки и пробельные края выбрасываются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput multi: таблица по строкам превращается в одну строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput pair: последняя строка, а не весь вывод",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput single: последняя непустая строка вывода",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput string: последняя строка без пробельных краёв",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput пустой вывод — пустой ответ при любом формате",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "без своего верного ответа решения закрыты",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "после верного ответа видны чужие решения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "решивший видит пустое состояние, если решений нет",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl вердикт приходит из базы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl ошибка базы с кодом превращается в понятный текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl публикация доходит до RPC",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl свои попытки разбираются вместе с датой",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl у чужого решения виден логин автора",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase непустой ответ уходит в репозиторий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase ответ из одних переводов строк считается пустым",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase ответ уходит без пробельных краёв, включая переводы строк",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase пустой ответ до сервера не доходит",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController ошибка отправки видна в состоянии",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController публикация зовёт репозиторий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController сброс убирает вердикт",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController успешная отправка кладёт вердикт в состояние",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "время попытки выводится коротко",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "верный ответ показывает вердикт и предлагает публикацию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "для multi из вывода берётся вся таблица одной строкой",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "для остальных форматов из вывода берётся последняя строка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "мои попытки показываются с вердиктом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "неверный ответ публиковать не предлагают",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "ответ подставляется из вывода программы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "ответ уходит без пробельных краёв",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "ошибка отправки показывается текстом из базы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "подсказка под полем зависит от формата ответа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "у табличной задачи подсказка про таблицу по строкам",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "каталог идёт по номеру, затем по названию — по возрастанию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "номера для фильтра идут по возрастанию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "файлы задачи идут по sort_order по возрастанию",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief задание без номера КИМ получает null, а не ноль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief строка без обязательных полей — ошибка формата",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief читает номер задания",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toDetail неизвестный формат ответа не роняет разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toDetail формат ответа разбирается в перечисление",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toThemeArticles прикладывает карточку статьи к строке темы по id",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toThemeArticles строка темы без видимой статьи пропускается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask без тем со статьями второй запрос не уходит",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask неизвестная задача — понятная ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask собирает условие, файлы и справку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask справка по темам: статьи вторым запросом, ручные — следом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog задача без моих попыток — не начата",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog обрыв связи превращается в сетевую ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog отбор по прогрессу выполняется на клиенте",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog собирает карточки, прогресс и статистику",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog фильтр уходит в datasource без изменений",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "номера заданий приходят без повторов и по порядку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge без ручных связей справка состоит из статей по темам",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge без тем справка — ручные связи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge главные первыми, внутри — по порядку темы, затем ручные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge нет ни тем, ни ручных связей — справка пустая",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge повтор ручной связи не дублирует статью",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge статья двух тем — один раз, по ранней теме",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge статья основной темы главная, других тем — сопутствующая",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge статья по теме и вручную — один раз, с более сильной значимостью и на месте темы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "задача без номера КИМ попадает в группу «Без номера»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "нажатие на карточку открывает задачу",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "ошибка каталога показывается с повтором",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "показывает задачи с группировкой по номеру",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "показывает статус и статистику",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "пустой каталог объясняет себя",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "фильтр по сложности уходит в запрос",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "фильтр по состоянию решения уходит в запрос",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/ege_group_label_test.dart",
+      "name": "задание без номера КИМ попадает в группу «Без номера»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/ege_group_label_test.dart",
+      "name": "номер задания подписывается номером",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview длинная строка обрезается с многоточием",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview короткий файл показывается целиком",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview лишние строки заменяются многоточием",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview файл задания в одну строку не тянет за собой мегабайт",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "fileSizeLabel большой файл — в килобайтах",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "fileSizeLabel маленький файл — в байтах",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "без ручных связей справка показывает статью по теме",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "из справки к задаче можно перейти в статью",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "на узком экране условие, справка и файлы — вкладки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "ошибка загрузки показывается с повтором",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "показывает условие и подсказку про справку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "файл разворачивается и показывает первые строки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/main_test.dart",
+      "name": "UC-12-P-02: без параметров сборки приложение показывает экран «не сконфигурировано» с причиной",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    }
+  ],
+  "paths": {
+    "UC-12-P-01": "PASS",
+    "UC-12-P-02": "PASS",
+    "UC-12-P-03": "PASS"
+  },
+  "totals": {
+    "pass": 274,
+    "fail": 0,
+    "blocked": 0
+  }
+}
