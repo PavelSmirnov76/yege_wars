@@ -10,3 +10,4 @@
 | [MOD-4](MOD-4-CATALOG.md) | Каталог | [BT-8](../../1-business-tasks/planning/BT-8-PLANNING-CATALOG.md), [BT-9](../../1-business-tasks/planning/BT-9-PLANNING-PROBLEM-PAGE.md) |
 | [MOD-5](MOD-5-EDITOR.md) | Редактор | [BT-10](../../1-business-tasks/planning/BT-10-PLANNING-RUN.md) |
 | [MOD-6](MOD-6-SUBMISSION.md) | Отправка | [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [BT-12](../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md) |
+| [MOD-7](MOD-7-REFERENCE.md) | Справочник | [BT-13](../../1-business-tasks/planning/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md) |

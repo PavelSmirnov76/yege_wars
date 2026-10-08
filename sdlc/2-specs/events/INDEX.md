@@ -23,3 +23,6 @@
 | [EVT-17](EVT-17-PUBLICATION-SWITCHED-IN-SUBMISSION.md) | Публикация изменена | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
 | [EVT-18](EVT-18-ANSWER-KEY-REQUESTED-IN-SUBMISSION.md) | Запрошен эталон | [ENT-10](../entities/ENT-10-ANSWER-KEY-IN-SUBMISSION.md) |
 | [EVT-19](EVT-19-ATTEMPT-WRITTEN-IN-SUBMISSION.md) | Попытка записана напрямую | [ENT-11](../entities/ENT-11-ATTEMPT-IN-SUBMISSION.md) |
+| [EVT-20](EVT-20-REFERENCE-OPENED-IN-REFERENCE.md) | Справочник открыт | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
+| [EVT-21](EVT-21-ARTICLE-OPENED-IN-REFERENCE.md) | Статья открыта | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
+| [EVT-22](EVT-22-LINK-SHOWN-IN-REFERENCE.md) | Показана ссылка | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
