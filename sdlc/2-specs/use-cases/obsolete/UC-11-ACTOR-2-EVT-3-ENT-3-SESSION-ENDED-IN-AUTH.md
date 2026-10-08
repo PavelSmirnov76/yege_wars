@@ -1,10 +1,14 @@
+> **Похоронен:** 2026-10-08
+> **Почему:** адрес не запоминается, когда сессия заканчивается на открытой странице (R17) — решение владельца
+> **Заменён:** [UC-13](../UC-13-ACTOR-2-EVT-3-ENT-3-SESSION-ENDED-IN-AUTH.md)
+
 # UC-11: Выход
 
-supersedes: [UC-3](obsolete/UC-3-ACTOR-2-EVT-3-ENT-3-SESSION-ENDED-IN-AUTH.md)
+supersedes: [UC-3](UC-3-ACTOR-2-EVT-3-ENT-3-SESSION-ENDED-IN-AUTH.md)
 
-**Основание:** [R8](../../0-vibes/prd/PRD.md#r8), [BT-2](../../1-business-tasks/planning/BT-2-PLANNING-SIGN-IN.md), [MOD-1](../modules/MOD-1-AUTH.md).
+**Основание:** [R8](../../../0-vibes/prd/PRD.md#r8), [BT-2](../../../1-business-tasks/planning/BT-2-PLANNING-SIGN-IN.md), [MOD-1](../../modules/MOD-1-AUTH.md).
 
-**Актор, событие, сущность:** [ACTOR-2](../actors/ACTOR-2-USER-IN-AUTH.md), [EVT-3](../events/EVT-3-SIGNED-OUT-IN-AUTH.md), [ENT-3](../entities/ENT-3-SESSION-IN-AUTH.md).
+**Актор, событие, сущность:** [ACTOR-2](../../actors/ACTOR-2-USER-IN-AUTH.md), [EVT-3](../../events/EVT-3-SIGNED-OUT-IN-AUTH.md), [ENT-3](../../entities/ENT-3-SESSION-IN-AUTH.md).
 
 ## Триггер
 
