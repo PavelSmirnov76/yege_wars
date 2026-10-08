@@ -1,8 +1,12 @@
+> **Похоронен:** 2026-10-08
+> **Почему:** проход 1 пропустил путь: сессия есть, но профиль не прочитан
+> **Заменён:** [UC-10](../UC-10-ACTOR-1-EVT-2-ENT-3-SESSION-STARTED-IN-AUTH.md)
+
 # UC-2: Вход
 
-**Основание:** [R7](../../0-vibes/prd/PRD.md#r7), [R9](../../0-vibes/prd/PRD.md#r9), [BT-2](../../1-business-tasks/planning/BT-2-PLANNING-SIGN-IN.md), [MOD-1](../modules/MOD-1-AUTH.md).
+**Основание:** [R7](../../../0-vibes/prd/PRD.md#r7), [R9](../../../0-vibes/prd/PRD.md#r9), [BT-2](../../../1-business-tasks/planning/BT-2-PLANNING-SIGN-IN.md), [MOD-1](../../modules/MOD-1-AUTH.md).
 
-**Актор, событие, сущность:** [ACTOR-1](../actors/ACTOR-1-VISITOR-IN-AUTH.md), [EVT-2](../events/EVT-2-SIGNED-IN-IN-AUTH.md), [ENT-3](../entities/ENT-3-SESSION-IN-AUTH.md).
+**Актор, событие, сущность:** [ACTOR-1](../../actors/ACTOR-1-VISITOR-IN-AUTH.md), [EVT-2](../../events/EVT-2-SIGNED-IN-IN-AUTH.md), [ENT-3](../../entities/ENT-3-SESSION-IN-AUTH.md).
 
 ## Триггер
 
