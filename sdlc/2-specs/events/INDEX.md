@@ -13,3 +13,4 @@
 | [EVT-7](EVT-7-REGISTRATION-SWITCHED-IN-MANAGEMENT.md) | Регистрация открыта или закрыта | [ENT-4](../entities/ENT-4-SETTINGS-IN-MANAGEMENT.md) |
 | [EVT-8](EVT-8-ROLE-CHANGED-IN-MANAGEMENT.md) | Роль изменена | [ENT-2](../entities/ENT-2-PROFILE-IN-AUTH.md) |
 | [EVT-9](EVT-9-PASSWORD-RESET-IN-MANAGEMENT.md) | Пароль задан администратором | [ENT-1](../entities/ENT-1-ACCOUNT-IN-AUTH.md) |
+| [EVT-10](EVT-10-APP-STARTED-IN-CONFIG.md) | Приложение запущено | [ENT-5](../entities/ENT-5-BUILD-CONFIG-IN-CONFIG.md) |

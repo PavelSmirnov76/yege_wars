@@ -8,3 +8,4 @@
 | [ENT-2](ENT-2-PROFILE-IN-AUTH.md) | Профиль | [MOD-1](../modules/MOD-1-AUTH.md), [ENT-1](ENT-1-ACCOUNT-IN-AUTH.md) |
 | [ENT-3](ENT-3-SESSION-IN-AUTH.md) | Сессия | [MOD-1](../modules/MOD-1-AUTH.md), [ENT-1](ENT-1-ACCOUNT-IN-AUTH.md), [ENT-2](ENT-2-PROFILE-IN-AUTH.md) |
 | [ENT-4](ENT-4-SETTINGS-IN-MANAGEMENT.md) | Настройки | [MOD-2](../modules/MOD-2-MANAGEMENT.md) |
+| [ENT-5](ENT-5-BUILD-CONFIG-IN-CONFIG.md) | Конфигурация сборки | [MOD-3](../modules/MOD-3-CONFIG.md) |
