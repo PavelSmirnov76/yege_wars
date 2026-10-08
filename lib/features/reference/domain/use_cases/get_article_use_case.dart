@@ -3,6 +3,8 @@ import 'package:yege_wars/features/reference/domain/entities/reference_article.d
 import 'package:yege_wars/features/reference/domain/repositories/reference_repository.dart';
 
 /// Статья справочника целиком.
+///
+/// Реализует UC-26.
 final class GetArticleUseCase {
   /// Создаёт use case поверх [ReferenceRepository].
   const GetArticleUseCase(this._repository);

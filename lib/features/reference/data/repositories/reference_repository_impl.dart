@@ -10,6 +10,8 @@ import 'package:yege_wars/features/reference/domain/entities/reference_article.d
 import 'package:yege_wars/features/reference/domain/repositories/reference_repository.dart';
 
 /// Реализация [ReferenceRepository] поверх [ReferenceRemoteDataSource].
+///
+/// Реализует UC-25, UC-26 и UC-28.
 final class ReferenceRepositoryImpl implements ReferenceRepository {
   /// Создаёт репозиторий поверх [ReferenceRemoteDataSource].
   const ReferenceRepositoryImpl(this._dataSource);

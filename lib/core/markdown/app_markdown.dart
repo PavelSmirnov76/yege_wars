@@ -15,6 +15,8 @@ import 'package:yege_wars/core/markdown/wiki_link_syntax.dart';
 /// Поддерживает заголовки, списки, таблицы, цитаты, выделение, ссылки,
 /// участки и блоки кода с подсветкой Python, а также внутренние ссылки
 /// справочника `[[slug]]`.
+///
+/// Реализует UC-28, воплощает COMP-15.
 class AppMarkdown extends StatelessWidget {
   /// Создаёт рендерер разметки [data].
   const AppMarkdown({

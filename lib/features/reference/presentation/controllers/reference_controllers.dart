@@ -9,6 +9,8 @@ import 'package:yege_wars/features/reference/reference_providers.dart';
 part 'reference_controllers.g.dart';
 
 /// Текущие условия отбора статей в разделе «Справочник».
+///
+/// Реализует UC-25.
 @riverpod
 class ArticleFilterController extends _$ArticleFilterController {
   @override
@@ -37,6 +39,8 @@ class ArticleFilterController extends _$ArticleFilterController {
 }
 
 /// Список статей по текущему фильтру.
+///
+/// Реализует UC-25.
 @riverpod
 Future<List<ArticleBrief>> articles(Ref ref) async {
   final filter = ref.watch(articleFilterControllerProvider);
@@ -50,6 +54,8 @@ Future<List<ArticleBrief>> articles(Ref ref) async {
 /// Значения фильтров: какие номера заданий и теги вообще встречаются.
 ///
 /// Считается по всему справочнику один раз за сессию — статей немного.
+///
+/// Реализует UC-25.
 @Riverpod(keepAlive: true)
 Future<ArticleFacets> articleFacets(Ref ref) async {
   final result = await ref.watch(listArticlesUseCaseProvider)(
@@ -69,6 +75,8 @@ Future<ArticleFacets> articleFacets(Ref ref) async {
 }
 
 /// Статья справочника по slug.
+///
+/// Реализует UC-26.
 @riverpod
 Future<ReferenceArticle> article(Ref ref, String slug) async {
   final result = await ref.watch(getArticleUseCaseProvider)(slug);
@@ -82,6 +90,8 @@ Future<ReferenceArticle> article(Ref ref, String slug) async {
 ///
 /// Словарь маленький (slug и заголовок), поэтому грузится целиком и живёт
 /// до конца сессии.
+///
+/// Реализует UC-28.
 @Riverpod(keepAlive: true)
 Future<Map<String, String>> articleTitles(Ref ref) async {
   final result = await ref.watch(getArticleTitlesUseCaseProvider)();

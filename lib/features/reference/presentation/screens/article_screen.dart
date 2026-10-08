@@ -11,6 +11,8 @@ import 'package:yege_wars/features/reference/presentation/widgets/article_meta.d
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 
 /// Страница статьи справочника.
+///
+/// Реализует UC-26 и UC-28.
 class ArticleScreen extends ConsumerWidget {
   /// Создаёт страницу статьи с идентификатором [slug].
   const ArticleScreen({required this.slug, super.key});

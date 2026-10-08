@@ -11,6 +11,8 @@ import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart'
 ///
 /// Статьи не склеиваются в один текст: каждая — самостоятельный мини-урок,
 /// который используется многими задачами.
+///
+/// Реализует UC-27.
 class TaskHelpPanel extends StatelessWidget {
   /// Создаёт панель для связей [articles].
   const TaskHelpPanel({required this.articles, super.key});

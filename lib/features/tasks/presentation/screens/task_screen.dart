@@ -24,7 +24,7 @@ import 'package:yege_wars/features/tasks/presentation/widgets/task_help_panel.da
 /// Редактор кода с запуском и отправкой ответа и решения других — тоже
 /// здесь: на широком экране справа от условия, на узком — вкладками.
 ///
-/// Реализует UC-15.
+/// Реализует UC-15, UC-27 и UC-28.
 class TaskScreen extends ConsumerWidget {
   /// Создаёт страницу задачи с идентификатором [slug].
   const TaskScreen({required this.slug, super.key});

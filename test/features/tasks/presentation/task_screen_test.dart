@@ -7,6 +7,8 @@ import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/features/tasks/data/datasources/tasks_remote_data_source.dart';
 import 'package:yege_wars/features/tasks/data/repositories/tasks_repository_impl.dart';
+import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
+import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/task_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_files_panel.dart';
@@ -69,7 +71,8 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('UC-15-P-01: показывает условие и подсказку про справку', (
+  testWidgets('UC-15-P-01, UC-27-P-01: показывает условие и подсказку про '
+      'справку', (
     tester,
   ) async {
     await openTask(tester);
@@ -80,8 +83,8 @@ void main() {
     expect(find.text(l10n.taskHelpHint), findsOneWidget);
   });
 
-  testWidgets('UC-15-P-01: на узком экране условие, справка и файлы — '
-      'вкладки', (
+  testWidgets('UC-15-P-01, UC-27-P-01: на узком экране условие, справка и '
+      'файлы — вкладки', (
     tester,
   ) async {
     await openTask(tester, surface: const Size(390, 800));
@@ -96,7 +99,8 @@ void main() {
     expect(find.text('Проход по строке окном'), findsOneWidget);
   });
 
-  testWidgets('без ручных связей справка показывает статью по теме', (
+  testWidgets('UC-27-P-01: без ручных связей справка показывает статью по '
+      'теме', (
     tester,
   ) async {
     // Настоящий репозиторий поверх заглушки datasource: так проверяется,
@@ -161,7 +165,8 @@ void main() {
     expect(find.text(l10n.taskFileCopy), findsOneWidget);
   });
 
-  testWidgets('из справки к задаче можно перейти в статью', (tester) async {
+  testWidgets('UC-27-P-01: из справки к задаче можно перейти в '
+      'статью', (tester) async {
     await openTask(tester, surface: const Size(390, 800));
 
     await openTab(tester, l10n.taskHelpTitle);
@@ -169,6 +174,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ArticleScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-27-P-02: у задачи без статей справка пустая, подсказки над '
+      'условием нет', (tester) async {
+    tasks.taskResult = const Ok(
+      TaskDetail(
+        brief: testTask24,
+        statementMd: '## Условие\n\nНайдите наибольший фрагмент.',
+        answerFormat: AnswerFormat.single,
+      ),
+    );
+    await openTask(tester, surface: const Size(390, 800));
+
+    expect(find.text('Найдите наибольший фрагмент.'), findsOneWidget);
+    expect(find.text(l10n.taskHelpHint), findsNothing);
+
+    await openTab(tester, l10n.taskHelpTitle);
+
+    expect(find.text(l10n.taskHelpEmpty), findsOneWidget);
   });
 
   testWidgets('UC-15-P-02: ошибка загрузки показывается с повтором', (

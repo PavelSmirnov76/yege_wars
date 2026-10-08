@@ -31,7 +31,8 @@ Future<void> pumpMarkdown(
 }
 
 void main() {
-  testWidgets('рисует заголовок, абзац и блок кода', (tester) async {
+  testWidgets('UC-26-P-01: рисует заголовок, абзац и блок '
+      'кода', (tester) async {
     await pumpMarkdown(
       tester,
       '# Чтение файлов\n\nОткрываем файл.\n\n```python\nprint(1)\n```\n',
@@ -42,7 +43,8 @@ void main() {
     expect(find.byType(CodeBlock), findsOneWidget);
   });
 
-  testWidgets('нажатие на внутреннюю ссылку отдаёт slug', (tester) async {
+  testWidgets('UC-28-P-01: нажатие на внутреннюю ссылку отдаёт '
+      'slug', (tester) async {
     String? tapped;
     await pumpMarkdown(
       tester,
@@ -61,7 +63,8 @@ void main() {
     expect(tapped, 'regex-basics');
   });
 
-  testWidgets('неизвестная ссылка остаётся текстом', (tester) async {
+  testWidgets('UC-28-P-02: неизвестная ссылка остаётся '
+      'текстом', (tester) async {
     var tapped = false;
     await pumpMarkdown(
       tester,
@@ -73,7 +76,8 @@ void main() {
     expect(tapped, isFalse);
   });
 
-  testWidgets('таблица и цитата не ломают разметку', (tester) async {
+  testWidgets('UC-26-P-01: таблица и цитата не ломают '
+      'разметку', (tester) async {
     await pumpMarkdown(
       tester,
       '| Поле | Тип |\n|---|---|\n| slug | text |\n\n> Важно помнить.\n',

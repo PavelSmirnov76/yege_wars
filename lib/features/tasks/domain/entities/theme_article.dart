@@ -3,6 +3,8 @@ import 'package:yege_wars/features/reference/domain/entities/article_brief.dart'
 import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart';
 
 /// Статья справочника, которая полагается задаче по одной из её тем.
+///
+/// Реализует UC-27.
 @immutable
 final class ThemeArticle {
   /// Создаёт статью темы.
