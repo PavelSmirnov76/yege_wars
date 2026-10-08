@@ -80,7 +80,7 @@ void main() {
       );
     });
 
-    test('UC-11-P-03: выход из аккаунта в другой вкладке '
+    test('UC-13-P-03: выход из аккаунта в другой вкладке '
         'сбрасывает состояние', () async {
       readState();
       repository.emitUserId(testStudent.id);
@@ -129,7 +129,7 @@ void main() {
       expect(readState(), const AuthAuthenticated(testStudent));
     });
 
-    test('UC-11-P-01: выход возвращает в unauthenticated', () async {
+    test('UC-13-P-01: выход возвращает в unauthenticated', () async {
       readState();
       repository.emitUserId(testStudent.id);
       await pumpEventQueue();
@@ -142,7 +142,7 @@ void main() {
       expect(readState(), isA<AuthUnauthenticated>());
     });
 
-    test('UC-11-P-02: ошибка выхода сохраняет вход', () async {
+    test('UC-13-P-02: ошибка выхода сохраняет вход', () async {
       repository.signOutResult = const Err<void>(
         NetworkFailure(),
       );

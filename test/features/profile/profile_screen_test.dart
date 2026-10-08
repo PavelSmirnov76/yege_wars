@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/app/router/app_routes.dart';
@@ -5,6 +6,7 @@ import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/auth/presentation/screens/login_screen.dart';
 import 'package:yege_wars/features/profile/presentation/screens/profile_screen.dart';
+import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
 import '../../helpers/fake_auth_repository.dart';
@@ -53,7 +55,7 @@ void main() {
     );
   });
 
-  testWidgets('UC-11-P-01: кнопка «Выйти» возвращает на экран входа', (
+  testWidgets('UC-13-P-01: кнопка «Выйти» возвращает на экран входа', (
     tester,
   ) async {
     await openProfile(tester);
@@ -64,7 +66,7 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
-  testWidgets('UC-11-P-02: ошибка выхода показывается сообщением', (
+  testWidgets('UC-13-P-02: ошибка выхода показывается сообщением', (
     tester,
   ) async {
     repository.signOutResult = const Err<void>(NetworkFailure());
@@ -78,5 +80,24 @@ void main() {
       find.text('Нет соединения с сервером. Проверьте интернет.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('UC-13-P-01: после «Выйти» адрес профиля не запоминается — '
+      'следующий вход открывает главную', (tester) async {
+    await openProfile(tester);
+
+    await tester.tap(find.text(l10n.profileSignOut));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(currentLocation(tester), AppRoutes.login);
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, testStudent.username);
+    await tester.enterText(fields.last, 'password1');
+    await tester.tap(find.text(l10n.authSignInButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CatalogScreen), findsOneWidget);
   });
 }

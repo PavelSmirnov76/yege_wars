@@ -15,10 +15,14 @@ import 'package:yege_wars/features/auth/presentation/widgets/auth_submit_button.
 
 /// Экран входа по логину и паролю.
 ///
-/// Реализует UC-10.
+/// Реализует UC-10 и UC-1.
 class LoginScreen extends ConsumerStatefulWidget {
-  /// Создаёт экран входа.
-  const LoginScreen({super.key});
+  /// Создаёт экран входа с адресом [from], который откроется после входа.
+  const LoginScreen({this.from, super.key});
+
+  /// Адрес, на который шёл посетитель ([AppRoutes.fromQueryParam]):
+  /// ссылка на регистрацию передаёт его дальше.
+  final String? from;
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -116,7 +120,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         TextButton(
           onPressed: _isSubmitting
               ? null
-              : () => context.goNamed(AppRoutes.registerName),
+              : () => context.goNamed(
+                  AppRoutes.registerName,
+                  queryParameters: {AppRoutes.fromQueryParam: ?widget.from},
+                ),
           child: Text(l10n.authNoAccountLink),
         ),
       ],

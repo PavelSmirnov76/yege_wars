@@ -13,7 +13,7 @@ part 'auth_controller.g.dart';
 /// Живёт всё время работы приложения ([Riverpod.keepAlive]), иначе при
 /// смене экранов сессия каждый раз определялась бы заново.
 ///
-/// Реализует UC-1, UC-10 и UC-11.
+/// Реализует UC-1, UC-10 и UC-13.
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
   @override
