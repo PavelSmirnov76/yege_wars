@@ -19,10 +19,15 @@ import 'package:yege_wars/features/auth/presentation/widgets/auth_submit_button.
 /// Пока не известно, открыта ли регистрация, форма заблокирована;
 /// при закрытой регистрации показывается сообщение.
 ///
-/// Реализует UC-1.
+/// Реализует UC-1 и UC-10.
 class RegisterScreen extends ConsumerStatefulWidget {
-  /// Создаёт экран регистрации.
-  const RegisterScreen({super.key});
+  /// Создаёт экран регистрации с адресом [from], который откроется после
+  /// регистрации.
+  const RegisterScreen({this.from, super.key});
+
+  /// Адрес, на который шёл посетитель ([AppRoutes.fromQueryParam]):
+  /// ссылка на вход передаёт его дальше.
+  final String? from;
 
   @override
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
@@ -126,7 +131,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         TextButton(
           onPressed: _isSubmitting
               ? null
-              : () => context.goNamed(AppRoutes.loginName),
+              : () => context.goNamed(
+                  AppRoutes.loginName,
+                  queryParameters: {AppRoutes.fromQueryParam: ?widget.from},
+                ),
           child: Text(l10n.authHaveAccountLink),
         ),
       ],

@@ -31,8 +31,15 @@ GoRouter appRouter(Ref ref) {
 
   final router = GoRouter(
     refreshListenable: refreshNotifier,
-    redirect: (context, state) =>
-        _guard(ref.read(authControllerProvider), state),
+    // Открытая страница — текущая конфигурация роутера: пока redirect
+    // разбирает новый адрес, она ещё не сменилась.
+    redirect: (context, state) => _guard(
+      ref.read(authControllerProvider),
+      state,
+      openLocation: GoRouter.of(
+        context,
+      ).routerDelegate.currentConfiguration.uri,
+    ),
     errorBuilder: (context, state) => const NotFoundScreen(),
     routes: [
       GoRoute(
@@ -43,12 +50,16 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.login,
         name: AppRoutes.loginName,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => LoginScreen(
+          from: state.uri.queryParameters[AppRoutes.fromQueryParam],
+        ),
       ),
       GoRoute(
         path: AppRoutes.register,
         name: AppRoutes.registerName,
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => RegisterScreen(
+          from: state.uri.queryParameters[AppRoutes.fromQueryParam],
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -118,15 +129,34 @@ GoRouter appRouter(Ref ref) {
   return router;
 }
 
+/// Служебные пути: их не открывают как адрес из
+/// [AppRoutes.fromQueryParam].
+const Set<String> _servicePaths = {
+  AppRoutes.splash,
+  AppRoutes.login,
+  AppRoutes.register,
+};
+
 /// Правила доступа к маршрутам.
 ///
-/// Пока состояние неизвестно, показывается заставка, а адрес, на который
-/// шёл пользователь, сохраняется в параметре [AppRoutes.fromQueryParam]
-/// и восстанавливается после проверки сессии (иначе при перезагрузке
-/// страницы терялась бы глубокая ссылка).
+/// Адрес, на который шёл пользователь, хранится в параметре
+/// [AppRoutes.fromQueryParam]: пока состояние неизвестно — у заставки
+/// (иначе при перезагрузке страницы терялась бы глубокая ссылка), без
+/// входа — у экранов входа и регистрации. После проверки сессии, входа или
+/// регистрации он открывается, если годен ([_restoredLocation]), иначе
+/// открывается главная.
 ///
-/// Реализует UC-1, UC-5, UC-10 и UC-11.
-String? _guard(AuthState auth, GoRouterState state) {
+/// Адрес не запоминается, если сессия закончилась на открытой странице
+/// [openLocation] — «Выйти» в этой вкладке или в другой, сессия кончилась
+/// сама: открытую страницу роутер перепроверяет при смене состояния входа,
+/// и проверяемый адрес совпадает с открытым.
+///
+/// Реализует UC-1, UC-5, UC-10 и UC-13.
+String? _guard(
+  AuthState auth,
+  GoRouterState state, {
+  required Uri openLocation,
+}) {
   final path = state.matchedLocation;
   final isAuthPath = path == AppRoutes.login || path == AppRoutes.register;
 
@@ -134,9 +164,19 @@ String? _guard(AuthState auth, GoRouterState state) {
     case AuthUnknown():
       return path == AppRoutes.splash
           ? null
-          : _splashLocation(state.uri.toString());
+          : _locationWithFrom(AppRoutes.splash, state.uri.toString());
     case AuthUnauthenticated():
-      return isAuthPath ? null : AppRoutes.login;
+      if (isAuthPath) {
+        return null;
+      }
+      if (path == AppRoutes.splash) {
+        return _signInLocationAfterSplash(state);
+      }
+      // Открытая страница без входа: сессия закончилась на ней.
+      if (state.uri == openLocation) {
+        return AppRoutes.login;
+      }
+      return _locationWithFrom(AppRoutes.login, state.uri.toString());
     case AuthAuthenticated(:final profile):
       if (isAuthPath || path == AppRoutes.splash) {
         return _restoredLocation(state) ?? AppRoutes.catalog;
@@ -148,23 +188,52 @@ String? _guard(AuthState auth, GoRouterState state) {
   }
 }
 
-/// Адрес заставки с сохранённым адресом [from].
-String _splashLocation(String from) => Uri(
-  path: AppRoutes.splash,
+/// Адрес [path] с адресом [from] в параметре [AppRoutes.fromQueryParam].
+String _locationWithFrom(String path, String from) => Uri(
+  path: path,
   queryParameters: {AppRoutes.fromQueryParam: from},
 ).toString();
 
-/// Адрес, сохранённый перед показом заставки, если он пригоден
-/// для перехода.
+/// Куда уводит заставка, когда входа нет.
+///
+/// Сохранённую страницу входа или регистрации открывает как есть, со своим
+/// адресом в [AppRoutes.fromQueryParam]: так адрес переживает перезагрузку
+/// этих страниц. Любой другой сохранённый адрес без изменений передаёт
+/// экрану входа.
+String _signInLocationAfterSplash(GoRouterState state) {
+  final from = state.uri.queryParameters[AppRoutes.fromQueryParam];
+  if (from == null) {
+    return AppRoutes.login;
+  }
+  final path = _internalUri(from)?.path;
+  if (path == AppRoutes.login || path == AppRoutes.register) {
+    return from;
+  }
+  return _locationWithFrom(AppRoutes.login, from);
+}
+
+/// Адрес из [AppRoutes.fromQueryParam], если его можно открыть: путь внутри
+/// приложения, не служебный. Возвращается целиком, с параметрами запроса.
 String? _restoredLocation(GoRouterState state) {
   final from = state.uri.queryParameters[AppRoutes.fromQueryParam];
-  if (from == null || !from.startsWith('/')) {
+  final path = from == null ? null : _internalUri(from)?.path;
+  if (path == null || _servicePaths.contains(path)) {
     return null;
   }
-  final path = Uri.parse(from).path;
-  final isServicePath =
-      path == AppRoutes.splash ||
-      path == AppRoutes.login ||
-      path == AppRoutes.register;
-  return isServicePath ? null : from;
+  return from;
+}
+
+/// Разобранный [location], если это путь внутри приложения: без схемы и
+/// хоста, начинается с `/`.
+///
+/// Адреса `//хост…` и `/\хост…` Dart разбирает с хостом — они не проходят.
+Uri? _internalUri(String location) {
+  final uri = Uri.tryParse(location);
+  if (uri == null ||
+      uri.hasScheme ||
+      uri.hasAuthority ||
+      !uri.path.startsWith('/')) {
+    return null;
+  }
+  return uri;
 }

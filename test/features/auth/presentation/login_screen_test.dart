@@ -87,7 +87,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('успешный вход ведёт в каталог', (tester) async {
+  testWidgets('UC-10-P-01: успешный вход ведёт в каталог', (tester) async {
     await pumpApp(tester, repository: repository);
 
     await fillForm(tester);

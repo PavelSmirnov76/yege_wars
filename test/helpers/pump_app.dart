@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/app.dart';
+import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/python_runtime/python_runtime_provider.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/editor/editor_providers.dart';
@@ -66,3 +67,8 @@ ProviderContainer containerOf(WidgetTester tester) => ProviderScope.containerOf(
   tester.element(find.byType(YegeWarsApp)),
   listen: false,
 );
+
+/// Адрес открытой страницы приложения — с параметрами запроса.
+String currentLocation(WidgetTester tester) => containerOf(
+  tester,
+).read(appRouterProvider).routerDelegate.currentConfiguration.uri.toString();

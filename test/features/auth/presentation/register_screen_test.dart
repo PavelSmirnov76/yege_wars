@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:yege_wars/app/router/app_router.dart';
+import 'package:yege_wars/app/router/app_routes.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
+import 'package:yege_wars/features/auth/presentation/screens/login_screen.dart';
 import 'package:yege_wars/features/auth/presentation/screens/register_screen.dart';
+import 'package:yege_wars/features/profile/presentation/screens/profile_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
@@ -24,7 +28,9 @@ void main() {
     expect(find.byType(RegisterScreen), findsOneWidget);
   }
 
-  testWidgets('успешная регистрация ведёт в каталог', (tester) async {
+  testWidgets('UC-1-P-01: успешная регистрация ведёт в каталог', (
+    tester,
+  ) async {
     await openRegister(tester);
 
     final fields = find.byType(TextFormField);
@@ -99,5 +105,42 @@ void main() {
 
     expect(find.text('Логин уже занят, выберите другой.'), findsOneWidget);
     expect(find.byType(RegisterScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-1-P-01: адрес переходит со входа на регистрацию и '
+      'открывается после регистрации', (tester) async {
+    await pumpApp(tester, repository: repository);
+    containerOf(tester).read(appRouterProvider).go(AppRoutes.profile);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(l10n.authNoAccountLink));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(RegisterScreen), findsOneWidget);
+    expect(currentLocation(tester), '/register?from=%2Fprofile');
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, 'newbie');
+    await tester.enterText(fields.last, 'password1');
+    await tester.tap(find.text(l10n.authSignUpButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-10-P-01: ссылка с регистрации на вход сохраняет адрес', (
+    tester,
+  ) async {
+    await pumpApp(tester, repository: repository);
+    containerOf(tester).read(appRouterProvider).go(AppRoutes.profile);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(l10n.authNoAccountLink));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(l10n.authHaveAccountLink));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(currentLocation(tester), '/login?from=%2Fprofile');
   });
 }

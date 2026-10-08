@@ -12,7 +12,7 @@ import 'package:yege_wars/l10n/gen/app_localizations.dart';
 ///
 /// Прогресс и статистика появятся на этапе 7.
 ///
-/// Реализует UC-4 и UC-11.
+/// Реализует UC-4 и UC-13.
 class ProfileScreen extends ConsumerWidget {
   /// Создаёт экран профиля.
   const ProfileScreen({super.key});
