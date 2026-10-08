@@ -11,6 +11,8 @@ import 'package:yege_wars/l10n/gen/app_localizations.dart';
 /// Экран профиля: логин, роль и выход из аккаунта.
 ///
 /// Прогресс и статистика появятся на этапе 7.
+///
+/// Реализует UC-4 и UC-11.
 class ProfileScreen extends ConsumerWidget {
   /// Создаёт экран профиля.
   const ProfileScreen({super.key});

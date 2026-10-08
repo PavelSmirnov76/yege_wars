@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 
 /// Карточка формы авторизации по центру экрана.
+///
+/// Воплощает COMP-1.
 class AuthFormCard extends StatelessWidget {
   /// Создаёт карточку с заголовком [title] и содержимым [children].
   const AuthFormCard({

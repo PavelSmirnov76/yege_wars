@@ -17,7 +17,7 @@ void main() {
   tearDown(() => repository.dispose());
 
   group('SignInUseCase', () {
-    test('не идёт в репозиторий при неверном логине', () async {
+    test('UC-10-P-03: не идёт в репозиторий при неверном логине', () async {
       final result = await SignInUseCase(repository)(
         username: 'ab',
         password: 'password1',
@@ -27,7 +27,7 @@ void main() {
       expect(repository.lastUsername, isNull);
     });
 
-    test('не идёт в репозиторий при коротком пароле', () async {
+    test('UC-10-P-03: не идёт в репозиторий при коротком пароле', () async {
       final result = await SignInUseCase(repository)(
         username: 'pavel',
         password: 'short',
@@ -50,7 +50,7 @@ void main() {
   });
 
   group('SignUpUseCase', () {
-    test('проверяет ввод до обращения к репозиторию', () async {
+    test('UC-1-P-02: проверяет ввод до обращения к репозиторию', () async {
       final result = await SignUpUseCase(repository)(
         username: 'павел',
         password: 'password1',

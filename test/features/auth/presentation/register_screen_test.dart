@@ -37,7 +37,26 @@ void main() {
     expect(find.byType(CatalogScreen), findsOneWidget);
   });
 
-  testWidgets('при закрытой регистрации форма заблокирована', (tester) async {
+  testWidgets('UC-1-P-02: не отправляет форму с некорректным вводом', (
+    tester,
+  ) async {
+    await openRegister(tester);
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, 'ab');
+    await tester.enterText(fields.last, 'short');
+    await tester.tap(find.text(l10n.authSignUpButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.authUsernameInvalid), findsOneWidget);
+    expect(find.text(l10n.authPasswordInvalid), findsOneWidget);
+    expect(repository.lastUsername, isNull);
+    expect(find.byType(RegisterScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-1-P-04: при закрытой регистрации форма заблокирована', (
+    tester,
+  ) async {
     repository.registrationOpenResult = const Ok(false);
     await openRegister(tester);
 
@@ -52,7 +71,9 @@ void main() {
     );
   });
 
-  testWidgets('ошибка проверки регистрации показывается', (tester) async {
+  testWidgets('UC-1-P-05: ошибка проверки регистрации показывается', (
+    tester,
+  ) async {
     repository.registrationOpenResult = const Err(NetworkFailure());
     await openRegister(tester);
 
@@ -62,7 +83,9 @@ void main() {
     );
   });
 
-  testWidgets('ошибка регистрации показывается на экране', (tester) async {
+  testWidgets('UC-1-P-03: ошибка регистрации показывается на экране', (
+    tester,
+  ) async {
     repository.signUpResult = const Err(
       ValidationFailure(message: 'Логин уже занят, выберите другой.'),
     );

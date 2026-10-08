@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Кнопка отправки формы с индикатором загрузки.
+///
+/// Воплощает COMP-3.
 class AuthSubmitButton extends StatelessWidget {
   /// Создаёт кнопку с подписью [label].
   ///

@@ -3,6 +3,8 @@ import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 
 /// Экран админки (заглушка этапа 1).
+///
+/// Реализует UC-5.
 class AdminScreen extends StatelessWidget {
   /// Создаёт экран админки.
   const AdminScreen({super.key});

@@ -18,6 +18,8 @@ import 'package:yege_wars/features/auth/presentation/widgets/auth_submit_button.
 ///
 /// Пока не известно, открыта ли регистрация, форма заблокирована;
 /// при закрытой регистрации показывается сообщение.
+///
+/// Реализует UC-1.
 class RegisterScreen extends ConsumerStatefulWidget {
   /// Создаёт экран регистрации.
   const RegisterScreen({super.key});

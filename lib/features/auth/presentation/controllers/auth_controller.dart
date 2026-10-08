@@ -12,6 +12,8 @@ part 'auth_controller.g.dart';
 /// догружает профиль из `profiles`, при выходе сбрасывает состояние.
 /// Живёт всё время работы приложения ([Riverpod.keepAlive]), иначе при
 /// смене экранов сессия каждый раз определялась бы заново.
+///
+/// Реализует UC-1, UC-10 и UC-11.
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
   @override

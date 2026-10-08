@@ -29,7 +29,7 @@ void main() {
     expect(find.byType(ProfileScreen), findsOneWidget);
   }
 
-  testWidgets('показывает логин и роль', (tester) async {
+  testWidgets('UC-4-P-01: показывает логин и роль', (tester) async {
     await openProfile(tester);
 
     expect(find.text(testStudent.username), findsOneWidget);
@@ -39,7 +39,23 @@ void main() {
     );
   });
 
-  testWidgets('кнопка «Выйти» возвращает на экран входа', (tester) async {
+  testWidgets('UC-4-P-01: показывает роль администратора', (tester) async {
+    repository.currentProfileResult = const Ok(testAdmin);
+    await pumpApp(tester, repository: repository, initialUserId: testAdmin.id);
+    containerOf(tester).read(appRouterProvider).go(AppRoutes.profile);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileScreen), findsOneWidget);
+    expect(find.text(testAdmin.username), findsOneWidget);
+    expect(
+      find.text('${l10n.profileRoleLabel}: ${l10n.profileRoleAdmin}'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('UC-11-P-01: кнопка «Выйти» возвращает на экран входа', (
+    tester,
+  ) async {
     await openProfile(tester);
 
     await tester.tap(find.text(l10n.profileSignOut));
@@ -48,7 +64,9 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
-  testWidgets('ошибка выхода показывается сообщением', (tester) async {
+  testWidgets('UC-11-P-02: ошибка выхода показывается сообщением', (
+    tester,
+  ) async {
     repository.signOutResult = const Err<void>(NetworkFailure());
     await openProfile(tester);
 

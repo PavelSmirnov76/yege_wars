@@ -29,7 +29,9 @@ void main() {
     await tester.enterText(fields.last, password);
   }
 
-  testWidgets('не отправляет форму с некорректным вводом', (tester) async {
+  testWidgets('UC-10-P-03: не отправляет форму с некорректным вводом', (
+    tester,
+  ) async {
     await pumpApp(tester, repository: repository);
     expect(find.byType(LoginScreen), findsOneWidget);
 
@@ -42,7 +44,7 @@ void main() {
     expect(repository.lastUsername, isNull);
   });
 
-  testWidgets('показывает ошибку сервера', (tester) async {
+  testWidgets('UC-10-P-02: показывает ошибку сервера', (tester) async {
     repository.signInResult = const Err(
       AuthFailure(message: 'Неверный логин или пароль.'),
     );
@@ -53,6 +55,20 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Неверный логин или пароль.'), findsOneWidget);
+    expect(find.byType(LoginScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-10-P-04: сбой связи показывается сообщением', (
+    tester,
+  ) async {
+    repository.signInResult = const Err(NetworkFailure());
+    await pumpApp(tester, repository: repository);
+
+    await fillForm(tester);
+    await tester.tap(find.text(l10n.authSignInButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text(const NetworkFailure().message), findsOneWidget);
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
@@ -83,7 +99,9 @@ void main() {
     expect(find.byType(CatalogScreen), findsOneWidget);
   });
 
-  testWidgets('показывает ошибку восстановления сессии', (tester) async {
+  testWidgets('UC-10-P-06: показывает ошибку восстановления сессии', (
+    tester,
+  ) async {
     repository.currentProfileResult = const Err(
       DatabaseFailure(message: 'Профиль пользователя не найден.'),
     );

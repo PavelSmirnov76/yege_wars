@@ -50,7 +50,7 @@ $$;
 -- Невалидные и повторные username отклоняются
 do $$
 begin
-  -- короче 3 символов
+  -- UC-1-P-02: короче 3 символов
   begin
     perform tests.signup('ab');
     raise exception 'ТЕСТ ПРОВАЛЕН (а): username короче 3 символов прошёл регистрацию';
@@ -59,7 +59,7 @@ begin
     raise notice 'OK: (а) короткий username отклонён (%)', sqlerrm;
   end;
 
-  -- недопустимые символы
+  -- UC-1-P-02: недопустимые символы
   begin
     perform tests.signup('bad name!');
     raise exception 'ТЕСТ ПРОВАЛЕН (а): username с недопустимыми символами прошёл регистрацию';
@@ -79,7 +79,25 @@ begin
 end
 $$;
 
--- Закрытая регистрация: [registration_closed]
+-- UC-1-P-03: занятый логин с другой почтой — [username_taken] из триггера
+-- (повторный signup выше до триггера не доходит: падает на уникальности почты)
+do $$
+begin
+  begin
+    insert into auth.users (email, raw_user_meta_data)
+    values ('alice.second@ege.local', jsonb_build_object('username', 'alice'));
+    raise exception 'ТЕСТ ПРОВАЛЕН (а): занятый логин прошёл регистрацию с другой почтой';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[username_taken]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (а): ожидалась ошибка [username_taken], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (а) занятый логин с другой почтой — [username_taken]';
+  end;
+end
+$$;
+
+-- UC-1-P-04: закрытая регистрация — [registration_closed]
 do $$
 begin
   update public.app_settings set value = 'false'::jsonb where key = 'registration_open';
@@ -644,7 +662,7 @@ $$;
 -- (и) admin_* функции
 -- =============================================================================
 
--- Под студентом — [forbidden]
+-- UC-6-P-01: под студентом — [forbidden]
 do $$
 declare
   v_alice uuid;
@@ -851,7 +869,7 @@ begin
   select id into v_bob   from public.profiles where username = 'bob';
   select id into v_admin from public.profiles where username = 'boss';
 
-  -- под студентом — [forbidden]
+  -- UC-6-P-01: admin_reset_password под студентом — [forbidden]
   perform tests.login(v_alice);
   begin
     perform public.admin_reset_password(v_bob, 'correct-horse-battery');
@@ -870,10 +888,10 @@ begin
 
   perform tests.login(v_admin);
 
-  -- нормальный пароль — проходит
+  -- UC-9-P-01: нормальный пароль — проходит
   perform public.admin_reset_password(v_bob, 'newStrongPass123');
 
-  -- короткий пароль — [weak_password]
+  -- UC-9-P-02: короткий пароль — [weak_password]
   begin
     perform public.admin_reset_password(v_bob, '123');
     raise exception 'ТЕСТ ПРОВАЛЕН (л): короткий пароль принят';
@@ -887,12 +905,59 @@ begin
 
   perform tests.logout();
 
-  -- хэш действительно изменился
+  -- UC-9-P-01: хэш действительно изменился
   select encrypted_password into v_new from auth.users where id = v_bob;
   if v_new is null or v_new is not distinct from v_old then
     raise exception 'ТЕСТ ПРОВАЛЕН (л): encrypted_password не изменился после admin_reset_password';
   end if;
   raise notice 'OK: (л) admin_reset_password под админом: encrypted_password изменился';
+end
+$$;
+
+-- UC-9-P-01: новым паролем можно войти — хэш bcrypt сходится с ним и не сходится с другим
+do $$
+declare
+  v_admin uuid;
+  v_carol uuid;
+  v_hash  text;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  select id into v_carol from public.profiles where username = 'carol';
+
+  perform tests.login(v_admin);
+  perform public.admin_reset_password(v_carol, 'carolFreshPass42');
+  perform tests.logout();
+
+  select encrypted_password into v_hash from auth.users where id = v_carol;
+  if v_hash is null or extensions.crypt('carolFreshPass42', v_hash) <> v_hash then
+    raise exception 'ТЕСТ ПРОВАЛЕН (л): новый пароль не сходится с хэшем после admin_reset_password';
+  end if;
+  if extensions.crypt('notCarolsPass42', v_hash) = v_hash then
+    raise exception 'ТЕСТ ПРОВАЛЕН (л): с хэшем сходится и другой пароль';
+  end if;
+  raise notice 'OK: (л) admin_reset_password: новый пароль сходится с хэшем, другой — нет';
+end
+$$;
+
+-- UC-9-P-03: пароль несуществующему пользователю — [user_not_found]
+do $$
+declare
+  v_admin uuid;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_reset_password(gen_random_uuid(), 'longEnoughPass1');
+    raise exception 'ТЕСТ ПРОВАЛЕН (л): пароль задан несуществующему пользователю';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[user_not_found]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (л): ожидалась ошибка [user_not_found], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (л) admin_reset_password несуществующему пользователю — [user_not_found]';
+  end;
+  perform tests.logout();
 end
 $$;
 
@@ -1283,7 +1348,7 @@ begin
     raise exception 'ТЕСТ ПРОВАЛЕН (н): опубликованная задача не видна в tasks_public';
   end if;
 
-  -- Админские RPC под студентом
+  -- UC-6-P-01: админские RPC под студентом
   begin
     perform public.admin_get_task('ege24-demo-01');
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студент получил задачу через admin_get_task';
@@ -1365,6 +1430,7 @@ begin
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту не видна опубликованная статья';
   end if;
 
+  -- UC-6-P-01: admin_upsert_article под студентом
   begin
     perform public.admin_upsert_article('{"slug":"hack-article"}'::jsonb);
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студент создал статью';
@@ -1866,6 +1932,7 @@ declare
   v_alice uuid;
 begin
   select id into v_alice from public.profiles where username = 'alice';
+  -- UC-6-P-01: admin_set_task_answer под учеником — [forbidden]
   perform tests.login(v_alice);
   begin
     perform public.admin_set_task_answer(jsonb_build_object(
@@ -2157,6 +2224,7 @@ begin
     raise notice 'OK: (р) answer_explanation под учеником — permission denied';
   end;
 
+  -- UC-6-P-01: admin_get_task под учеником
   begin
     perform public.admin_get_task('fipi-ans001');
     raise exception 'ТЕСТ ПРОВАЛЕН (р): ученик получил задачу через admin_get_task';
@@ -2169,6 +2237,211 @@ begin
 
   update public.app_settings set value = '60'::jsonb
    where key = 'content_writes_per_minute';
+end
+$$;
+
+-- =============================================================================
+-- (с) admin_set_role
+-- =============================================================================
+
+-- UC-6-P-01: admin_set_role под учеником — [forbidden]
+do $$
+declare
+  v_alice uuid;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+
+  perform tests.login(v_alice);
+  begin
+    perform public.admin_set_role(v_alice, 'admin');
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): ученик назначил себе роль администратора';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[forbidden]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (с): ожидалась ошибка [forbidden], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (с) admin_set_role под учеником — [forbidden]';
+  end;
+  perform tests.logout();
+end
+$$;
+
+-- UC-8-P-01: администратор назначает и снимает роль администратора
+do $$
+declare
+  v_admin uuid;
+  v_carol uuid;
+  v_role  text;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  select id into v_carol from public.profiles where username = 'carol';
+
+  perform tests.login(v_admin);
+  perform public.admin_set_role(v_carol, 'admin');
+  perform tests.logout();
+  select role into v_role from public.profiles where id = v_carol;
+  if v_role is distinct from 'admin' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): после назначения роль carol = %, ожидалась admin', coalesce(v_role, '<null>');
+  end if;
+
+  perform tests.login(v_admin);
+  perform public.admin_set_role(v_carol, 'student');
+  perform tests.logout();
+  select role into v_role from public.profiles where id = v_carol;
+  if v_role is distinct from 'student' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): после снятия роль carol = %, ожидалась student', coalesce(v_role, '<null>');
+  end if;
+
+  raise notice 'OK: (с) admin_set_role: администратор назначает и снимает роль';
+end
+$$;
+
+-- UC-8-P-02: снять роль администратора с себя — [self_demote]
+do $$
+declare
+  v_admin uuid;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_set_role(v_admin, 'student');
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): администратор снял роль с самого себя';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[self_demote]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (с): ожидалась ошибка [self_demote], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (с) admin_set_role: снять роль с себя — [self_demote]';
+  end;
+  perform tests.logout();
+end
+$$;
+
+-- UC-8-P-03: недопустимая роль — [bad_role]
+do $$
+declare
+  v_admin uuid;
+  v_carol uuid;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+  select id into v_carol from public.profiles where username = 'carol';
+
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_set_role(v_carol, 'superuser');
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): admin_set_role приняла недопустимую роль';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[bad_role]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (с): ожидалась ошибка [bad_role], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (с) admin_set_role: недопустимая роль — [bad_role]';
+  end;
+  perform tests.logout();
+end
+$$;
+
+-- UC-8-P-04: роль несуществующему пользователю — [user_not_found]
+do $$
+declare
+  v_admin uuid;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  perform tests.login(v_admin);
+  begin
+    perform public.admin_set_role(gen_random_uuid(), 'student');
+    raise exception 'ТЕСТ ПРОВАЛЕН (с): роль задана несуществующему пользователю';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[user_not_found]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (с): ожидалась ошибка [user_not_found], получено: %', sqlerrm;
+    end if;
+    raise notice 'OK: (с) admin_set_role несуществующему пользователю — [user_not_found]';
+  end;
+  perform tests.logout();
+end
+$$;
+
+-- =============================================================================
+-- (т) Переключение регистрации: app_settings.registration_open через RLS
+-- =============================================================================
+
+-- UC-7-P-01: администратор закрывает и открывает регистрацию, is_registration_open() и триггер следуют флагу
+do $$
+declare
+  v_admin uuid;
+  v_rows  bigint;
+begin
+  select id into v_admin from public.profiles where username = 'boss';
+
+  perform tests.login(v_admin);
+  update public.app_settings set value = 'false'::jsonb where key = 'registration_open';
+  get diagnostics v_rows = row_count;
+  if v_rows <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): администратор закрыл регистрацию, изменено строк: %, ожидалась 1', v_rows;
+  end if;
+  if public.is_registration_open() is not false then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): регистрация закрыта, а is_registration_open() вернула не false';
+  end if;
+  perform tests.logout();
+
+  begin
+    perform tests.signup('erin');
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): регистрация закрыта администратором, но signup прошёл';
+  exception when others then
+    if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+    if sqlerrm not like '[registration_closed]%' then
+      raise exception 'ТЕСТ ПРОВАЛЕН (т): ожидалась ошибка [registration_closed], получено: %', sqlerrm;
+    end if;
+  end;
+
+  perform tests.login(v_admin);
+  update public.app_settings set value = 'true'::jsonb where key = 'registration_open';
+  get diagnostics v_rows = row_count;
+  if v_rows <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): администратор открыл регистрацию, изменено строк: %, ожидалась 1', v_rows;
+  end if;
+  if public.is_registration_open() is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): регистрация открыта, а is_registration_open() вернула не true';
+  end if;
+  perform tests.logout();
+
+  begin
+    perform tests.signup('erin');
+  exception when others then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): регистрация открыта администратором, но signup упал: %', sqlerrm;
+  end;
+
+  raise notice 'OK: (т) администратор закрывает и открывает регистрацию, is_registration_open() и триггер следуют флагу';
+end
+$$;
+
+-- UC-7-P-02: ученик меняет registration_open — без ошибки, 0 строк, значение прежнее
+do $$
+declare
+  v_alice uuid;
+  v_rows  bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+
+  perform tests.login(v_alice);
+  begin
+    update public.app_settings set value = 'false'::jsonb where key = 'registration_open';
+    get diagnostics v_rows = row_count;
+  exception when others then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): попытка ученика изменить registration_open упала: %', sqlerrm;
+  end;
+  perform tests.logout();
+
+  if v_rows <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): ученик изменил registration_open, изменено строк: %', v_rows;
+  end if;
+  if public.is_registration_open() is not true then
+    raise exception 'ТЕСТ ПРОВАЛЕН (т): после попытки ученика регистрация закрыта';
+  end if;
+  raise notice 'OK: (т) ученик меняет registration_open — без ошибки, 0 строк, значение прежнее';
 end
 $$;
 

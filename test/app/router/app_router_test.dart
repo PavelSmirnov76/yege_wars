@@ -9,6 +9,7 @@ import 'package:yege_wars/core/widgets/splash_screen.dart';
 import 'package:yege_wars/features/admin/presentation/screens/admin_screen.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/auth/presentation/screens/login_screen.dart';
+import 'package:yege_wars/features/auth/presentation/screens/register_screen.dart';
 import 'package:yege_wars/features/profile/presentation/screens/profile_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
@@ -49,7 +50,8 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
-  testWidgets('адрес, открытый до проверки сессии, восстанавливается', (
+  testWidgets('UC-10-P-05: адрес, открытый до проверки сессии, '
+      'восстанавливается', (
     tester,
   ) async {
     await pumpWithUnknownSession(tester);
@@ -74,7 +76,8 @@ void main() {
     expect(find.byType(ProfileScreen), findsNothing);
   });
 
-  testWidgets('после входа открывается каталог, после выхода — вход', (
+  testWidgets('UC-10-P-05, UC-11-P-03: после входа открывается каталог, '
+      'после выхода — вход', (
     tester,
   ) async {
     await pumpApp(
@@ -90,7 +93,31 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
-  testWidgets('ученика не пускает в админку и прячет пункт меню', (
+  testWidgets('UC-10-P-05: вошедшего с /login и /register уводит на главную', (
+    tester,
+  ) async {
+    await pumpApp(
+      tester,
+      repository: repository,
+      initialUserId: testStudent.id,
+    );
+    final router = containerOf(tester).read(appRouterProvider);
+
+    for (final path in [AppRoutes.login, AppRoutes.register]) {
+      router.go(AppRoutes.profile);
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+
+      router.go(path);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CatalogScreen), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
+      expect(find.byType(RegisterScreen), findsNothing);
+    }
+  });
+
+  testWidgets('UC-5-P-02: ученика не пускает в админку и прячет пункт меню', (
     tester,
   ) async {
     await pumpApp(
@@ -108,7 +135,9 @@ void main() {
     expect(find.byType(AdminScreen), findsNothing);
   });
 
-  testWidgets('админ открывает админку и видит пункт меню', (tester) async {
+  testWidgets('UC-5-P-01: админ открывает админку и видит пункт меню', (
+    tester,
+  ) async {
     repository.currentProfileResult = const Ok(testAdmin);
     await pumpApp(tester, repository: repository, initialUserId: testAdmin.id);
 

@@ -14,6 +14,8 @@ import 'package:yege_wars/features/auth/presentation/widgets/auth_message.dart';
 import 'package:yege_wars/features/auth/presentation/widgets/auth_submit_button.dart';
 
 /// Экран входа по логину и паролю.
+///
+/// Реализует UC-10.
 class LoginScreen extends ConsumerStatefulWidget {
   /// Создаёт экран входа.
   const LoginScreen({super.key});
