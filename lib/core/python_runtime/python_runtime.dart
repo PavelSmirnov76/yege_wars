@@ -20,6 +20,8 @@ enum PythonRuntimeState {
 ///
 /// Интерфейс намеренно узкий: реализация на Pyodide в браузере может быть
 /// заменена на серверную (например, Judge0) без изменения интерфейса.
+///
+/// Реализует UC-17.
 abstract interface class PythonRuntime {
   /// Поток состояний: по нему UI показывает загрузку и выполнение.
   Stream<PythonRuntimeState> get states;

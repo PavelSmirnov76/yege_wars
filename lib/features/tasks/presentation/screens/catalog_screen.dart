@@ -16,6 +16,8 @@ import 'package:yege_wars/features/tasks/presentation/widgets/task_card.dart';
 
 /// Каталог задач: поиск, фильтры и карточки, сгруппированные по номеру
 /// задания ЕГЭ.
+///
+/// Реализует UC-14.
 class CatalogScreen extends ConsumerStatefulWidget {
   /// Создаёт экран каталога.
   const CatalogScreen({super.key});

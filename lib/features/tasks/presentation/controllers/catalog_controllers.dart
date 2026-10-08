@@ -9,6 +9,8 @@ import 'package:yege_wars/features/tasks/tasks_providers.dart';
 part 'catalog_controllers.g.dart';
 
 /// Текущие условия отбора задач в каталоге.
+///
+/// Реализует UC-14.
 @riverpod
 class TaskFilterController extends _$TaskFilterController {
   @override
@@ -39,6 +41,8 @@ class TaskFilterController extends _$TaskFilterController {
 }
 
 /// Каталог задач по текущему фильтру.
+///
+/// Реализует UC-14.
 @riverpod
 Future<List<CatalogItem>> catalog(Ref ref) async {
   final filter = ref.watch(taskFilterControllerProvider);

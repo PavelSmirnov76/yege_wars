@@ -72,7 +72,7 @@ void main() {
   group('PreferencesDraftStorage', () {
     setUp(() => SharedPreferences.setMockInitialValues({}));
 
-    test('сохраняет и читает черновик задачи', () async {
+    test('UC-16-P-01: сохраняет и читает черновик задачи', () async {
       const storage = PreferencesDraftStorage();
 
       await storage.write('e24-longest-run', 'print(1)');
@@ -81,7 +81,7 @@ void main() {
       expect(await storage.read('другая-задача'), isNull);
     });
 
-    test('пустой черновик удаляется', () async {
+    test('UC-16-P-01: пустой черновик удаляется', () async {
       const storage = PreferencesDraftStorage();
       await storage.write('e24-longest-run', 'print(1)');
 
@@ -109,7 +109,7 @@ void main() {
 
     RunState read() => container.read(runControllerProvider('e24'));
 
-    test('запуск передаёт код, ввод и файлы задачи', () async {
+    test('UC-17-P-01: запуск передаёт код, ввод и файлы задачи', () async {
       await container
           .read(runControllerProvider('e24').notifier)
           .run(
@@ -127,7 +127,7 @@ void main() {
       expect(read().result?.stdout, '446');
     });
 
-    test('ошибка среды попадает в состояние', () async {
+    test('UC-17-P-05: ошибка среды попадает в состояние', () async {
       runtime.runResult = const Err(
         UnexpectedFailure(message: 'Среда Python не запустилась.'),
       );
@@ -142,7 +142,7 @@ void main() {
       expect(read().result, isNull);
     });
 
-    test('состояние среды приходит из потока', () async {
+    test('UC-17-P-01: состояние среды приходит из потока', () async {
       container.read(runControllerProvider('e24'));
       runtime.emitState(PythonRuntimeState.loading);
       await pumpEventQueue();
@@ -150,7 +150,7 @@ void main() {
       expect(read().isLoadingRuntime, isTrue);
     });
 
-    test('«Стоп» доходит до среды', () async {
+    test('UC-17-P-03: «Стоп» доходит до среды', () async {
       await container.read(runControllerProvider('e24').notifier).stop();
 
       expect(runtime.stopCalls, 1);

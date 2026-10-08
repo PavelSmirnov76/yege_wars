@@ -15,6 +15,8 @@ import 'package:yege_wars/features/submissions/presentation/widgets/verdict_bann
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
 /// Отправка ответа: поле, вердикт и публикация верного решения.
+///
+/// Реализует UC-18, UC-19 и UC-20.
 class SubmitPanel extends ConsumerStatefulWidget {
   /// Создаёт панель для задачи [task]; [codeOf] отдаёт текущий код.
   const SubmitPanel({required this.task, required this.codeOf, super.key});

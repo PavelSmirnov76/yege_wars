@@ -17,6 +17,8 @@ String attemptTimeLabel(DateTime moment) {
 }
 
 /// Мои попытки по задаче: ответ, вердикт и переключатель публикации.
+///
+/// Реализует UC-20 и UC-21.
 class AttemptsList extends ConsumerWidget {
   /// Создаёт список попыток задачи [taskId].
   const AttemptsList({required this.taskId, super.key});

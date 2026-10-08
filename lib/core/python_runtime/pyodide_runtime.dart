@@ -19,6 +19,8 @@ PythonRuntime createPythonRuntime() => PyodideRuntime();
 /// GitHub Pages нет), поэтому «Стоп» и таймаут убивают воркер и создают
 /// новый. Загруженный Pyodide при этом теряется, но браузер берёт его из
 /// своего кеша.
+///
+/// Реализует UC-17.
 final class PyodideRuntime implements PythonRuntime {
   /// Создаёт среду; [workerUrl] переопределяется в тестах.
   PyodideRuntime({this.workerUrl = defaultWorkerUrl});

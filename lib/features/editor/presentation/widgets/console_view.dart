@@ -29,6 +29,8 @@ String runStatusLabel(RunState state, AppLocalizations l10n) {
 }
 
 /// Консоль: вывод программы и сообщения об ошибках.
+///
+/// Воплощает COMP-9.
 class ConsoleView extends StatelessWidget {
   /// Создаёт консоль для состояния [state].
   const ConsoleView({required this.state, super.key});

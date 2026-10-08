@@ -184,6 +184,7 @@ begin
   select id into v_alice from public.profiles where username = 'alice';
   select id into v_admin from public.profiles where username = 'boss';
 
+  -- UC-23-P-01: select из task_answers под студентом — permission denied
   perform tests.login(v_alice);
   begin
     perform 1 from public.task_answers;
@@ -193,6 +194,7 @@ begin
   end;
   perform tests.logout();
 
+  -- UC-23-P-01: select из task_answers под админом — permission denied
   perform tests.login(v_admin);
   begin
     perform 1 from public.task_answers;
@@ -207,6 +209,7 @@ $$;
 -- =============================================================================
 -- (в) tasks: студент видит только опубликованные, админ — все
 -- =============================================================================
+-- UC-14-P-01, UC-15-P-02: студенту видны только опубликованные задачи, неопубликованная — нет
 do $$
 declare
   v_alice     uuid;
@@ -257,6 +260,7 @@ begin
 
   perform tests.login(v_alice);
 
+  -- UC-24-P-01: прямой insert в submissions — permission denied
   begin
     insert into public.submissions (user_id, task_id, code, answer, is_correct)
     values (v_alice, v_task, 'print(12)', '12', true);
@@ -265,6 +269,7 @@ begin
     raise notice 'OK: (г) прямой insert в submissions — permission denied';
   end;
 
+  -- UC-24-P-01: прямой update submissions — permission denied
   begin
     update public.submissions set answer = 'x' where user_id = v_alice;
     raise exception 'ТЕСТ ПРОВАЛЕН (г): прямой update submissions прошёл';
@@ -282,6 +287,7 @@ $$;
 -- =============================================================================
 
 -- single: верный, нормализация '012' = '12', неверный
+-- UC-19-P-01, UC-19-P-02: single — верный ответ засчитан, '012' равен '12', неверный не засчитан
 do $$
 declare
   v_alice uuid;
@@ -317,6 +323,7 @@ end
 $$;
 
 -- pair: лишние пробелы не влияют
+-- UC-19-P-01: pair — лишние пробелы не влияют на верный ответ
 do $$
 declare
   v_alice uuid;
@@ -344,6 +351,7 @@ end
 $$;
 
 -- string: регистр значим
+-- UC-19-P-01, UC-19-P-02: string — посимвольно с учётом регистра, другой регистр не засчитан
 do $$
 declare
   v_alice uuid;
@@ -373,6 +381,7 @@ $$;
 -- =============================================================================
 -- (е) Rate limit: при лимите 3 четвёртая отправка подряд — [rate_limit]
 -- =============================================================================
+-- UC-19-P-04: отправка сверх лимита за минуту — [rate_limit]
 do $$
 declare
   v_carol uuid;
@@ -464,6 +473,7 @@ end
 $$;
 
 -- До публикации Алиса не видит попыток Боба вообще
+-- UC-22-P-01: решившему задачу неопубликованные попытки других не видны
 do $$
 declare
   v_alice uuid;
@@ -552,6 +562,7 @@ begin
 
   perform tests.login(v_alice);
 
+  -- UC-22-P-01: решившему видна ровно опубликованная попытка другого по этой задаче
   select count(*) into v_cnt from public.submissions where user_id = v_bob;
   if v_cnt <> 1 then
     raise exception 'ТЕСТ ПРОВАЛЕН (ж): Алиса видит % попыток Боба, ожидалась ровно 1 (опубликованная по t-pair)', v_cnt;
@@ -564,6 +575,7 @@ begin
     raise exception 'ТЕСТ ПРОВАЛЕН (ж): Алисе видна не та попытка Боба по t-pair (или она не опубликована)';
   end if;
 
+  -- UC-22-P-02: опубликованная попытка другого по задаче, которую ученик не решил, не видна
   select count(*) into v_cnt
     from public.submissions
    where user_id = v_bob and task_id = v_other;
@@ -615,6 +627,7 @@ begin
   perform tests.login(v_alice);
 
   -- чужая попытка
+  -- UC-20-P-04: публикация чужой попытки — [not_owner]
   begin
     perform public.set_solution_published(v_bob_sub, true);
     raise exception 'ТЕСТ ПРОВАЛЕН (з): Алиса опубликовала чужую попытку';
@@ -627,6 +640,7 @@ begin
   end;
 
   -- своя, но неверная
+  -- UC-20-P-04: публикация своей неверной попытки — [not_correct]
   begin
     perform public.set_solution_published(v_alice_wrong, true);
     raise exception 'ТЕСТ ПРОВАЛЕН (з): опубликована неверная попытка';
@@ -639,6 +653,7 @@ begin
   end;
 
   -- своя верная: публикация
+  -- UC-20-P-01: публикация своей верной попытки — время публикации записано
   perform public.set_solution_published(v_alice_correct, true);
   select published_at into v_pub_at from public.submissions where id = v_alice_correct;
   if v_pub_at is null then
@@ -647,6 +662,7 @@ begin
   raise notice 'OK: (з) публикация своей верной попытки: published_at заполнен';
 
   -- снятие публикации
+  -- UC-20-P-02: снятие с публикации — время публикации снято
   perform public.set_solution_published(v_alice_correct, false);
   select published_at into v_pub_at from public.submissions where id = v_alice_correct;
   if v_pub_at is not null then
@@ -966,6 +982,7 @@ $$;
 -- По t-other пока отправлял только Боб (решил): attempted = 1, solved = 1.
 -- Попытка админа не должна изменить ни одно из чисел.
 -- =============================================================================
+-- UC-14-P-01: доля решивших в каталоге считается только по ученикам
 do $$
 declare
   v_admin uuid;
@@ -1324,6 +1341,7 @@ begin
   select id into v_alice from public.profiles where username = 'alice';
   perform tests.login(v_alice);
 
+  -- UC-23-P-01: select reference_solution под студентом — permission denied
   begin
     perform reference_solution from public.tasks where slug = 'ege24-demo-01';
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студент прочитал reference_solution напрямую';
@@ -1331,6 +1349,7 @@ begin
     raise notice 'OK: (н) select reference_solution под студентом — permission denied';
   end;
 
+  -- UC-23-P-01: select answer_explanation под студентом — permission denied
   begin
     perform answer_explanation from public.tasks where slug = 'ege24-demo-01';
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студент прочитал answer_explanation напрямую';
@@ -1339,6 +1358,7 @@ begin
   end;
 
   -- Представление для учеников отдаёт только опубликованные задачи
+  -- UC-14-P-01, UC-15-P-02: tasks_public отдаёт опубликованную задачу и не отдаёт черновик
   select count(*) into v_cnt from public.tasks_public where slug = 't-unpub';
   if v_cnt <> 0 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): черновик виден в tasks_public';
@@ -1404,12 +1424,14 @@ begin
 
   perform tests.login(v_alice);
 
+  -- UC-15-P-02: файл неопубликованной задачи ученику не виден
   select count(*) into v_cnt from public.task_files f
    where f.filename = 'hidden.txt';
   if v_cnt <> 0 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту виден файл неопубликованной задачи';
   end if;
 
+  -- UC-15-P-01: файл опубликованной задачи ученику виден
   select count(*) into v_cnt from public.task_files f
     join public.tasks t on t.id = f.task_id
    where t.slug = 'ege24-demo-01';
@@ -1747,6 +1769,8 @@ $$;
 -- Полная матрица прав anon и authenticated на объекты public. Новая таблица,
 -- представление или функция, у которой миграция не сняла выданное Supabase
 -- по умолчанию, этот тест не пройдёт.
+-- UC-23-P-01: у клиентских ролей нет прав на task_answers и колонки эталона и разбора в tasks
+-- UC-24-P-01: у клиентских ролей на submissions только select — ни insert, ни update, ни delete
 do $$
 declare
   v_extra   text;
@@ -2442,6 +2466,110 @@ begin
     raise exception 'ТЕСТ ПРОВАЛЕН (т): после попытки ученика регистрация закрыта';
   end if;
   raise notice 'OK: (т) ученик меняет registration_open — без ошибки, 0 строк, значение прежнее';
+end
+$$;
+
+-- =============================================================================
+-- (у) submit_solution: задача без эталона и недоступная задача; удаление попытки
+-- Отправляет новый ученик frank: так проверки не задевают попытки остальных и
+-- их счётчик частоты.
+-- =============================================================================
+
+-- Сетап: ученик frank и опубликованная задача без эталонного ответа
+do $$
+begin
+  perform tests.signup('frank');
+
+  insert into public.tasks (slug, ege_number, title, statement_md, difficulty, answer_format, status)
+  values ('t-nokey', null, 'Без эталона', 'Задача без эталонного ответа.', 1, 'single', 'published');
+
+  raise notice 'OK: (у) сетап: ученик frank и задача без эталона';
+end
+$$;
+
+-- UC-19-P-02: задача без эталонного ответа — любой ответ неверен, попытка записана
+do $$
+declare
+  v_frank uuid;
+  v_task  uuid;
+  v_res   jsonb;
+  v_cnt   bigint;
+begin
+  select id into v_frank from public.profiles where username = 'frank';
+  select id into v_task  from public.tasks where slug = 't-nokey';
+
+  perform tests.login(v_frank);
+  foreach v_res in array array[
+    public.submit_solution(v_task, 'print(1)', '1'),
+    public.submit_solution(v_task, 'print(0)', '0')
+  ] loop
+    if (v_res ->> 'is_correct')::boolean is not false then
+      raise exception 'ТЕСТ ПРОВАЛЕН (у): у задачи без эталона ответ засчитан: %', v_res;
+    end if;
+  end loop;
+
+  select count(*) into v_cnt
+    from public.submissions
+   where user_id = v_frank and task_id = v_task and not is_correct;
+  perform tests.logout();
+
+  if v_cnt <> 2 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (у): у задачи без эталона записано неверных попыток: %, ожидалось 2', v_cnt;
+  end if;
+  raise notice 'OK: (у) задача без эталона: любой ответ неверен, попытки записаны';
+end
+$$;
+
+-- UC-19-P-05: неопубликованная и несуществующая задача — [task_not_found], попытки нет
+do $$
+declare
+  v_frank uuid;
+  v_unpub uuid;
+  v_task  uuid;
+  v_cnt   bigint;
+begin
+  select id into v_frank from public.profiles where username = 'frank';
+  select id into v_unpub from public.tasks where slug = 't-unpub';
+
+  perform tests.login(v_frank);
+  foreach v_task in array array[v_unpub, gen_random_uuid()] loop
+    begin
+      perform public.submit_solution(v_task, 'print(5)', '5');
+      raise exception 'ТЕСТ ПРОВАЛЕН (у): отправка по недоступной задаче прошла';
+    exception when others then
+      if sqlerrm like 'ТЕСТ ПРОВАЛЕН%' then raise; end if;
+      if sqlerrm not like '[task_not_found]%' then
+        raise exception 'ТЕСТ ПРОВАЛЕН (у): ожидалась ошибка [task_not_found], получено: %', sqlerrm;
+      end if;
+    end;
+  end loop;
+  perform tests.logout();
+
+  select count(*) into v_cnt
+    from public.submissions
+   where user_id = v_frank and task_id = v_unpub;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (у): по неопубликованной задаче записано попыток: %', v_cnt;
+  end if;
+  raise notice 'OK: (у) неопубликованная и несуществующая задача — [task_not_found], попытки нет';
+end
+$$;
+
+-- UC-24-P-01: прямой delete из submissions — permission denied
+do $$
+declare
+  v_alice uuid;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+
+  perform tests.login(v_alice);
+  begin
+    delete from public.submissions where user_id = v_alice;
+    raise exception 'ТЕСТ ПРОВАЛЕН (у): прямой delete из submissions прошёл';
+  exception when insufficient_privilege then
+    raise notice 'OK: (у) прямой delete из submissions — permission denied';
+  end;
+  perform tests.logout();
 end
 $$;
 

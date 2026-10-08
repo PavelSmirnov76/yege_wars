@@ -12,6 +12,8 @@ import 'package:yege_wars/features/submissions/presentation/widgets/attempts_lis
 /// Доступ решает база: пока у ученика нет своей верной попытки, список
 /// приходит пустым — поэтому до первого верного ответа показываем
 /// объяснение, а не «пусто».
+///
+/// Реализует UC-22.
 class SolutionsList extends ConsumerWidget {
   /// Создаёт список решений задачи [taskId].
   const SolutionsList({

@@ -4,6 +4,8 @@ import 'package:yege_wars/features/tasks/domain/entities/task_filter.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 
 /// Каталог задач по фильтру.
+///
+/// Реализует UC-14.
 final class ListCatalogUseCase {
   /// Создаёт use case поверх [TasksRepository].
   const ListCatalogUseCase(this._repository);

@@ -3,6 +3,8 @@ import 'package:yege_wars/core/network/supabase_schema.dart';
 import 'package:yege_wars/features/submissions/data/datasources/submissions_remote_data_source.dart';
 
 /// Реализация [SubmissionsRemoteDataSource] поверх [SupabaseClient].
+///
+/// Реализует UC-19.
 final class SupabaseSubmissionsRemoteDataSource
     implements SubmissionsRemoteDataSource {
   /// Создаёт datasource поверх клиента [SupabaseClient].

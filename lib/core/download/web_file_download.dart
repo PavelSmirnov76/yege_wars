@@ -6,6 +6,8 @@ import 'package:web/web.dart' as web;
 ///
 /// Содержимое уже в памяти (оно пришло из базы вместе с задачей), поэтому
 /// файл собирается на месте, а не запрашивается заново.
+///
+/// Реализует UC-15.
 bool downloadTextFile({required String filename, required String content}) {
   final blob = web.Blob(
     [content.toJS].toJS,

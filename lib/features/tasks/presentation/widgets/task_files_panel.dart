@@ -48,6 +48,8 @@ String filePreview(
 ///
 /// Файл открывается программой ученика по имени, поэтому имя показывается
 /// как есть.
+///
+/// Реализует UC-15.
 class TaskFilesPanel extends StatelessWidget {
   /// Создаёт панель для файлов [files].
   const TaskFilesPanel({required this.files, super.key});

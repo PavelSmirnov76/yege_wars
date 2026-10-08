@@ -15,6 +15,8 @@ String difficultyLabel(TaskDifficulty difficulty, AppLocalizations l10n) =>
     };
 
 /// Цветная метка сложности задачи.
+///
+/// Воплощает COMP-6.
 class DifficultyBadge extends StatelessWidget {
   /// Создаёт метку для сложности [difficulty].
   const DifficultyBadge(this.difficulty, {super.key});

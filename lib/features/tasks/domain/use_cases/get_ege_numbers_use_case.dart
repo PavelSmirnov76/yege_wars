@@ -2,6 +2,8 @@ import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 
 /// Номера заданий ЕГЭ, по которым есть задачи.
+///
+/// Реализует UC-14.
 final class GetEgeNumbersUseCase {
   /// Создаёт use case поверх [TasksRepository].
   const GetEgeNumbersUseCase(this._repository);

@@ -17,7 +17,8 @@ void main() {
 
   tearDown(() => supabase.dispose());
 
-  test('каталог идёт по номеру, затем по названию — по возрастанию', () async {
+  test('UC-14-P-01: каталог идёт по номеру, затем по названию — по '
+      'возрастанию', () async {
     await dataSource.fetchTasks(const TaskFilter());
 
     expect(supabase.onlyUrl.path, '/rest/v1/tasks_public');
@@ -27,7 +28,7 @@ void main() {
     );
   });
 
-  test('файлы задачи идут по sort_order по возрастанию', () async {
+  test('UC-15-P-01: файлы задачи идут по sort_order по возрастанию', () async {
     await dataSource.fetchFiles('task-id');
 
     expect(supabase.onlyUrl.path, '/rest/v1/task_files');
@@ -37,7 +38,7 @@ void main() {
     );
   });
 
-  test('номера для фильтра идут по возрастанию', () async {
+  test('UC-14-P-02: номера для фильтра идут по возрастанию', () async {
     await dataSource.fetchEgeNumbers();
 
     expect(supabase.onlyUrl.path, '/rest/v1/tasks_public');

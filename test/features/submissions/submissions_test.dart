@@ -138,7 +138,7 @@ void main() {
 
     setUp(() => repository = FakeSubmissionsRepository());
 
-    test('пустой ответ до сервера не доходит', () async {
+    test('UC-19-P-03: пустой ответ до сервера не доходит', () async {
       final result = await SubmitAnswerUseCase(repository)(
         taskId: 'task-24',
         answer: '   ',
@@ -148,7 +148,7 @@ void main() {
       expect(repository.submitCalls, 0);
     });
 
-    test('непустой ответ уходит в репозиторий', () async {
+    test('UC-19-P-01: непустой ответ уходит в репозиторий', () async {
       await SubmitAnswerUseCase(repository)(
         taskId: 'task-24',
         answer: '446',
@@ -160,7 +160,8 @@ void main() {
       expect(repository.lastCode, 'print(446)');
     });
 
-    test('ответ уходит без пробельных краёв, включая переводы строк', () async {
+    test('UC-19-P-01: ответ уходит без пробельных краёв, включая переводы '
+        'строк', () async {
       await SubmitAnswerUseCase(repository)(
         taskId: 'task-25',
         answer: ' \t108 54 136 68\r\n\n',
@@ -169,7 +170,8 @@ void main() {
       expect(repository.lastAnswer, '108 54 136 68');
     });
 
-    test('ответ из одних переводов строк считается пустым', () async {
+    test('UC-19-P-03: ответ из одних переводов строк считается '
+        'пустым', () async {
       final result = await SubmitAnswerUseCase(repository)(
         taskId: 'task-24',
         answer: '\n\r\n\t',
@@ -195,7 +197,7 @@ void main() {
 
     tearDown(() => container.dispose());
 
-    test('успешная отправка кладёт вердикт в состояние', () async {
+    test('UC-19-P-01: успешная отправка кладёт вердикт в состояние', () async {
       await container
           .read(submitControllerProvider('task-24').notifier)
           .submit(answer: '446', code: 'print(446)');
@@ -205,7 +207,7 @@ void main() {
       expect(state.isSubmitting, isFalse);
     });
 
-    test('ошибка отправки видна в состоянии', () async {
+    test('UC-19-P-04: ошибка отправки видна в состоянии', () async {
       repository.submitResult = const Err(
         DatabaseFailure(message: 'Слишком много отправок, подождите минуту.'),
       );
@@ -234,7 +236,7 @@ void main() {
       );
     });
 
-    test('публикация зовёт репозиторий', () async {
+    test('UC-20-P-01: публикация зовёт репозиторий', () async {
       await container
           .read(publishControllerProvider('task-24').notifier)
           .setPublished(submissionId: 'attempt-ok', isPublished: true);

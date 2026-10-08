@@ -23,6 +23,8 @@ final class SubmitState {
 }
 
 /// Отправка ответа по задаче.
+///
+/// Реализует UC-19.
 @riverpod
 class SubmitController extends _$SubmitController {
   @override
@@ -60,6 +62,8 @@ class SubmitController extends _$SubmitController {
 }
 
 /// Мои попытки по задаче, сначала свежие.
+///
+/// Реализует UC-21.
 @riverpod
 Future<List<Submission>> myAttempts(Ref ref, String taskId) async {
   final result = await ref
@@ -75,6 +79,8 @@ Future<List<Submission>> myAttempts(Ref ref, String taskId) async {
 ///
 /// База отдаёт их только тому, кто сам верно решил задачу, поэтому пустой
 /// список — обычное дело, а не ошибка.
+///
+/// Реализует UC-22.
 @riverpod
 Future<List<Submission>> publishedSolutions(Ref ref, String taskId) async {
   final result = await ref
@@ -87,6 +93,8 @@ Future<List<Submission>> publishedSolutions(Ref ref, String taskId) async {
 }
 
 /// Публикация своих верных решений.
+///
+/// Реализует UC-20.
 @riverpod
 class PublishController extends _$PublishController {
   @override

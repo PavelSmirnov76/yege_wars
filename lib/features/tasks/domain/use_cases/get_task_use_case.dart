@@ -3,6 +3,8 @@ import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
 
 /// Задача целиком по slug.
+///
+/// Реализует UC-15.
 final class GetTaskUseCase {
   /// Создаёт use case поверх [TasksRepository].
   const GetTaskUseCase(this._repository);

@@ -13,6 +13,8 @@ import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.da
 import 'package:yege_wars/features/tasks/domain/task_help_rules.dart';
 
 /// Реализация [TasksRepository] поверх [TasksRemoteDataSource].
+///
+/// Реализует UC-14.
 final class TasksRepositoryImpl implements TasksRepository {
   /// Создаёт репозиторий поверх [TasksRemoteDataSource].
   const TasksRepositoryImpl(this._dataSource);
