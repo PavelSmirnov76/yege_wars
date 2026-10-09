@@ -19,6 +19,7 @@
 | [ENT-14](ENT-14-MANUAL-LINK-IN-REFERENCE.md) | Ручная связь | [MOD-7](../modules/MOD-7-REFERENCE.md), [ENT-6](ENT-6-PROBLEM-IN-CATALOG.md), [ENT-12](ENT-12-ARTICLE-IN-REFERENCE.md) |
 | [ENT-15](ENT-15-DRAFT-IN-CODE.md) | Черновик | [ENT-8](obsolete/ENT-8-CODE-IN-EDITOR.md), [MOD-8](../modules/MOD-8-CODE.md), [ENT-2](ENT-2-PROFILE-IN-AUTH.md), [ENT-6](ENT-6-PROBLEM-IN-CATALOG.md) |
 | [ENT-16](ENT-16-SITE-IN-SITE.md) | Сайт | [MOD-9](../modules/MOD-9-SITE.md), [ENT-5](ENT-5-BUILD-CONFIG-IN-CONFIG.md) |
+| [ENT-17](ENT-17-TEST-ACCOUNT-IN-AUTH.md) | Тестовая учётная запись | [MOD-1](../modules/MOD-1-AUTH.md), [ENT-1](ENT-1-ACCOUNT-IN-AUTH.md) |
 
 ## К пересмотру
 

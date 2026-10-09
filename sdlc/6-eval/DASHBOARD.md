@@ -198,8 +198,14 @@
 | [R47](../0-vibes/prd/PRD.md#r47) | [UC-33](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md) | [UC-33-P-02](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-02) | PASS | auto 2026-10-09-7588607 |
 | [R47](../0-vibes/prd/PRD.md#r47) | [UC-33](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md) | [UC-33-P-03](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-03) | PASS | auto 2026-10-09-7588607 |
 | [R47](../0-vibes/prd/PRD.md#r47) | [UC-33](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md) | [UC-33-P-04](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-04) | PASS | auto 2026-10-09-7588607 |
+| [R48](../0-vibes/prd/PRD.md#r48) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-01](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-01) | НЕ ПРОВЕРЕНО | — |
+| [R48](../0-vibes/prd/PRD.md#r48) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-02](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-02) | НЕ ПРОВЕРЕНО | — |
+| [R48](../0-vibes/prd/PRD.md#r48) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-03](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-03) | НЕ ПРОВЕРЕНО | — |
+| [R49](../0-vibes/prd/PRD.md#r49) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-01](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-01) | НЕ ПРОВЕРЕНО | — |
+| [R49](../0-vibes/prd/PRD.md#r49) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-02](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-02) | НЕ ПРОВЕРЕНО | — |
+| [R49](../0-vibes/prd/PRD.md#r49) | [UC-38](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md) | [UC-38-P-03](../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-03) | НЕ ПРОВЕРЕНО | — |
 
-Итого путей: PASS 78, FAIL 0, BLOCKED 0, НЕ ПРОВЕРЕНО 3.
+Итого путей: PASS 78, FAIL 0, BLOCKED 0, НЕ ПРОВЕРЕНО 6.
 
 ## Устаревшие требования
 
