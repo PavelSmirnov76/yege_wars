@@ -17,6 +17,28 @@ const List<String> _secretNames = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
 /// Команда сборки — по ней ищется шаг сборки.
 const String _buildCommand = 'flutter build web';
 
+/// Проверки перед сборкой, как в задаче build из ci.yml: часть команды, по
+/// которой ищется шаг, и вызов, который шаг делает.
+const List<(String, List<String>)> _checks = [
+  ('flutter pub get', ['flutter', 'pub', 'get']),
+  (
+    _formatCommand,
+    ['dart', 'format', '--output=none', '--set-exit-if-changed'],
+  ),
+  ('flutter gen-l10n', ['flutter', 'gen-l10n']),
+  ('dart run build_runner', ['dart', 'run', 'build_runner', 'build']),
+  (
+    'flutter analyze',
+    ['flutter', 'analyze', '--fatal-infos', '--fatal-warnings'],
+  ),
+  ('dart run custom_lint', ['dart', 'run', 'custom_lint']),
+  ('flutter test', ['flutter', 'test']),
+];
+
+/// Форматирование дописывает к вызову список файлов от `find` — его тест не
+/// сверяет.
+const String _formatCommand = 'dart format';
+
 void main() {
   late YamlMap workflow;
   late YamlMap build;
@@ -69,24 +91,43 @@ void main() {
     },
   );
 
-  test('UC-29-P-01: перед сборкой — анализ и тесты, как в CI', () {
+  test('UC-29-P-01: перед сборкой — анализ и тесты, как в CI', () async {
     final buildIndex = _indexRunning(buildSteps, _buildCommand);
     expect(buildIndex, isNonNegative);
 
-    for (final command in [
-      'flutter pub get',
-      'dart format --output=none --set-exit-if-changed',
-      'flutter gen-l10n',
-      'dart run build_runner build',
-      'flutter analyze --fatal-infos --fatal-warnings',
-      'dart run custom_lint',
-      'flutter test',
-    ]) {
+    for (final (command, call) in _checks) {
       final index = _indexRunning(buildSteps, command);
       expect(index, isNonNegative, reason: command);
       expect(index, lessThan(buildIndex), reason: command);
+
+      final (result, calls) = await _runWithFakeTools(buildSteps[index]);
+      expect(result.exitCode, 0, reason: '$command: ${result.stderr}');
+      if (command == _formatCommand) {
+        expect(calls, isNotEmpty);
+        for (final formatCall in calls) {
+          expect(formatCall.take(call.length), call);
+          expect(formatCall.length, greaterThan(call.length));
+        }
+      } else {
+        expect(calls, [call], reason: command);
+      }
     }
   });
+
+  test(
+    'UC-29-P-02: упала проверка перед сборкой — шаг падает, дальше выкладка '
+    'не идёт',
+    () async {
+      for (final (command, _) in _checks) {
+        final step = buildSteps[_indexRunning(buildSteps, command)];
+
+        final (result, calls) = await _runWithFakeTools(step, toolExitCode: 1);
+
+        expect(calls, isNotEmpty, reason: command);
+        expect(result.exitCode, isNot(0), reason: command);
+      }
+    },
+  );
 
   test(
     'UC-29-P-01: сборка по ENT-16 — release, base href /yege_wars/, '
@@ -95,19 +136,23 @@ void main() {
       final step = buildSteps[_indexRunning(buildSteps, _buildCommand)];
       _expectSecretsEnv(step);
 
-      final args = await _runWithFakeFlutter(step, {
-        'SUPABASE_URL': _fakeUrl,
-        'SUPABASE_ANON_KEY': _fakeKey,
-      });
+      final (result, calls) = await _runWithFakeTools(
+        step,
+        env: {'SUPABASE_URL': _fakeUrl, 'SUPABASE_ANON_KEY': _fakeKey},
+      );
 
-      expect(args, [
-        'build',
-        'web',
-        '--release',
-        '--base-href',
-        '/yege_wars/',
-        '--dart-define=SUPABASE_URL=$_fakeUrl',
-        '--dart-define=SUPABASE_ANON_KEY=$_fakeKey',
+      expect(result.exitCode, 0, reason: '${result.stderr}');
+      expect(calls, [
+        [
+          'flutter',
+          'build',
+          'web',
+          '--release',
+          '--base-href',
+          '/yege_wars/',
+          '--dart-define=SUPABASE_URL=$_fakeUrl',
+          '--dart-define=SUPABASE_ANON_KEY=$_fakeKey',
+        ],
       ]);
     },
   );
@@ -269,19 +314,36 @@ Future<ProcessResult> _runStep(
   );
 }
 
-/// Запускает шаг с поддельным `flutter`, который печатает свои аргументы по
-/// одному на строку, и возвращает их.
-Future<List<String>> _runWithFakeFlutter(
-  YamlMap step,
-  Map<String, String> env,
-) async {
-  final bin = await Directory.systemTemp.createTemp('fake_flutter');
+/// Запускает шаг с поддельными `flutter` и `dart` в начале `PATH`.
+///
+/// Поддельная программа на каждый вызов печатает строку — своё имя и
+/// аргументы через табуляцию — и завершается с кодом [toolExitCode].
+/// Возвращает итог шага и вызовы по порядку.
+Future<(ProcessResult, List<List<String>>)> _runWithFakeTools(
+  YamlMap step, {
+  Map<String, String> env = const {},
+  int toolExitCode = 0,
+}) async {
+  final bin = await Directory.systemTemp.createTemp('fake_tools');
   addTearDown(() => bin.delete(recursive: true));
-  final flutter = File('${bin.path}/flutter')
-    ..writeAsStringSync('#!/bin/sh\nprintf "%s\\n" "\$@"\n');
-  await Process.run('chmod', ['+x', flutter.path]);
+  for (final tool in ['flutter', 'dart']) {
+    final file = File('${bin.path}/$tool')
+      ..writeAsStringSync(
+        '#!/bin/sh\n'
+        'printf "%s" "\${0##*/}"\n'
+        r'for arg in "$@"; do printf "\t%s" "$arg"; done'
+        '\n'
+        r'printf "\n"'
+        '\n'
+        'exit $toolExitCode\n',
+      );
+    await Process.run('chmod', ['+x', file.path]);
+  }
 
   final result = await _runStep(step, env, path: bin.path);
-  expect(result.exitCode, 0, reason: '${result.stderr}');
-  return const LineSplitter().convert('${result.stdout}');
+  final calls = const LineSplitter()
+      .convert('${result.stdout}')
+      .map((line) => line.split('\t'))
+      .toList();
+  return (result, calls);
 }

@@ -40,9 +40,10 @@ void main() {
   test(
     'UC-30-P-01: адреса в web/index.html относительные и ведут в web/',
     () {
-      final urls = RegExp(r'\s(?:href|src)="([^"]*)"')
+      // Значение атрибута — в двойных или одинарных кавычках.
+      final urls = RegExp(r"""\s(?:href|src)=(["'])(.*?)\1""")
           .allMatches(html)
-          .map((match) => match.group(1)!)
+          .map((match) => match.group(2)!)
           .where((url) => url != _baseHrefPlaceholder)
           .toList();
 
