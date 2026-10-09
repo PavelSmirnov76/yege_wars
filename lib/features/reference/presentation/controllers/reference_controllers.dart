@@ -3,6 +3,7 @@ import 'package:yege_wars/features/reference/domain/entities/article_brief.dart'
 import 'package:yege_wars/features/reference/domain/entities/article_facets.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_filter.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_level.dart';
+import 'package:yege_wars/features/reference/domain/entities/codifier_section.dart';
 import 'package:yege_wars/features/reference/domain/entities/reference_article.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
 
@@ -10,7 +11,7 @@ part 'reference_controllers.g.dart';
 
 /// Текущие условия отбора статей в разделе «Справочник».
 ///
-/// Реализует UC-36.
+/// Реализует UC-39.
 @riverpod
 class ArticleFilterController extends _$ArticleFilterController {
   @override
@@ -24,7 +25,8 @@ class ArticleFilterController extends _$ArticleFilterController {
       ? state.copyWith(clearEgeNumber: true)
       : state.copyWith(egeNumber: egeNumber);
 
-  /// Переключает тег.
+  /// Переключает тег: повторный выбор снимает фильтр. Чип раздела
+  /// кодификатора отдаёт сюда тег раздела.
   void toggleTag(String tag) => state = state.tag == tag
       ? state.copyWith(clearTag: true)
       : state.copyWith(tag: tag);
@@ -40,7 +42,7 @@ class ArticleFilterController extends _$ArticleFilterController {
 
 /// Список статей по текущему фильтру.
 ///
-/// Реализует UC-36.
+/// Реализует UC-39.
 @riverpod
 Future<List<ArticleBrief>> articles(Ref ref) async {
   final filter = ref.watch(articleFilterControllerProvider);
@@ -51,11 +53,12 @@ Future<List<ArticleBrief>> articles(Ref ref) async {
   );
 }
 
-/// Значения фильтров: какие номера заданий и теги вообще встречаются.
+/// Значения фильтров: какие номера заданий и разделы кодификатора вообще
+/// встречаются.
 ///
 /// Считается по всему справочнику один раз за сессию — статей немного.
 ///
-/// Реализует UC-36.
+/// Реализует UC-39.
 @Riverpod(keepAlive: true)
 Future<ArticleFacets> articleFacets(Ref ref) async {
   final result = await ref.watch(listArticlesUseCaseProvider)(
@@ -66,7 +69,10 @@ Future<ArticleFacets> articleFacets(Ref ref) async {
       egeNumbers: {
         for (final article in articles) ...article.egeNumbers,
       }.toList()..sort(),
-      tags: {for (final article in articles) ...article.tags}.toList()..sort(),
+      sections: {
+        for (final article in articles)
+          for (final tag in article.tags) ?CodifierSection.fromTag(tag),
+      }.toList()..sort((a, b) => a.index.compareTo(b.index)),
     ),
     // Без значений фильтров раздел остаётся рабочим: список статей грузится
     // отдельно и сам покажет свою ошибку.

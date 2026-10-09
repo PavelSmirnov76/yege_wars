@@ -12,7 +12,6 @@ import 'package:yege_wars/features/editor/presentation/controllers/run_controlle
 import 'package:yege_wars/features/submissions/domain/answer_rules.dart';
 import 'package:yege_wars/features/submissions/presentation/answer_format_hint.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
-import 'package:yege_wars/features/submissions/presentation/widgets/attempts_list.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/verdict_banner.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
@@ -20,7 +19,8 @@ import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 ///
 /// «Отправить ответ» сначала записывает черновик кода, отправка этого не
 /// ждёт. Если публикация из блока «Задача решена!» не удалась, блок остаётся,
-/// под его кнопками — текст ошибки, и опубликовать можно снова.
+/// под его кнопками — текст ошибки, и опубликовать можно снова. Список
+/// своих попыток ставит страница задачи.
 ///
 /// Реализует UC-18, UC-19, UC-31 и UC-33.
 class SubmitPanel extends ConsumerStatefulWidget {
@@ -180,10 +180,6 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
             ],
           ],
         ],
-        const SizedBox(height: AppSpacing.lg),
-        Text(l10n.attemptsTitle, style: theme.textTheme.titleSmall),
-        const SizedBox(height: AppSpacing.sm),
-        AttemptsList(taskId: taskId),
       ],
     );
   }

@@ -42,7 +42,7 @@ void main() {
       expect(result.valueOrNull?.single.level, ArticleLevel.basic);
     });
 
-    test('UC-36-P-02: фильтр передаётся в datasource без изменений', () async {
+    test('UC-39-P-02: фильтр передаётся в datasource без изменений', () async {
       const filter = ArticleFilter(egeNumber: 24, query: 'окно');
       when(() => dataSource.fetchArticles(any())).thenAnswer((_) async => []);
 

@@ -14,7 +14,7 @@ import 'package:yege_wars/features/tasks/domain/task_help_rules.dart';
 
 /// Реализация [TasksRepository] поверх [TasksRemoteDataSource].
 ///
-/// Реализует UC-14 и UC-27.
+/// Реализует UC-14 и UC-40.
 final class TasksRepositoryImpl implements TasksRepository {
   /// Создаёт репозиторий поверх [TasksRemoteDataSource].
   const TasksRepositoryImpl(this._dataSource);

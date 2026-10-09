@@ -17,7 +17,7 @@ void main() {
 
   tearDown(() => supabase.dispose());
 
-  test('UC-36-P-01: статьи идут по уровню, затем по названию — по '
+  test('UC-39-P-01: статьи идут по уровню, затем по названию — по '
       'возрастанию', () async {
     await dataSource.fetchArticles(const ArticleFilter());
 

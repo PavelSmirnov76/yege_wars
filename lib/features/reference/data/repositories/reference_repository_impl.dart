@@ -11,7 +11,7 @@ import 'package:yege_wars/features/reference/domain/repositories/reference_repos
 
 /// Реализация [ReferenceRepository] поверх [ReferenceRemoteDataSource].
 ///
-/// Реализует UC-36, UC-37 и UC-28.
+/// Реализует UC-39, UC-37 и UC-28.
 final class ReferenceRepositoryImpl implements ReferenceRepository {
   /// Создаёт репозиторий поверх [ReferenceRemoteDataSource].
   const ReferenceRepositoryImpl(this._dataSource);

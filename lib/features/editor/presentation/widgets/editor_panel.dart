@@ -109,24 +109,36 @@ class _EditorPanelState extends ConsumerState<EditorPanel> {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
+        // «Запустить» и «Стоп» делят строку поровну; подпись, которой не
+        // хватило места, обрезается многоточием, а не рвётся по буквам.
         Row(
           children: [
             Expanded(
               child: FilledButton.icon(
                 onPressed: runState.isBusy ? null : () => unawaited(_run()),
                 icon: const Icon(Icons.play_arrow),
-                label: Text(l10n.editorRun),
+                label: Text(
+                  l10n.editorRun,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
-            OutlinedButton.icon(
-              onPressed: runState.isBusy
-                  ? () => unawaited(
-                      ref.read(runControllerProvider(slug).notifier).stop(),
-                    )
-                  : null,
-              icon: const Icon(Icons.stop),
-              label: Text(l10n.editorStop),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: runState.isBusy
+                    ? () => unawaited(
+                        ref.read(runControllerProvider(slug).notifier).stop(),
+                      )
+                    : null,
+                icon: const Icon(Icons.stop),
+                label: Text(
+                  l10n.editorStop,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ),
           ],
         ),

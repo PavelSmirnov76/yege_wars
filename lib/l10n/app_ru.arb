@@ -53,6 +53,10 @@
       }
     }
   },
+  "referenceSection1": "1 · Цифровая грамотность",
+  "referenceSection2": "2 · Теоретические основы информатики",
+  "referenceSection3": "3 · Алгоритмы и программирование",
+  "referenceSection4": "4 · Информационные технологии",
   "referenceArticleNotFound": "Статья не найдена",
   "commonRetry": "Повторить",
   "catalogSearchHint": "Поиск по названию",
@@ -86,6 +90,8 @@
   "progressSolved": "Решено",
   "progressAttempted": "Есть попытки",
   "progressNotStarted": "Не начата",
+  "taskTabProblem": "Задача",
+  "taskTabAttempts": "Попытки",
   "taskStatementTitle": "Условие",
   "taskFilesTitle": "Файлы",
   "taskHelpTitle": "Справка",

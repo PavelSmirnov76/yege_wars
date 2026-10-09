@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +15,7 @@ import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 import '../../../helpers/fake_auth_repository.dart';
 import '../../../helpers/fake_reference_repository.dart';
 import '../../../helpers/pump_app.dart';
+import '../../../helpers/selection.dart';
 
 void main() {
   final l10n = AppLocalizationsRu();
@@ -55,28 +55,11 @@ void main() {
     }
   }
 
-  /// Нажимает ссылку с текстом [text] в разметке статьи.
-  ///
-  /// Текст статьи выделяемый, и `tapOnText` подстроку в нём не находит
-  /// (doc-комментарий `AppMarkdown`), поэтому нажатие отдаётся
-  /// распознавателю ссылки — тому же, что сработал бы от пальца.
-  void tapLink(WidgetTester tester, String text) {
-    TapGestureRecognizer? recognizer;
-    for (final widget in tester.widgetList<SelectableText>(
-      find.byType(SelectableText),
-    )) {
-      widget.textSpan?.visitChildren((span) {
-        if (span is TextSpan &&
-            span.text == text &&
-            span.recognizer is TapGestureRecognizer) {
-          recognizer = span.recognizer! as TapGestureRecognizer;
-          return false;
-        }
-        return true;
-      });
-    }
-    expect(recognizer, isNotNull, reason: 'нет ссылки «$text»');
-    recognizer!.onTap!();
+  /// Нажимает ссылку с текстом [text] в разметке статьи — по месту текста
+  /// на экране, как палец или мышь.
+  Future<void> tapLink(WidgetTester tester, String text) async {
+    await tester.tapOnText(find.textRange.ofSubstring(text));
+    await tester.pumpAndSettle();
   }
 
   testWidgets('UC-37-P-01: показывает заголовок, сведения и '
@@ -114,6 +97,63 @@ void main() {
     final markdown = tester.widget<AppMarkdown>(find.byType(AppMarkdown));
     expect(markdown.articleTitles, {'regex-basics': 'Регулярные выражения'});
     expect(find.textContaining('Регулярные выражения'), findsOneWidget);
+  });
+
+  testWidgets('UC-28-P-01: нажатие на ссылку открывает другую статью здесь '
+      'же, в разделе «Справочник»', (tester) async {
+    reference.articleResult = const Ok(
+      ReferenceArticle(
+        brief: testFileReading,
+        contentMd: 'Читай [[regex-basics]] дальше.',
+      ),
+    );
+    await openArticle(tester, testFileReading.slug);
+
+    await tapLink(tester, 'Регулярные');
+
+    expect(currentLocation(tester), '/reference/regex-basics');
+    expect(reference.lastSlug, 'regex-basics');
+    expect(find.byType(ArticleScreen), findsOneWidget);
+  });
+
+  testWidgets('UC-37-P-01: статья — одна область выделения от названия до '
+      'конца текста', (tester) async {
+    reference.articleResult = const Ok(
+      ReferenceArticle(
+        brief: testFileReading,
+        contentMd:
+            '## Когда это нужно\n\nПочти в каждом задании.\n\n'
+            '| Режим | Смысл |\n|---|---|\n| r | чтение |\n\n'
+            '```python\nprint(1)\n```\n\n'
+            'Файл закрывается сам.',
+      ),
+    );
+    await openArticle(tester, testFileReading.slug);
+
+    // Название есть и в заголовке экрана — берётся то, что в статье.
+    final title = find.descendant(
+      of: find.byType(SelectionArea),
+      matching: find.text(testFileReading.title),
+    );
+    final copied = await selectAndCopy(
+      tester,
+      from: title,
+      to: find.text('Файл закрывается сам.', findRichText: true),
+    );
+
+    for (final part in [
+      testFileReading.title,
+      l10n.referenceLevelBasic,
+      l10n.referenceReadingMinutes(testFileReading.readingMinutes),
+      '3.12',
+      'Когда это нужно',
+      'Почти в каждом задании.',
+      'чтение',
+      'print(1)',
+      'Файл закрывается сам.',
+    ]) {
+      expect(copied, contains(part));
+    }
   });
 
   testWidgets('UC-37-P-02: статьи нет — сразу «Статья справочника не '
@@ -222,8 +262,7 @@ void main() {
     await openArticle(tester, testFileReading.slug);
     final location = currentLocation(tester);
 
-    tapLink(tester, 'документации');
-    await tester.pumpAndSettle();
+    await tapLink(tester, 'документации');
 
     expect(currentLocation(tester), location);
     expect(reference.lastSlug, testFileReading.slug);
