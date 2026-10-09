@@ -26,6 +26,9 @@ final class PyodideRuntime implements PythonRuntime {
   PyodideRuntime({this.workerUrl = defaultWorkerUrl});
 
   /// Адрес воркера относительно корня приложения.
+  ///
+  /// Относительный намеренно: сайт открывается под `/yege_wars/`, и адрес
+  /// разрешается от `<base href>` страницы — UC-30.
   static const String defaultWorkerUrl = 'pyodide_worker.js';
 
   /// Адрес воркера.

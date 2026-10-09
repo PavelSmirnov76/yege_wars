@@ -1,0 +1,127 @@
+# Выкладка сайта на GitHub Pages — только ручным запуском владельца:
+# Actions → «Выкладка сайта» → Run workflow, ветка main.
+#
+# Реализует UC-29.
+#
+# Порядок: ветка → секреты → проверки → сборка → публикация. Любое падение
+# до задачи deploy оставляет на сайте прежнюю версию. Что настроить один
+# раз — README, раздел «Деплой».
+name: Выкладка сайта
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Одна выкладка за раз: следующая ждёт идущую, а не обрывает её.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Образ закреплён, как в ci.yml: ubuntu-latest с 2026-10-19 переходит
+    # на Ubuntu 26.
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      # configure-pages читает настройки Pages.
+      pages: read
+    steps:
+      # Файл workflow и checkout берутся из ветки, выбранной в форме
+      # запуска, поэтому другая ветка останавливает выкладку здесь.
+      - name: Только main
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Выкладка только из main, а запущена из $GITHUB_REF. Запустите заново с веткой main."
+            exit 1
+          fi
+
+      # Сборка без параметров не падает, а даёт сайт с экраном «Приложение
+      # не сконфигурировано», поэтому пустой секрет роняет выкладку здесь.
+      # Незаданный секрет приходит пустой строкой. Печатаются только имена.
+      - name: Секреты заданы
+        shell: bash
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          missing=0
+          for name in SUPABASE_URL SUPABASE_ANON_KEY; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Секрет $name не задан: Settings → Secrets and variables → Actions."
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - uses: actions/checkout@v7
+
+      # Pages выключен — падение здесь, до проверок и сборки.
+      - name: Настройки Pages
+        uses: actions/configure-pages@v6
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.0
+          channel: stable
+          cache: true
+
+      # Проверки — те же, что в задаче build из ci.yml.
+      - name: Установка зависимостей
+        run: flutter pub get
+
+      - name: Проверка форматирования (без генерённых файлов)
+        run: >
+          find lib test -name '*.dart'
+          -not -name '*.g.dart'
+          -not -path 'lib/l10n/gen/*'
+          -print0 |
+          xargs -0 dart format --output=none --set-exit-if-changed
+
+      - name: Генерация локализации
+        run: flutter gen-l10n
+
+      - name: Кодогенерация (build_runner)
+        run: dart run build_runner build
+
+      - name: Статический анализ
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      - name: Кастомные линты (riverpod_lint)
+        run: dart run custom_lint
+
+      - name: Тесты
+        run: flutter test
+
+      # Значения — из переменных окружения шага, а не подстановкой
+      # выражений в текст команды.
+      - name: Сборка сайта
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: >
+          flutter build web --release --base-href /yege_wars/
+          --dart-define=SUPABASE_URL="$SUPABASE_URL"
+          --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+
+      - name: Загрузка сайта
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Публикация на GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
