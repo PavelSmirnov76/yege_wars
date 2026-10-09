@@ -236,7 +236,7 @@ void main() {
       );
     });
 
-    test('UC-20-P-01: публикация зовёт репозиторий', () async {
+    test('UC-33-P-01: публикация зовёт репозиторий', () async {
       await container
           .read(publishControllerProvider('task-24').notifier)
           .setPublished(submissionId: 'attempt-ok', isPublished: true);

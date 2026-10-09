@@ -1,19 +1,21 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:yege_wars/features/editor/data/preferences_draft_storage.dart';
-import 'package:yege_wars/features/editor/domain/draft_storage.dart';
+import 'package:yege_wars/core/network/supabase_client_provider.dart';
+import 'package:yege_wars/features/editor/data/datasources/supabase_draft_remote_data_source.dart';
+import 'package:yege_wars/features/editor/data/repositories/draft_repository_impl.dart';
+import 'package:yege_wars/features/editor/domain/repositories/draft_repository.dart';
+import 'package:yege_wars/features/editor/domain/use_cases/save_draft_use_case.dart';
 
 part 'editor_providers.g.dart';
 
-/// Хранилище черновиков кода.
+/// Черновики кода в базе. В тестах подменяется целиком.
+///
+/// Живёт всю сессию: в нём очередь записей черновиков.
 @Riverpod(keepAlive: true)
-DraftStorage draftStorage(Ref ref) => const PreferencesDraftStorage();
+DraftRepository draftRepository(Ref ref) => DraftRepositoryImpl(
+  SupabaseDraftRemoteDataSource(ref.watch(supabaseClientProvider)),
+);
 
-/// Черновик кода для задачи.
-///
-/// Читается один раз при открытии задачи; дальше правки сохраняются
-/// редактором с задержкой.
-///
-/// Реализует UC-16.
-@riverpod
-Future<String> taskDraft(Ref ref, String taskSlug) async =>
-    await ref.watch(draftStorageProvider).read(taskSlug) ?? '';
+/// Use case сохранения черновика.
+@Riverpod(keepAlive: true)
+SaveDraftUseCase saveDraftUseCase(Ref ref) =>
+    SaveDraftUseCase(ref.watch(draftRepositoryProvider));

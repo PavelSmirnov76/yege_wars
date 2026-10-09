@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
+import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/editor/presentation/controllers/draft_controller.dart';
 import 'package:yege_wars/features/editor/presentation/controllers/run_controller.dart';
 import 'package:yege_wars/features/submissions/domain/answer_rules.dart';
 import 'package:yege_wars/features/submissions/presentation/answer_format_hint.dart';
@@ -16,7 +18,11 @@ import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
 /// Отправка ответа: поле, вердикт и публикация верного решения.
 ///
-/// Реализует UC-18, UC-19 и UC-20.
+/// «Отправить ответ» сначала записывает черновик кода, отправка этого не
+/// ждёт. Если публикация из блока «Задача решена!» не удалась, блок остаётся,
+/// под его кнопками — текст ошибки, и опубликовать можно снова.
+///
+/// Реализует UC-18, UC-19, UC-31 и UC-33.
 class SubmitPanel extends ConsumerStatefulWidget {
   /// Создаёт панель для задачи [task]; [codeOf] отдаёт текущий код.
   const SubmitPanel({required this.task, required this.codeOf, super.key});
@@ -35,15 +41,22 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
   final TextEditingController _answerController = TextEditingController();
   bool _publishOffered = true;
 
+  /// Сбой последней публикации из блока «Задача решена!».
+  Failure? _publishFailure;
+
   @override
   void dispose() {
     _answerController.dispose();
     super.dispose();
   }
 
-  /// Отправляет ответ на проверку.
+  /// Отправляет ответ на проверку; черновик записывается сразу.
   Future<void> _submit() async {
-    setState(() => _publishOffered = true);
+    setState(() {
+      _publishOffered = true;
+      _publishFailure = null;
+    });
+    ref.read(draftControllerProvider(widget.task.brief.id).notifier).flush();
     await ref
         .read(submitControllerProvider(widget.task.brief.id).notifier)
         .submit(
@@ -52,14 +65,21 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
         );
   }
 
-  /// Публикует только что принятое решение.
+  /// Публикует только что принятое решение: вышло — блок скрывается, нет —
+  /// остаётся с текстом ошибки.
   Future<void> _publish(String submissionId) async {
-    await ref
+    final failure = await ref
         .read(publishControllerProvider(widget.task.brief.id).notifier)
         .setPublished(submissionId: submissionId, isPublished: true);
-    if (mounted) {
-      setState(() => _publishOffered = false);
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _publishFailure = failure;
+      if (failure == null) {
+        _publishOffered = false;
+      }
+    });
   }
 
   @override
@@ -149,6 +169,15 @@ class _SubmitPanelState extends ConsumerState<SubmitPanel> {
                 ),
               ],
             ),
+            if (_publishFailure case final failure?) ...[
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                failure.message,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.danger,
+                ),
+              ),
+            ],
           ],
         ],
         const SizedBox(height: AppSpacing.lg),

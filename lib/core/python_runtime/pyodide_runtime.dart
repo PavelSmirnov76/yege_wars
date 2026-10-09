@@ -20,7 +20,7 @@ PythonRuntime createPythonRuntime() => PyodideRuntime();
 /// новый. Загруженный Pyodide при этом теряется, но браузер берёт его из
 /// своего кеша.
 ///
-/// Реализует UC-17.
+/// Реализует UC-32.
 final class PyodideRuntime implements PythonRuntime {
   /// Создаёт среду; [workerUrl] переопределяется в тестах.
   PyodideRuntime({this.workerUrl = defaultWorkerUrl});
@@ -168,9 +168,7 @@ final class PyodideRuntime implements PythonRuntime {
         _setState(PythonRuntimeState.loading);
       case 'ready':
         AppLogger.info('Pyodide: среда готова');
-        if (_pending == null) {
-          _setState(PythonRuntimeState.ready);
-        }
+        _setState(runtimeStateOnReady(isRunPending: _pending != null));
       case 'result':
         AppLogger.info(
           'Ответ воркера: вывод ${(data['stdout'] as String? ?? '').length} '

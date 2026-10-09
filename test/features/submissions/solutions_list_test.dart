@@ -31,8 +31,9 @@ void main() {
 
   /// Открывает вкладку «Решения».
   ///
-  /// Без [settle] вкладка открывается конечным числом кадров: индикатор
-  /// загрузки крутится бесконечно, и `pumpAndSettle` его не дождётся.
+  /// Без [settle] вкладка открывается конечным числом кадров: так видно,
+  /// что сбой загрузки показан сразу, а не после автоповторов, — пока шли
+  /// бы повторы, крутился бы индикатор, и `pumpAndSettle` прокрутил бы их.
   Future<void> openSolutions(WidgetTester tester, {bool settle = true}) async {
     await tester.binding.setSurfaceSize(const Size(500, 1000));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -61,7 +62,7 @@ void main() {
     }
   }
 
-  testWidgets('UC-22-P-02: без своего верного ответа решения закрыты', (
+  testWidgets('UC-35-P-02: без своего верного ответа решения закрыты', (
     tester,
   ) async {
     submissions.solutionsResult = Ok([testOtherSolution]);
@@ -71,7 +72,7 @@ void main() {
     expect(find.byType(CodeBlock), findsNothing);
   });
 
-  testWidgets('UC-22-P-01: после верного ответа видны чужие решения', (
+  testWidgets('UC-35-P-01: после верного ответа видны чужие решения', (
     tester,
   ) async {
     submissions
@@ -84,7 +85,7 @@ void main() {
     expect(find.byType(CodeBlock), findsOneWidget);
   });
 
-  testWidgets('UC-22-P-03: решивший видит пустое состояние, если решений нет', (
+  testWidgets('UC-35-P-03: решивший видит пустое состояние, если решений нет', (
     tester,
   ) async {
     submissions.attemptsResult = Ok([testCorrectAttempt]);
@@ -93,8 +94,8 @@ void main() {
     expect(find.text(l10n.solutionsEmpty), findsOneWidget);
   });
 
-  testWidgets('UC-22-P-04: сбой загрузки решений — индикатор загрузки без '
-      'сообщения', (
+  testWidgets('UC-35-P-04: сбой загрузки решений — сразу сообщение и '
+      '«Повторить» вместо списка', (
     tester,
   ) async {
     const failure = NetworkFailure();
@@ -103,32 +104,69 @@ void main() {
       ..solutionsResult = const Err(failure);
     await openSolutions(tester, settle: false);
 
-    // Экран пути: вместо списка индикатор загрузки, сообщения нет.
-    void expectSpinnerOnly() {
-      expect(
-        find.descendant(
-          of: find.byType(SolutionsList),
-          matching: find.byType(CircularProgressIndicator),
-        ),
-        findsOneWidget,
-      );
-      expect(find.text(failure.message), findsNothing);
-      expect(find.text(l10n.solutionsEmpty), findsNothing);
-    }
-
-    // Пока Riverpod повторяет загрузку — AsyncLoading с ошибкой внутри.
-    final solutions = publishedSolutionsProvider(testTask24.id);
-    final retrying = containerOf(tester).read(solutions);
-    expect(retrying, isA<AsyncLoading<List<Submission>>>());
-    expect(retrying.error, failure);
-    expectSpinnerOnly();
-
-    // После последнего повтора — AsyncError.
-    await pumpUntilRetriesEnd(tester, solutions);
+    // Автоповторов нет: провайдер сразу в AsyncError, запрос один.
     expect(
-      containerOf(tester).read(solutions),
+      containerOf(tester).read(publishedSolutionsProvider(testTask24.id)),
       isA<AsyncError<List<Submission>>>(),
     );
-    expectSpinnerOnly();
+    expect(submissions.solutionsCalls, 1);
+
+    final retry = find.widgetWithText(OutlinedButton, l10n.commonRetry);
+    expect(
+      find.descendant(
+        of: find.byType(SolutionsList),
+        matching: find.byType(CircularProgressIndicator),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(SolutionsList),
+        matching: find.text(failure.message),
+      ),
+      findsOneWidget,
+    );
+    expect(retry, findsOneWidget);
+    expect(find.text(l10n.solutionsEmpty), findsNothing);
+
+    // «Повторить» запрашивает решения заново.
+    submissions.solutionsResult = Ok([testOtherSolution]);
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    expect(submissions.solutionsCalls, 2);
+    expect(find.text(failure.message), findsNothing);
+    expect(find.byType(CodeBlock), findsOneWidget);
+  });
+
+  testWidgets('UC-35-P-04: свои попытки не загрузились — в «Решениях» '
+      'сообщение и «Повторить», а не «откроются после верного '
+      'ответа»', (tester) async {
+    const failure = NetworkFailure();
+    submissions
+      ..attemptsResult = const Err(failure)
+      ..solutionsResult = Ok([testOtherSolution]);
+    await openSolutions(tester, settle: false);
+
+    // Автоповторов нет: попытки сразу в AsyncError, запрос один.
+    expect(
+      containerOf(tester).read(myAttemptsProvider(testTask24.id)),
+      isA<AsyncError<List<Submission>>>(),
+    );
+    expect(submissions.attemptsCalls, 1);
+
+    final retry = find.widgetWithText(OutlinedButton, l10n.commonRetry);
+    expect(find.text(l10n.solutionsLocked), findsNothing);
+    expect(find.text(failure.message), findsOneWidget);
+    expect(retry, findsOneWidget);
+    expect(find.byType(CodeBlock), findsNothing);
+
+    // «Повторить» запрашивает попытки, задача решена — решения видны.
+    submissions.attemptsResult = Ok([testCorrectAttempt]);
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    expect(find.text(failure.message), findsNothing);
+    expect(find.byType(CodeBlock), findsOneWidget);
   });
 }

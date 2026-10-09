@@ -4,6 +4,7 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/markdown/code_block.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
 import 'package:yege_wars/features/submissions/presentation/widgets/attempts_list.dart';
 
@@ -11,9 +12,10 @@ import 'package:yege_wars/features/submissions/presentation/widgets/attempts_lis
 ///
 /// Доступ решает база: пока у ученика нет своей верной попытки, список
 /// приходит пустым — поэтому до первого верного ответа показываем
-/// объяснение, а не «пусто».
+/// объяснение, а не «пусто». Не загрузились — вместо списка сообщение и
+/// «Повторить».
 ///
-/// Реализует UC-22.
+/// Реализует UC-35.
 class SolutionsList extends ConsumerWidget {
   /// Создаёт список решений задачи [taskId].
   const SolutionsList({
@@ -64,6 +66,10 @@ class SolutionsList extends ConsumerWidget {
             const SizedBox(height: AppSpacing.lg),
           ],
         ],
+      ),
+      AsyncError(:final error) => ReferenceErrorView(
+        error: error,
+        onRetry: () => ref.invalidate(publishedSolutionsProvider(taskId)),
       ),
       _ => const Center(child: CircularProgressIndicator()),
     };

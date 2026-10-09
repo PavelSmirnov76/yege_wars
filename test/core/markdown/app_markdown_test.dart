@@ -31,7 +31,7 @@ Future<void> pumpMarkdown(
 }
 
 void main() {
-  testWidgets('UC-26-P-01: рисует заголовок, абзац и блок '
+  testWidgets('UC-37-P-01: рисует заголовок, абзац и блок '
       'кода', (tester) async {
     await pumpMarkdown(
       tester,
@@ -76,7 +76,7 @@ void main() {
     expect(tapped, isFalse);
   });
 
-  testWidgets('UC-26-P-01: таблица и цитата не ломают '
+  testWidgets('UC-37-P-01: таблица и цитата не ломают '
       'разметку', (tester) async {
     await pumpMarkdown(
       tester,

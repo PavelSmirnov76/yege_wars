@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
-import 'package:yege_wars/features/editor/editor_providers.dart';
+import 'package:yege_wars/features/editor/presentation/controllers/draft_controller.dart';
 import 'package:yege_wars/features/editor/presentation/controllers/run_controller.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/code_editor.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/console_view.dart';
@@ -15,9 +15,11 @@ import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 
 /// Панель решения задачи: редактор, ввод, запуск и консоль.
 ///
-/// Под консолью — отправка ответа, [SubmitPanel].
+/// Под консолью — отправка ответа, [SubmitPanel]. Код поля — черновик
+/// задачи из [DraftController]: его держит страница задачи, панель берёт код
+/// при создании и отдаёт туда каждую правку.
 ///
-/// Реализует UC-16 и UC-17.
+/// Реализует UC-31 и UC-32.
 class EditorPanel extends ConsumerStatefulWidget {
   /// Создаёт панель для задачи [task].
   const EditorPanel({required this.task, super.key});
@@ -30,48 +32,43 @@ class EditorPanel extends ConsumerStatefulWidget {
 }
 
 class _EditorPanelState extends ConsumerState<EditorPanel> {
-  /// Пауза перед сохранением черновика.
-  static const Duration _saveDebounce = Duration(milliseconds: 600);
-
-  final PythonEditingController _codeController = PythonEditingController();
+  late final PythonEditingController _codeController = PythonEditingController(
+    text: _draft.currentCode(),
+  );
   final TextEditingController _stdinController = TextEditingController();
-  Timer? _saveDebounceTimer;
-  bool _draftLoaded = false;
+
+  /// Черновик задачи; живёт, пока открыта страница задачи.
+  DraftController get _draft =>
+      ref.read(draftControllerProvider(widget.task.brief.id).notifier);
 
   @override
   void initState() {
     super.initState();
-    _codeController.addListener(_scheduleSave);
+    _codeController.addListener(_onCodeChanged);
   }
 
   @override
   void dispose() {
-    _saveDebounceTimer?.cancel();
     _codeController
-      ..removeListener(_scheduleSave)
+      ..removeListener(_onCodeChanged)
       ..dispose();
     _stdinController.dispose();
     super.dispose();
   }
 
-  /// Откладывает сохранение черновика, чтобы не писать на каждую клавишу.
-  void _scheduleSave() {
-    if (!_draftLoaded) {
+  /// Правка уходит в черновик, записывает его контроллер.
+  void _onCodeChanged() => _draft.edit(_codeController.text);
+
+  /// Запускает программу; черновик записывается сразу, запуск этого не ждёт.
+  Future<void> _run() async {
+    final slug = widget.task.brief.slug;
+    // Ctrl/Cmd+Enter во время запуска — как недоступная «Запустить».
+    if (ref.read(runControllerProvider(slug)).isBusy) {
       return;
     }
-    _saveDebounceTimer?.cancel();
-    _saveDebounceTimer = Timer(_saveDebounce, () {
-      ref
-          .read(draftStorageProvider)
-          .write(widget.task.brief.slug, _codeController.text)
-          .ignore();
-    });
-  }
-
-  /// Запускает программу.
-  Future<void> _run() async {
+    _draft.flush();
     await ref
-        .read(runControllerProvider(widget.task.brief.slug).notifier)
+        .read(runControllerProvider(slug).notifier)
         .run(
           code: _codeController.text,
           stdin: _stdinController.text,
@@ -85,20 +82,6 @@ class _EditorPanelState extends ConsumerState<EditorPanel> {
     final theme = Theme.of(context);
     final slug = widget.task.brief.slug;
     final runState = ref.watch(runControllerProvider(slug));
-
-    // Черновик подставляется один раз, чтобы не затирать набранное.
-    final draft = ref.watch(taskDraftProvider(slug)).value;
-    if (!_draftLoaded && draft != null) {
-      _draftLoaded = true;
-      if (draft.isNotEmpty) {
-        // Менять контроллер во время построения нельзя — ждём кадр.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && _codeController.text.isEmpty) {
-            _codeController.text = draft;
-          }
-        });
-      }
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,14 +113,14 @@ class _EditorPanelState extends ConsumerState<EditorPanel> {
           children: [
             Expanded(
               child: FilledButton.icon(
-                onPressed: runState.isRunning ? null : () => unawaited(_run()),
+                onPressed: runState.isBusy ? null : () => unawaited(_run()),
                 icon: const Icon(Icons.play_arrow),
                 label: Text(l10n.editorRun),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
             OutlinedButton.icon(
-              onPressed: runState.isRunning
+              onPressed: runState.isBusy
                   ? () => unawaited(
                       ref.read(runControllerProvider(slug).notifier).stop(),
                     )

@@ -30,9 +30,9 @@ void main() {
 
   /// Открывает раздел «Справочник» под вошедшим учеником.
   ///
-  /// Без [settle] экран открывается конечным числом кадров: пока Riverpod
-  /// повторяет упавший запрос, крутится индикатор, и `pumpAndSettle`
-  /// прокрутил бы все повторы.
+  /// Без [settle] экран открывается конечным числом кадров: так видно, что
+  /// сбой показан сразу, а не после автоповторов, — пока шли бы повторы,
+  /// крутился бы индикатор, и `pumpAndSettle` прокрутил бы их.
   Future<void> openReference(WidgetTester tester, {bool settle = true}) async {
     await pumpApp(
       tester,
@@ -75,7 +75,7 @@ void main() {
     expect(find.text(l10n.navReference), findsOneWidget);
   });
 
-  testWidgets('UC-25-P-01: показывает список статей', (tester) async {
+  testWidgets('UC-36-P-01: показывает список статей', (tester) async {
     await openReference(tester);
 
     expect(find.text(testFileReading.title), findsOneWidget);
@@ -83,14 +83,14 @@ void main() {
     expect(find.text(testFileReading.summary), findsOneWidget);
   });
 
-  testWidgets('UC-25-P-03: пустой справочник объясняет себя', (tester) async {
+  testWidgets('UC-36-P-03: пустой справочник объясняет себя', (tester) async {
     reference.articlesResult = const Ok([]);
     await openReference(tester);
 
     expect(find.text(l10n.referenceEmpty), findsOneWidget);
   });
 
-  testWidgets('UC-25-P-02: выбор уровня уходит в запрос', (tester) async {
+  testWidgets('UC-36-P-02: выбор уровня уходит в запрос', (tester) async {
     await openReference(tester);
 
     await tester.tap(
@@ -101,7 +101,7 @@ void main() {
     expect(reference.lastFilter?.level, ArticleLevel.medium);
   });
 
-  testWidgets('UC-25-P-04: ошибка списка показывается с кнопкой '
+  testWidgets('UC-36-P-04: ошибка списка показывается с кнопкой '
       'повтора', (tester) async {
     reference.articlesResult = const Err(testNetworkFailure);
     await openReference(tester);
@@ -118,7 +118,7 @@ void main() {
     expect(find.text(testFileReading.title), findsOneWidget);
   });
 
-  testWidgets('UC-25-P-01: нажатие на карточку открывает '
+  testWidgets('UC-36-P-01: нажатие на карточку открывает '
       'статью', (tester) async {
     await openReference(tester);
 
@@ -129,7 +129,7 @@ void main() {
     expect(reference.lastSlug, testFileReading.slug);
   });
 
-  testWidgets('UC-25-P-02: чипы номеров и тегов — из значений '
+  testWidgets('UC-36-P-02: чипы номеров и тегов — из значений '
       'фильтров', (tester) async {
     await openReference(tester);
 
@@ -144,17 +144,19 @@ void main() {
     ]);
   });
 
-  testWidgets('UC-25-P-02: значения фильтров не загрузились — чипов номеров '
-      'и тегов нет до конца сессии, а список работает', (tester) async {
+  testWidgets('UC-36-P-02: значения фильтров не загрузились — чипов номеров '
+      'и тегов нет до перезагрузки страницы, а список работает', (
+    tester,
+  ) async {
     // При открытии нет связи: не загрузились ни список, ни значения
     // фильтров.
     reference.articlesResult = const Err(testNetworkFailure);
-    await openReference(tester, settle: false);
+    await openReference(tester);
 
-    // Связь вернулась, пока Riverpod повторяет запрос: список загрузился,
-    // а значения фильтров больше не запрашиваются.
+    // Связь вернулась: список поднимает «Повторить», а значения фильтров
+    // больше не запрашиваются.
     reference.articlesResult = const Ok([testFileReading, testRegexBasics]);
-    await tester.pump(const Duration(minutes: 1));
+    await tester.tap(find.text(l10n.commonRetry));
     await tester.pumpAndSettle();
 
     expect(find.text(testFileReading.title), findsOneWidget);
@@ -177,7 +179,7 @@ void main() {
     expect(chipLabels(tester), levelChips());
   });
 
-  testWidgets('UC-25-P-02: строка поиска уходит в запрос через 300 мс после '
+  testWidgets('UC-36-P-02: строка поиска уходит в запрос через 300 мс после '
       'ввода', (tester) async {
     await openReference(tester);
     final calls = reference.listCalls;
@@ -195,7 +197,7 @@ void main() {
     expect(reference.lastFilter?.query, 'файл');
   });
 
-  testWidgets('UC-25-P-02: «Сбросить фильтры» снимает все условия и строку '
+  testWidgets('UC-36-P-02: «Сбросить фильтры» снимает все условия и строку '
       'поиска, а текст в поле остаётся', (tester) async {
     await openReference(tester);
     final reset = find.widgetWithText(TextButton, l10n.referenceResetFilters);
@@ -240,7 +242,7 @@ void main() {
     );
   });
 
-  testWidgets('UC-25-P-03: по заданным условиям статей нет', (tester) async {
+  testWidgets('UC-36-P-03: по заданным условиям статей нет', (tester) async {
     reference.articlesResult = const Ok([]);
     await openReference(tester);
 
@@ -253,8 +255,8 @@ void main() {
     expect(find.text(l10n.referenceEmpty), findsNothing);
   });
 
-  testWidgets('UC-25-P-04: сбой связи — индикатор, пока идут повторы, затем '
-      'сообщение и «Повторить»', (tester) async {
+  testWidgets('UC-36-P-04: сбой связи — сразу сообщение и «Повторить», '
+      'без автоповторов', (tester) async {
     reference.articlesResult = const Err(testNetworkFailure);
     await openReference(tester, settle: false);
 
@@ -263,26 +265,22 @@ void main() {
       matching: find.byType(CircularProgressIndicator),
     );
 
-    // Пока Riverpod повторяет запрос — AsyncLoading с ошибкой внутри.
-    final retrying = containerOf(tester).read(articlesProvider);
-    expect(retrying, isA<AsyncLoading<List<ArticleBrief>>>());
-    expect(retrying.error, testNetworkFailure);
-    expect(spinner, findsOneWidget);
-    expect(find.text(testNetworkFailure.message), findsNothing);
-    expect(find.text(l10n.commonRetry), findsNothing);
-
-    // После последнего повтора — AsyncError.
-    await pumpUntilRetriesEnd(tester, articlesProvider);
-
+    // Провайдер сразу в AsyncError; запросов два — список и значения
+    // фильтров, по одному.
     expect(
       containerOf(tester).read(articlesProvider),
       isA<AsyncError<List<ArticleBrief>>>(),
     );
+    expect(reference.listCalls, 2);
     expect(spinner, findsNothing);
     expect(find.text(testNetworkFailure.message), findsOneWidget);
     expect(
       find.widgetWithText(OutlinedButton, l10n.commonRetry),
       findsOneWidget,
     );
+
+    // И через минуту повторов нет.
+    await tester.pump(const Duration(minutes: 1));
+    expect(reference.listCalls, 2);
   });
 }

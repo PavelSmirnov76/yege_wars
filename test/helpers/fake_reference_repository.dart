@@ -59,6 +59,9 @@ final class FakeReferenceRepository implements ReferenceRepository {
   /// slug последнего запрошенной статьи.
   String? lastSlug;
 
+  /// Сколько раз запрашивалась статья.
+  int articleCalls = 0;
+
   @override
   FutureResult<List<ArticleBrief>> listArticles(ArticleFilter filter) async {
     listCalls++;
@@ -68,6 +71,7 @@ final class FakeReferenceRepository implements ReferenceRepository {
 
   @override
   FutureResult<ReferenceArticle> getArticle(String slug) async {
+    articleCalls++;
     lastSlug = slug;
     return articleResult;
   }
