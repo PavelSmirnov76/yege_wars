@@ -7,9 +7,9 @@
 - Публикация решения — [UC-33-P-01](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-01), [UC-33-P-02](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-02), [UC-33-P-03](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-03), [UC-33-P-04](../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-04).
 - Мои попытки — [UC-34-P-01](../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-01), [UC-34-P-02](../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-02), [UC-34-P-03](../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-03).
 - Решения других — [UC-35-P-01](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-01), [UC-35-P-02](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-02), [UC-35-P-03](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-03), [UC-35-P-04](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-04).
-- Справочник — [UC-36-P-01](../2-specs/use-cases/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-01), [UC-36-P-02](../2-specs/use-cases/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-02), [UC-36-P-03](../2-specs/use-cases/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-03), [UC-36-P-04](../2-specs/use-cases/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-04).
+- Справочник — [UC-36-P-01](../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-01), [UC-36-P-02](../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-02), [UC-36-P-03](../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-03), [UC-36-P-04](../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-04).
 - Статья — [UC-37-P-01](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-01), [UC-37-P-02](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-02), [UC-37-P-03](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md#uc-37-p-03).
-- Экраны — [FIG-16](../3-design/FIG-16-PROBLEM.md), [FIG-17](../3-design/FIG-17-REFERENCE.md), [FIG-18](../3-design/FIG-18-ARTICLE.md); компонент — [COMP-12](../3-design/design-system/COMP-12-ERROR-RETRY.md).
+- Экраны — [FIG-16](../3-design/obsolete/FIG-16-PROBLEM.md), [FIG-17](../3-design/obsolete/FIG-17-REFERENCE.md), [FIG-18](../3-design/obsolete/FIG-18-ARTICLE.md); компонент — [COMP-12](../3-design/design-system/COMP-12-ERROR-RETRY.md).
 - Бизнес-задачи — [BT-17](../1-business-tasks/planning/BT-17-PLANNING-RUN-AND-DRAFT.md), [BT-18](../1-business-tasks/planning/BT-18-PLANNING-LOAD-FAILURES.md), [BT-19](../1-business-tasks/planning/BT-19-PLANNING-PUBLICATION-FAILURE.md).
 
 ## Где работать
@@ -164,7 +164,7 @@ FIG-15, FIG-13 и FIG-14. Код и тесты пока реализуют ст�
 ### 1.2. Клиент — черновик ([UC-31](../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md))
 
 Черновик в базе по ENT-15, поведение — по путям UC-31 и состояниям
-[FIG-16](../3-design/FIG-16-PROBLEM.md). В браузере черновик больше не
+[FIG-16](../3-design/obsolete/FIG-16-PROBLEM.md). В браузере черновик больше не
 хранится.
 
 ### 1.3. Запуск ([UC-32](../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md))
@@ -179,7 +179,7 @@ FIG-15, FIG-13 и FIG-14. Код и тесты пока реализуют ст�
 Путь UC-33-P-04 — по состоянию FIG-16. Новых строк l10n дизайн не задаёт:
 текст ошибки — сообщение сбоя, как везде.
 
-### 1.5. Списки и автоповтор ([UC-34](../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-35](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md), [UC-36](../2-specs/use-cases/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md), [UC-37](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md))
+### 1.5. Списки и автоповтор ([UC-34](../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-35](../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md), [UC-36](../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md), [UC-37](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md))
 
 - COMP-12 на месте «Моих попыток» и «Решений» при сбое.
 - Автоповтор Riverpod отключён глобально. Сбой загрузки любого экрана сразу

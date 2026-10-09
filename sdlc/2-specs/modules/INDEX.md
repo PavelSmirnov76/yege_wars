@@ -9,9 +9,15 @@
 | [MOD-3](MOD-3-CONFIG.md) | Конфигурация | [BT-6](../../1-business-tasks/planning/BT-6-PLANNING-BUILD-CONFIG.md) |
 | [MOD-4](MOD-4-CATALOG.md) | Каталог | [BT-8](../../1-business-tasks/planning/BT-8-PLANNING-CATALOG.md), [BT-9](../../1-business-tasks/planning/BT-9-PLANNING-PROBLEM-PAGE.md) |
 | [MOD-6](MOD-6-SUBMISSION.md) | Отправка | [BT-11](../../1-business-tasks/planning/BT-11-PLANNING-ANSWER-CHECK.md), [BT-12](../../1-business-tasks/planning/BT-12-PLANNING-SOLUTIONS.md) |
-| [MOD-7](MOD-7-REFERENCE.md) | Справочник | [BT-13](../../1-business-tasks/planning/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md) |
+| [MOD-7](MOD-7-REFERENCE.md) | Справочник | [BT-13](../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md) |
 | [MOD-8](MOD-8-CODE.md) | Код | [MOD-5](obsolete/MOD-5-EDITOR.md), [BT-17](../../1-business-tasks/planning/BT-17-PLANNING-RUN-AND-DRAFT.md) |
 | [MOD-9](MOD-9-SITE.md) | Сайт | [BT-16](../../1-business-tasks/planning/BT-16-PLANNING-SITE.md) |
+
+## К пересмотру
+
+| Id | Ссылается на похороненное |
+|---|---|
+| [MOD-7](MOD-7-REFERENCE.md) | [BT-13](../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md) |
 
 ## Похоронены
 

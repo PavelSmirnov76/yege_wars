@@ -12,4 +12,4 @@
 
 - Высота не меньше тап-цели: `AppTheme._minTapTarget` — [TOKEN-6](TOKEN-6-TAP.md#min-tap-target).
 - Индикатор: размер 20, толщина линии 2 — константы компонента.
-- Цвет — акцент темы: `AppColors.accent` — [TOKEN-1](TOKEN-1-COLOR.md#accent), текст `AppColors.onAccent` — [TOKEN-1](TOKEN-1-COLOR.md#on-accent).
+- Цвет — акцент темы: `AppColors.accent` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#accent), текст `AppColors.onAccent` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#on-accent).

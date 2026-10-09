@@ -1,4 +1,6 @@
-# TOKEN-1: Цвета
+# TOKEN-7: Цвета
+
+supersedes: [TOKEN-1](obsolete/TOKEN-1-COLOR.md)
 
 Тёмная тема по умолчанию: графитовый фон и один акцент.
 
@@ -11,9 +13,9 @@
 | <a id="text-primary"></a>`AppColors.textPrimary` | `#E8EAEE` | основной текст, контраст ~15:1 на фоне |
 | <a id="text-secondary"></a>`AppColors.textSecondary` | `#9AA3B2` | второстепенный текст, контраст ~7:1 |
 | <a id="text-disabled"></a>`AppColors.textDisabled` | `#5D6572` | неактивный текст и подписи недоступных элементов |
-| <a id="accent"></a>`AppColors.accent` | `#FF4E2A` | акцент — красно-оранжевый |
-| <a id="accent-hover"></a>`AppColors.accentHover` | `#FF6A47` | акцент при наведении и нажатии |
-| <a id="on-accent"></a>`AppColors.onAccent` | `#140A06` | текст и иконки на акценте, контраст ~5.7:1 |
+| <a id="accent"></a>`AppColors.accent` | `#E8865A` | акцент — приглушённый оранжевый |
+| <a id="accent-hover"></a>`AppColors.accentHover` | `#F0A07E` | акцент при наведении и нажатии |
+| <a id="on-accent"></a>`AppColors.onAccent` | `#2A1006` | текст и иконки на акценте, контраст ~6.8:1 |
 | <a id="success"></a>`AppColors.success` | `#3ECF8E` | успех: верное решение, пройденные тесты |
 | <a id="warning"></a>`AppColors.warning` | `#FFB454` | предупреждение: частичное решение, важные подсказки |
 | <a id="danger"></a>`AppColors.danger` | `#FF5566` | ошибка: неверный ответ, упавшие тесты, деструктивные действия |

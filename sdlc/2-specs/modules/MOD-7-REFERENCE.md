@@ -1,6 +1,6 @@
 # MOD-7: Справочник
 
-**Основание:** [BT-13](../../1-business-tasks/planning/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md).
+**Основание:** [BT-13](../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md).
 
 ## Область
 

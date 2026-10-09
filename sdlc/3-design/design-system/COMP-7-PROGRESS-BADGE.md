@@ -4,8 +4,8 @@
 
 ## Варианты
 
-- **Решено** — значок галочки и подпись цветом `AppColors.success` — [TOKEN-1](TOKEN-1-COLOR.md#success).
-- **Есть попытки** — значок многоточия и подпись цветом `AppColors.warning` — [TOKEN-1](TOKEN-1-COLOR.md#warning).
+- **Решено** — значок галочки и подпись цветом `AppColors.success` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#success).
+- **Есть попытки** — значок многоточия и подпись цветом `AppColors.warning` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#warning).
 - **Не начата** — метки нет: таких задач в каталоге большинство.
 
 ## Состояния

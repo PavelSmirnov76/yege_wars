@@ -4,8 +4,8 @@
 
 ## Варианты
 
-- **Ошибка** — текст цветом `AppColors.danger` — [TOKEN-1](TOKEN-1-COLOR.md#danger).
-- **Предупреждение** — текст цветом `AppColors.warning` — [TOKEN-1](TOKEN-1-COLOR.md#warning); например, «регистрация закрыта».
+- **Ошибка** — текст цветом `AppColors.danger` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#danger).
+- **Предупреждение** — текст цветом `AppColors.warning` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#warning); например, «регистрация закрыта».
 
 ## Состояния
 

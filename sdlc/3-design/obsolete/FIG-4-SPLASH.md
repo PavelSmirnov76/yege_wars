@@ -8,7 +8,7 @@
 
 ## Раскладка
 
-Круговой индикатор по центру, фон приложения — `AppColors.background` — [TOKEN-1](../design-system/TOKEN-1-COLOR.md#background).
+Круговой индикатор по центру, фон приложения — `AppColors.background` — [TOKEN-1](../design-system/obsolete/TOKEN-1-COLOR.md#background).
 Текстов нет.
 
 ## Состояния

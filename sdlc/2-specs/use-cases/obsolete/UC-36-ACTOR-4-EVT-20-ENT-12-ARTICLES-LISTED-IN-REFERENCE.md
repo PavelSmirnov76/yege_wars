@@ -1,10 +1,14 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** Отбор по разделу кодификатора вместо тега (R50) — проход 9
+> **Заменён:** [UC-39](../UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md)
+
 # UC-36: Справочник
 
-supersedes: [UC-25](obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md)
+supersedes: [UC-25](UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md)
 
-**Основание:** [R35](../../0-vibes/prd/PRD.md#r35), [R36](../../0-vibes/prd/PRD.md#r36), [R38](../../0-vibes/prd/PRD.md#r38), [R46](../../0-vibes/prd/PRD.md#r46), [BT-13](../../1-business-tasks/planning/BT-13-PLANNING-REFERENCE.md), [BT-18](../../1-business-tasks/planning/BT-18-PLANNING-LOAD-FAILURES.md), [MOD-7](../modules/MOD-7-REFERENCE.md).
+**Основание:** [R35](../../../0-vibes/prd/PRD.md#r35), [R36](../../../0-vibes/prd/PRD.md#r36), [R38](../../../0-vibes/prd/PRD.md#r38), [R46](../../../0-vibes/prd/PRD.md#r46), [BT-13](../../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md), [BT-18](../../../1-business-tasks/planning/BT-18-PLANNING-LOAD-FAILURES.md), [MOD-7](../../modules/MOD-7-REFERENCE.md).
 
-**Актор, событие, сущность:** [ACTOR-4](../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-20](../events/EVT-20-REFERENCE-OPENED-IN-REFERENCE.md), [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md).
+**Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-20](../../events/EVT-20-REFERENCE-OPENED-IN-REFERENCE.md), [ENT-12](../../entities/ENT-12-ARTICLE-IN-REFERENCE.md).
 
 ## Триггер
 

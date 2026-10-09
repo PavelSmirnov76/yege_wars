@@ -4,8 +4,8 @@
 
 ## Варианты
 
-- **Верно** — галочка и «Верно!» цветом `AppColors.success` — [TOKEN-1](TOKEN-1-COLOR.md#success).
-- **Неверно** — крестик и «Неверно. Попробуй ещё раз» цветом `AppColors.danger` — [TOKEN-1](TOKEN-1-COLOR.md#danger).
+- **Верно** — галочка и «Верно!» цветом `AppColors.success` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#success).
+- **Неверно** — крестик и «Неверно. Попробуй ещё раз» цветом `AppColors.danger` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#danger).
 
 ## Состояния
 

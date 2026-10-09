@@ -14,17 +14,18 @@
 | [BT-9](BT-9-PLANNING-PROBLEM-PAGE.md) | Страница задачи | [R21](../../0-vibes/prd/PRD.md#r21), [R22](../../0-vibes/prd/PRD.md#r22), [R23](../../0-vibes/prd/PRD.md#r23) | да |
 | [BT-11](BT-11-PLANNING-ANSWER-CHECK.md) | Проверка ответа и попытки | [R27](../../0-vibes/prd/PRD.md#r27), [R28](../../0-vibes/prd/PRD.md#r28), [R29](../../0-vibes/prd/PRD.md#r29), [R30](../../0-vibes/prd/PRD.md#r30), [R31](../../0-vibes/prd/PRD.md#r31), [R32](../../0-vibes/prd/PRD.md#r32) | да |
 | [BT-12](BT-12-PLANNING-SOLUTIONS.md) | Решения | [R33](../../0-vibes/prd/PRD.md#r33), [R34](../../0-vibes/prd/PRD.md#r34) | да |
-| [BT-13](BT-13-PLANNING-REFERENCE.md) | Справочник | [R35](../../0-vibes/prd/PRD.md#r35), [R36](../../0-vibes/prd/PRD.md#r36), [R38](../../0-vibes/prd/PRD.md#r38) | да |
 | [BT-14](BT-14-PLANNING-ARTICLE.md) | Статья и ссылки | [R37](../../0-vibes/prd/PRD.md#r37), [R38](../../0-vibes/prd/PRD.md#r38), [R40](../../0-vibes/prd/PRD.md#r40) | да |
-| [BT-15](BT-15-PLANNING-HELP.md) | Справка к задаче | [R38](../../0-vibes/prd/PRD.md#r38), [R39](../../0-vibes/prd/PRD.md#r39) | да |
+| [BT-15](BT-15-PLANNING-HELP.md) | Справка к задаче | [R38](../../0-vibes/prd/PRD.md#r38), [R39](../../0-vibes/prd/PRD.md#r39) | нет — не проверено: [UC-40-P-01](../../2-specs/use-cases/UC-40-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-40-p-01), [UC-40-P-02](../../2-specs/use-cases/UC-40-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-40-p-02) |
 | [BT-16](BT-16-PLANNING-SITE.md) | Сайт | [R41](../../0-vibes/prd/PRD.md#r41), [R42](../../0-vibes/prd/PRD.md#r42) | да |
 | [BT-17](BT-17-PLANNING-RUN-AND-DRAFT.md) | Запуск программы и черновик | [BT-10](obsolete/BT-10-PLANNING-RUN.md), [R24](../../0-vibes/prd/PRD.md#r24), [R25](../../0-vibes/prd/PRD.md#r25), [R43](../../0-vibes/prd/PRD.md#r43), [R44](../../0-vibes/prd/PRD.md#r44), [R45](../../0-vibes/prd/PRD.md#r45) | да |
-| [BT-18](BT-18-PLANNING-LOAD-FAILURES.md) | Сбои загрузки | [R46](../../0-vibes/prd/PRD.md#r46) | да |
+| [BT-18](BT-18-PLANNING-LOAD-FAILURES.md) | Сбои загрузки | [R46](../../0-vibes/prd/PRD.md#r46) | нет — не проверено: [UC-39-P-01](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-01), [UC-39-P-02](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-02), [UC-39-P-03](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-03), [UC-39-P-04](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-04) |
 | [BT-19](BT-19-PLANNING-PUBLICATION-FAILURE.md) | Сбой публикации решения | [R47](../../0-vibes/prd/PRD.md#r47) | да |
 | [BT-20](BT-20-PLANNING-TEST-LOGIN.md) | Тестовый вход | [R48](../../0-vibes/prd/PRD.md#r48), [R49](../../0-vibes/prd/PRD.md#r49) | да |
+| [BT-21](BT-21-PLANNING-REFERENCE.md) | Справочник | [BT-13](obsolete/BT-13-PLANNING-REFERENCE.md), [R35](../../0-vibes/prd/PRD.md#r35), [R50](../../0-vibes/prd/PRD.md#r50), [R38](../../0-vibes/prd/PRD.md#r38) | нет — не проверено: [UC-39-P-01](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-01), [UC-39-P-02](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-02), [UC-39-P-03](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-03), [UC-39-P-04](../../2-specs/use-cases/UC-39-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-39-p-04) |
 
 ## Похоронены
 
 | Id | Название | Заменён |
 |---|---|---|
 | [BT-10](obsolete/BT-10-PLANNING-RUN.md) | Запуск программы в браузере | [BT-17](BT-17-PLANNING-RUN-AND-DRAFT.md) |
+| [BT-13](obsolete/BT-13-PLANNING-REFERENCE.md) | Справочник | [BT-21](BT-21-PLANNING-REFERENCE.md) |

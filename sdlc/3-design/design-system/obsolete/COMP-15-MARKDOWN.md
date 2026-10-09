@@ -1,3 +1,7 @@
+> **Похоронен:** 2026-10-09
+> **Почему:** Текст выделяется одной областью вместе с текстом экрана, а не по абзацам — решение владельца, проход 9 (raw/2026-10-09/ui-polish.md)
+> **Заменён:** [COMP-16](../COMP-16-MARKDOWN.md)
+
 # COMP-15: Разметка
 
 Текст в разметке Markdown: условие задачи и текст статьи рисуются одним и тем
@@ -22,11 +26,11 @@
 
 - Абзац и пункты списка — `bodyMedium`; заголовки первого–четвёртого уровня —
   `headlineSmall`, `titleLarge`, `titleMedium`, `titleSmall`: стили из
-  `AppTypography.textTheme` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#text-theme).
-- Между блоками — `AppSpacing.md` — [TOKEN-3](TOKEN-3-SPACING.md#md).
+  `AppTypography.textTheme` — [TOKEN-2](../TOKEN-2-TYPOGRAPHY.md#text-theme).
+- Между блоками — `AppSpacing.md` — [TOKEN-3](../TOKEN-3-SPACING.md#md).
 - Ссылка — цветом `AppColors.accent` с подчёркиванием того же цвета — [TOKEN-1](TOKEN-1-COLOR.md#accent).
-- Участок кода в абзаце — шрифтом кода `AppTypography.code` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#code), мельче основного кода, на фоне `AppColors.codeBackground` — [TOKEN-1](TOKEN-1-COLOR.md#code-background); его размер задан в виджете, токена у него нет.
-- Блок кода — [COMP-11](COMP-11-CODE-BLOCK.md).
-- Цитата — фон `AppColors.surface` — [TOKEN-1](TOKEN-1-COLOR.md#surface), полоса слева цветом `AppColors.accent` — [TOKEN-1](TOKEN-1-COLOR.md#accent), скругление `AppRadius.sm` — [TOKEN-4](TOKEN-4-RADIUS.md#sm), отступ внутри `AppSpacing.md` — [TOKEN-3](TOKEN-3-SPACING.md#md); толщина полосы задана в виджете, токена у неё нет.
-- Таблица — рамка цветом `AppColors.border` — [TOKEN-1](TOKEN-1-COLOR.md#border), отступ в ячейке `AppSpacing.sm` — [TOKEN-3](TOKEN-3-SPACING.md#sm); черта — линия того же цвета.
+- Участок кода в абзаце — шрифтом кода `AppTypography.code` — [TOKEN-2](../TOKEN-2-TYPOGRAPHY.md#code), мельче основного кода, на фоне `AppColors.codeBackground` — [TOKEN-1](TOKEN-1-COLOR.md#code-background); его размер задан в виджете, токена у него нет.
+- Блок кода — [COMP-11](../COMP-11-CODE-BLOCK.md).
+- Цитата — фон `AppColors.surface` — [TOKEN-1](TOKEN-1-COLOR.md#surface), полоса слева цветом `AppColors.accent` — [TOKEN-1](TOKEN-1-COLOR.md#accent), скругление `AppRadius.sm` — [TOKEN-4](../TOKEN-4-RADIUS.md#sm), отступ внутри `AppSpacing.md` — [TOKEN-3](../TOKEN-3-SPACING.md#md); толщина полосы задана в виджете, токена у неё нет.
+- Таблица — рамка цветом `AppColors.border` — [TOKEN-1](TOKEN-1-COLOR.md#border), отступ в ячейке `AppSpacing.sm` — [TOKEN-3](../TOKEN-3-SPACING.md#sm); черта — линия того же цвета.
 - Картинки условия — из хранилища файлов проекта.

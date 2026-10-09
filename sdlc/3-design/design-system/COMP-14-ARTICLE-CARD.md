@@ -16,5 +16,5 @@
 
 - Отступ между карточками: `AppSpacing.md` — [TOKEN-3](TOKEN-3-SPACING.md#md).
 - Отступ внутри: `AppSpacing.lg` — [TOKEN-3](TOKEN-3-SPACING.md#lg); между названием и описанием — `AppSpacing.xs` — [TOKEN-3](TOKEN-3-SPACING.md#xs); перед сведениями — `AppSpacing.md` — [TOKEN-3](TOKEN-3-SPACING.md#md); перед тегами — `AppSpacing.sm` — [TOKEN-3](TOKEN-3-SPACING.md#sm); между тегами — `AppSpacing.xs` — [TOKEN-3](TOKEN-3-SPACING.md#xs).
-- Название — `titleMedium`, описание — `bodyMedium` цветом `AppColors.textSecondary`: стили из `AppTypography.textTheme` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#text-theme), цвет — [TOKEN-1](TOKEN-1-COLOR.md#text-secondary).
-- Фон, рамка и скругление — из темы карточек: `AppColors.surface` — [TOKEN-1](TOKEN-1-COLOR.md#surface), `AppColors.border` — [TOKEN-1](TOKEN-1-COLOR.md#border), `AppRadius.lg` — [TOKEN-4](TOKEN-4-RADIUS.md#lg).
+- Название — `titleMedium`, описание — `bodyMedium` цветом `AppColors.textSecondary`: стили из `AppTypography.textTheme` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#text-theme), цвет — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#text-secondary).
+- Фон, рамка и скругление — из темы карточек: `AppColors.surface` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#surface), `AppColors.border` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#border), `AppRadius.lg` — [TOKEN-4](TOKEN-4-RADIUS.md#lg).

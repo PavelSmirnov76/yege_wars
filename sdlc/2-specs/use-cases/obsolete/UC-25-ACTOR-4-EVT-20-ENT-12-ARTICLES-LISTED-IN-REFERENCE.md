@@ -1,10 +1,10 @@
 > **Похоронен:** 2026-10-09
 > **Почему:** сбой загрузки — сразу сообщение, без автоповторов, — R46; «до перезагрузки страницы» вместо «до конца сессии»; проход 7
-> **Заменён:** [UC-36](../UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md)
+> **Заменён:** [UC-36](UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md)
 
 # UC-25: Справочник
 
-**Основание:** [R35](../../../0-vibes/prd/PRD.md#r35), [R36](../../../0-vibes/prd/PRD.md#r36), [R38](../../../0-vibes/prd/PRD.md#r38), [BT-13](../../../1-business-tasks/planning/BT-13-PLANNING-REFERENCE.md), [MOD-7](../../modules/MOD-7-REFERENCE.md).
+**Основание:** [R35](../../../0-vibes/prd/PRD.md#r35), [R36](../../../0-vibes/prd/PRD.md#r36), [R38](../../../0-vibes/prd/PRD.md#r38), [BT-13](../../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md), [MOD-7](../../modules/MOD-7-REFERENCE.md).
 
 **Актор, событие, сущность:** [ACTOR-4](../../actors/ACTOR-4-STUDENT-IN-SUBMISSION.md), [EVT-20](../../events/EVT-20-REFERENCE-OPENED-IN-REFERENCE.md), [ENT-12](../../entities/ENT-12-ARTICLE-IN-REFERENCE.md).
 

@@ -1,10 +1,12 @@
 > **Похоронен:** 2026-10-09
-> **Почему:** сбой загрузки без индикатора повторов — UC-36; проход 7
-> **Заменён:** [FIG-17](FIG-17-REFERENCE.md)
+> **Почему:** Чипы разделов кодификатора вместо тегов (UC-39) — решение владельца, проход 9 (raw/2026-10-09/ui-polish.md)
+> **Заменён:** [FIG-21](../FIG-21-REFERENCE.md)
 
-# FIG-13: Справочник
+# FIG-17: Справочник
 
-**Основание:** [UC-25](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md).
+supersedes: [FIG-13](FIG-13-REFERENCE.md)
+
+**Основание:** [UC-36](../../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md).
 
 ## Раскладка
 
@@ -23,10 +25,10 @@
 
 ## Состояния
 
-- [UC-25-P-01](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-01) — список карточек; нажатие на карточку открывает страницу статьи.
-- [UC-25-P-02](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-02) — выбранные чипы отмечены; пока задано хоть одно условие, рядом с чипами уровня — «Сбросить фильтры»; если значения фильтров не загрузились — только чипы уровня.
-- [UC-25-P-03](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-03) — вместо списка по центру, с отступом `AppSpacing.xl` — [TOKEN-3](../design-system/TOKEN-3-SPACING.md#xl), цветом `AppColors.textSecondary` — [TOKEN-1](../design-system/obsolete/TOKEN-1-COLOR.md#text-secondary): «В справочнике пока нет статей» или «По этим условиям ничего не нашлось».
-- [UC-25-P-04](../../2-specs/use-cases/obsolete/UC-25-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-25-p-04) — вместо списка индикатор загрузки по центру, пока идут повторы; затем [COMP-12](../design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
+- [UC-36-P-01](../../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-01) — список карточек; нажатие на карточку открывает страницу статьи.
+- [UC-36-P-02](../../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-02) — выбранные чипы отмечены; пока задано хоть одно условие, рядом с чипами уровня — «Сбросить фильтры»; если значения фильтров не загрузились — только чипы уровня.
+- [UC-36-P-03](../../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-03) — вместо списка по центру, с отступом `AppSpacing.xl` — [TOKEN-3](../design-system/TOKEN-3-SPACING.md#xl), цветом `AppColors.textSecondary` — [TOKEN-1](../design-system/obsolete/TOKEN-1-COLOR.md#text-secondary): «В справочнике пока нет статей» или «По этим условиям ничего не нашлось».
+- [UC-36-P-04](../../2-specs/use-cases/obsolete/UC-36-ACTOR-4-EVT-20-ENT-12-ARTICLES-LISTED-IN-REFERENCE.md#uc-36-p-04) — вместо списка по центру — [COMP-12](../design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
 
 ## Тексты
 

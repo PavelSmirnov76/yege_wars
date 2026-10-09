@@ -16,6 +16,6 @@
 
 ## Размеры и токены
 
-- Текст и иконка — цветом `AppColors.textSecondary` — [TOKEN-1](TOKEN-1-COLOR.md#text-secondary); стиль — `bodySmall` из `AppTypography.textTheme` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#text-theme).
+- Текст и иконка — цветом `AppColors.textSecondary` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#text-secondary); стиль — `bodySmall` из `AppTypography.textTheme` — [TOKEN-2](TOKEN-2-TYPOGRAPHY.md#text-theme).
 - Между частями — `AppSpacing.md` — [TOKEN-3](TOKEN-3-SPACING.md#md); между строками при переносе — `AppSpacing.xs` — [TOKEN-3](TOKEN-3-SPACING.md#xs); между иконкой и временем — `AppSpacing.xxs` — [TOKEN-3](TOKEN-3-SPACING.md#xxs).
 - Иконка часов мельче строки текста; её размер задан в виджете, токена у него нет.

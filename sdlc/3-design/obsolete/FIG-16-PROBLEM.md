@@ -1,12 +1,12 @@
 > **Похоронен:** 2026-10-09
-> **Почему:** состояния под UC-31…UC-35; проход 7
-> **Заменён:** [FIG-16](FIG-16-PROBLEM.md)
+> **Почему:** Вкладки на широком экране, «Запустить» и «Стоп» поровну, условие — одна область выделения, справка карточками (UC-40) — решение владельца, проход 9 (raw/2026-10-09/ui-polish.md)
+> **Заменён:** [FIG-20](../FIG-20-PROBLEM.md)
 
-# FIG-15: Задача
+# FIG-16: Задача
 
-supersedes: [FIG-12](FIG-12-PROBLEM.md)
+supersedes: [FIG-15](FIG-15-PROBLEM.md)
 
-**Основание:** [UC-15](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md), [UC-16](../../2-specs/use-cases/obsolete/UC-16-ACTOR-4-EVT-13-ENT-8-DRAFT-SAVED-IN-EDITOR.md), [UC-17](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md), [UC-18](../../2-specs/use-cases/UC-18-ACTOR-4-EVT-15-ENT-9-ANSWER-FILLED-IN-SUBMISSION.md), [UC-19](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md), [UC-20](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md), [UC-21](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-22](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md), [UC-27](../../2-specs/use-cases/obsolete/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md), [UC-28](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
+**Основание:** [UC-15](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md), [UC-31](../../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md), [UC-32](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md), [UC-18](../../2-specs/use-cases/UC-18-ACTOR-4-EVT-15-ENT-9-ANSWER-FILLED-IN-SUBMISSION.md), [UC-19](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md), [UC-33](../../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md), [UC-34](../../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md), [UC-35](../../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md), [UC-27](../../2-specs/use-cases/obsolete/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md), [UC-28](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
 
 ## Раскладка
 
@@ -47,12 +47,15 @@ supersedes: [FIG-12](FIG-12-PROBLEM.md)
 - [UC-15-P-01](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-01) — условие и разделы, как в раскладке; у задачи без файлов в разделе «Файлы» — «У задачи нет файлов с данными»; после «Копировать» — сообщение внизу экрана «Файл скопирован в буфер обмена».
 - [UC-15-P-02](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-02) — вместо страницы по центру — «Задача не найдена или ещё не открыта.» и «Повторить».
 - [UC-15-P-03](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-03) — вместо страницы по центру — сообщение об ошибке и «Повторить».
-- [UC-16-P-01](../../2-specs/use-cases/obsolete/UC-16-ACTOR-4-EVT-13-ENT-8-DRAFT-SAVED-IN-EDITOR.md#uc-16-p-01) — при открытии задачи в пустом поле кода — черновик.
-- [UC-17-P-01](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-01) — пока среда не загружена, до конца запуска — «Загружаю Python — это разовая загрузка, потерпите» с индикатором, «Запустить» доступна, «Стоп» нет; с загруженной средой — «Выполняется…» с индикатором, «Запустить» недоступна, «Стоп» доступна; затем «Готово за N с»; вывод — в консоли.
-- [UC-17-P-02](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-02) — трассировка в консоли цветом ошибки; строка состояния — «Программа завершилась ошибкой».
-- [UC-17-P-03](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-03) — строка состояния — «Остановлено»; «Стоп» доступна только с загруженной средой.
-- [UC-17-P-04](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-04) — сообщение в консоли цветом ошибки; строка состояния — «Не уложилось в отведённое время».
-- [UC-17-P-05](../../2-specs/use-cases/obsolete/UC-17-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-EDITOR.md#uc-17-p-05) — причина в консоли цветом ошибки.
+- [UC-31-P-01](../../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md#uc-31-p-01) — при открытии задачи в поле кода — черновик пользователя.
+- [UC-31-P-02](../../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md#uc-31-p-02) — при открытии задачи поле кода пустое.
+- [UC-31-P-03](../../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md#uc-31-p-03) — экран не меняется.
+- [UC-31-P-04](../../2-specs/use-cases/UC-31-ACTOR-4-EVT-23-ENT-15-DRAFT-SAVED-IN-CODE.md#uc-31-p-04) — вместо страницы по центру — сообщение об ошибке и «Повторить», как при сбое загрузки задачи.
+- [UC-32-P-01](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md#uc-32-p-01) — весь запуск «Запустить» недоступна, «Стоп» доступна; пока среда загружается — «Загружаю Python — это разовая загрузка, потерпите» с индикатором, во время выполнения — «Выполняется…» с индикатором; затем «Готово за N с»; вывод — в консоли.
+- [UC-32-P-02](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md#uc-32-p-02) — трассировка в консоли цветом ошибки; строка состояния — «Программа завершилась ошибкой».
+- [UC-32-P-03](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md#uc-32-p-03) — строка состояния — «Остановлено».
+- [UC-32-P-04](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md#uc-32-p-04) — сообщение в консоли цветом ошибки; строка состояния — «Не уложилось в отведённое время».
+- [UC-32-P-05](../../2-specs/use-cases/UC-32-ACTOR-4-EVT-14-ENT-9-RUN-FINISHED-IN-CODE.md#uc-32-p-05) — причина в консоли цветом ошибки.
 - [UC-18-P-01](../../2-specs/use-cases/UC-18-ACTOR-4-EVT-15-ENT-9-ANSWER-FILLED-IN-SUBMISSION.md#uc-18-p-01) — справа от поля ответа — кнопка «Взять из вывода», пока в выводе есть непустая строка; по нажатию ответ встаёт в поле.
 - [UC-19-P-01](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-01) — вердикт «Верно!», под ним блок «Задача решена!»: пояснение «Опубликованное решение увидят те, кто решил задачу» и кнопки «Опубликовать решение» и «Не сейчас».
 - [UC-19-P-02](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-02) — вердикт «Неверно. Попробуй ещё раз»; блока публикации нет.
@@ -60,17 +63,17 @@ supersedes: [FIG-12](FIG-12-PROBLEM.md)
 - [UC-19-P-04](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-04) — под кнопкой цветом ошибки — «Слишком много отправок, подождите минуту.»; вердикта нет.
 - [UC-19-P-05](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-05) — под кнопкой цветом ошибки — «Задача не найдена или недоступна.»; вердикта нет.
 - [UC-19-P-06](../../2-specs/use-cases/UC-19-ACTOR-4-EVT-16-ENT-11-ATTEMPT-CHECKED-IN-SUBMISSION.md#uc-19-p-06) — под кнопкой цветом ошибки — текст сбоя; вердикта нет.
-- [UC-20-P-01](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-01) — блок «Задача решена!» скрыт, переключатель у попытки включён.
-- [UC-20-P-02](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-02) — переключатель у попытки выключен.
-- [UC-20-P-03](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-03) — блок «Задача решена!» скрыт.
-- [UC-20-P-04](../../2-specs/use-cases/obsolete/UC-20-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-20-p-04) — блок «Задача решена!» скрыт, переключатель прежний, сообщения нет.
-- [UC-21-P-01](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-01) — под «Мои попытки» — строка на попытку: значок вердикта цветом вердикта, ответ моноширинным шрифтом, время; у верной — переключатель с подсказкой «Опубликовано».
-- [UC-21-P-02](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-02) — под «Мои попытки» — «Попыток пока не было».
-- [UC-21-P-03](../../2-specs/use-cases/obsolete/UC-21-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-21-p-03) — под «Мои попытки» пусто.
-- [UC-22-P-01](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-01) — на каждое решение — подпись «логин, ДД.ММ ЧЧ:ММ» и блок кода.
-- [UC-22-P-02](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-02) — «Решения других откроются после твоего верного ответа».
-- [UC-22-P-03](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-03) — «Пока никто не опубликовал своё решение».
-- [UC-22-P-04](../../2-specs/use-cases/obsolete/UC-22-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-22-p-04) — вместо списка индикатор загрузки, сообщения нет.
+- [UC-33-P-01](../../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-01) — блок «Задача решена!» скрыт, переключатель у попытки включён.
+- [UC-33-P-02](../../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-02) — переключатель у попытки выключен.
+- [UC-33-P-03](../../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-03) — блок «Задача решена!» скрыт.
+- [UC-33-P-04](../../2-specs/use-cases/UC-33-ACTOR-4-EVT-17-ENT-11-SOLUTION-PUBLISHED-IN-SUBMISSION.md#uc-33-p-04) — при сбое публикации из блока «Задача решена!» блок остаётся, под его кнопками цветом ошибки — текст ошибки; при сбое переключателя — сообщение внизу экрана с текстом ошибки, переключатель прежний.
+- [UC-34-P-01](../../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-01) — под «Мои попытки» — строка на попытку: значок вердикта цветом вердикта, ответ моноширинным шрифтом, время; у верной — переключатель с подсказкой «Опубликовано».
+- [UC-34-P-02](../../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-02) — под «Мои попытки» — «Попыток пока не было».
+- [UC-34-P-03](../../2-specs/use-cases/UC-34-ACTOR-4-EVT-12-ENT-11-ATTEMPTS-LISTED-IN-SUBMISSION.md#uc-34-p-03) — под «Мои попытки» — [COMP-12](../design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
+- [UC-35-P-01](../../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-01) — на каждое решение — подпись «логин, ДД.ММ ЧЧ:ММ» и блок кода.
+- [UC-35-P-02](../../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-02) — «Решения других откроются после твоего верного ответа».
+- [UC-35-P-03](../../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-03) — «Пока никто не опубликовал своё решение».
+- [UC-35-P-04](../../2-specs/use-cases/UC-35-ACTOR-4-EVT-12-ENT-11-SOLUTIONS-SHOWN-IN-SUBMISSION.md#uc-35-p-04) — вместо списка — [COMP-12](../design-system/COMP-12-ERROR-RETRY.md) с текстом ошибки.
 - [UC-27-P-01](../../2-specs/use-cases/obsolete/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-27-p-01) — в разделе «Справка» карточки статей, главные первыми и раскрыты; кнопка «Справка» открывает статью в разделе «Справочник»; над условием — подсказка, если есть главная статья.
 - [UC-27-P-02](../../2-specs/use-cases/obsolete/UC-27-ACTOR-4-EVT-12-ENT-12-HELP-SHOWN-IN-REFERENCE.md#uc-27-p-02) — в разделе «Справка» — «К этой задаче пока нет статей справочника» цветом `AppColors.textSecondary` — [TOKEN-1](../design-system/obsolete/TOKEN-1-COLOR.md#text-secondary); подсказки над условием нет.
 - [UC-28-P-01](../../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md#uc-28-p-01) — в условии название статьи ссылкой; нажатие открывает статью в разделе «Справочник».

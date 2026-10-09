@@ -16,4 +16,4 @@
 - Ширина не больше 400 — константа компонента, своего токена нет.
 - Отступ вокруг карточки: `AppSpacing.lg` — [TOKEN-3](TOKEN-3-SPACING.md#lg).
 - Отступ внутри и между заголовком и полями: `AppSpacing.xl` — [TOKEN-3](TOKEN-3-SPACING.md#xl).
-- Скругление и фон — из темы карточек: `AppRadius.lg` — [TOKEN-4](TOKEN-4-RADIUS.md#lg), `AppColors.surface` — [TOKEN-1](TOKEN-1-COLOR.md#surface).
+- Скругление и фон — из темы карточек: `AppRadius.lg` — [TOKEN-4](TOKEN-4-RADIUS.md#lg), `AppColors.surface` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#surface).

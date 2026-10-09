@@ -4,9 +4,9 @@
 
 ## Варианты
 
-- **Простая** — `AppColors.difficultyEasy` — [TOKEN-1](TOKEN-1-COLOR.md#difficulty-easy).
-- **Средняя** — `AppColors.difficultyMedium` — [TOKEN-1](TOKEN-1-COLOR.md#difficulty-medium).
-- **Сложная** — `AppColors.difficultyHard` — [TOKEN-1](TOKEN-1-COLOR.md#difficulty-hard).
+- **Простая** — `AppColors.difficultyEasy` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#difficulty-easy).
+- **Средняя** — `AppColors.difficultyMedium` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#difficulty-medium).
+- **Сложная** — `AppColors.difficultyHard` — [TOKEN-1](obsolete/TOKEN-1-COLOR.md#difficulty-hard).
 
 ## Состояния
 

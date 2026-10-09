@@ -1,6 +1,6 @@
-# FIG-18: Статья
+# FIG-22: Статья
 
-supersedes: [FIG-14](obsolete/FIG-14-ARTICLE.md)
+supersedes: [FIG-18](obsolete/FIG-18-ARTICLE.md)
 
 **Основание:** [UC-37](../2-specs/use-cases/UC-37-ACTOR-4-EVT-21-ENT-12-ARTICLE-SHOWN-IN-REFERENCE.md), [UC-28](../2-specs/use-cases/UC-28-ACTOR-4-EVT-22-ENT-12-LINK-SHOWN-IN-REFERENCE.md).
 
@@ -15,10 +15,13 @@ supersedes: [FIG-14](obsolete/FIG-14-ARTICLE.md)
 виджете, токена у него нет. Сверху вниз: название — `headlineSmall` из
 `AppTypography.textTheme` — [TOKEN-2](design-system/TOKEN-2-TYPOGRAPHY.md#text-theme);
 сведения о статье [COMP-13](design-system/COMP-13-ARTICLE-META.md); все теги
-чипами; текст статьи [COMP-15](design-system/COMP-15-MARKDOWN.md). Перед
+чипами; текст статьи [COMP-16](design-system/COMP-16-MARKDOWN.md). Перед
 сведениями и перед тегами — `AppSpacing.sm` — [TOKEN-3](design-system/TOKEN-3-SPACING.md#sm),
 между тегами — `AppSpacing.xs` — [TOKEN-3](design-system/TOKEN-3-SPACING.md#xs),
 перед текстом — `AppSpacing.lg` — [TOKEN-3](design-system/TOKEN-3-SPACING.md#lg).
+
+Вся статья — одна область выделения: выделение идёт от названия до конца
+текста через сведения, теги, абзацы, таблицы и блоки кода.
 
 ## Состояния
 
@@ -47,4 +50,4 @@ supersedes: [FIG-14](obsolete/FIG-14-ARTICLE.md)
 
 ## Компоненты
 
-[COMP-4](design-system/COMP-4-NAVIGATION.md), [COMP-11](design-system/COMP-11-CODE-BLOCK.md), [COMP-12](design-system/COMP-12-ERROR-RETRY.md), [COMP-13](design-system/COMP-13-ARTICLE-META.md), [COMP-15](design-system/COMP-15-MARKDOWN.md).
+[COMP-4](design-system/COMP-4-NAVIGATION.md), [COMP-11](design-system/COMP-11-CODE-BLOCK.md), [COMP-12](design-system/COMP-12-ERROR-RETRY.md), [COMP-13](design-system/COMP-13-ARTICLE-META.md), [COMP-16](design-system/COMP-16-MARKDOWN.md).
