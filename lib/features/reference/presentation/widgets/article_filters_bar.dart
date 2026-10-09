@@ -8,7 +8,7 @@ import 'package:yege_wars/features/reference/presentation/widgets/article_level_
 
 /// Фильтры справочника: уровень, номер задания и тема.
 ///
-/// Реализует UC-25.
+/// Реализует UC-36.
 class ArticleFiltersBar extends ConsumerWidget {
   /// Создаёт панель фильтров.
   const ArticleFiltersBar({super.key});

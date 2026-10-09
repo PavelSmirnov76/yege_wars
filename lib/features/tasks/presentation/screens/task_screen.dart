@@ -7,6 +7,7 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/markdown/app_markdown.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/editor/presentation/controllers/draft_controller.dart';
 import 'package:yege_wars/features/editor/presentation/widgets/editor_panel.dart';
 import 'package:yege_wars/features/reference/presentation/controllers/reference_controllers.dart';
 import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
@@ -23,8 +24,10 @@ import 'package:yege_wars/features/tasks/presentation/widgets/task_help_panel.da
 ///
 /// Редактор кода с запуском и отправкой ответа и решения других — тоже
 /// здесь: на широком экране справа от условия, на узком — вкладками.
+/// Черновик кода грузится вместе с задачей: пока нет обоих, страница не
+/// открыта, а сбой любого — сообщение с «Повторить» вместо страницы.
 ///
-/// Реализует UC-15, UC-27 и UC-28.
+/// Реализует UC-15, UC-27, UC-28, UC-31 и UC-35.
 class TaskScreen extends ConsumerWidget {
   /// Создаёт страницу задачи с идентификатором [slug].
   const TaskScreen({required this.slug, super.key});
@@ -36,20 +39,38 @@ class TaskScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final task = ref.watch(taskProvider(slug));
+    // Черновик ищется по id задачи — он известен, когда пришла задача.
+    final taskId = task.value?.brief.id;
+    final draft = taskId == null
+        ? null
+        : ref.watch(draftControllerProvider(taskId));
+    final error = switch ((task, draft)) {
+      (AsyncError(:final error), _) || (_, AsyncError(:final error)) => error,
+      _ => null,
+    };
+    final loaded = switch ((task, draft)) {
+      (AsyncData(:final value), AsyncData()) => value,
+      _ => null,
+    };
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          task.value?.brief.title ?? l10n.navCatalog,
+          loaded?.brief.title ?? l10n.navCatalog,
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      body: switch (task) {
-        AsyncError(:final error) => ReferenceErrorView(
+      body: switch ((error, loaded)) {
+        (final Object error, _) => ReferenceErrorView(
           error: error,
-          onRetry: () => ref.invalidate(taskProvider(slug)),
+          onRetry: () {
+            ref.invalidate(taskProvider(slug));
+            if (taskId != null) {
+              ref.invalidate(draftControllerProvider(taskId));
+            }
+          },
         ),
-        AsyncData(:final value) => _TaskBody(task: value),
+        (_, final TaskDetail task) => _TaskBody(task: task),
         _ => const Center(child: CircularProgressIndicator()),
       },
     );
@@ -57,13 +78,35 @@ class TaskScreen extends ConsumerWidget {
 }
 
 /// Содержимое страницы: на широком экране две колонки, на узком — вкладки.
-class _TaskBody extends StatelessWidget {
+///
+/// Переход в другой раздел страницу не снимает, а прячет: ветка навигации
+/// остаётся в памяти с выключенным `TickerMode`. В этот момент черновик
+/// записывается сразу — это уход со страницы.
+class _TaskBody extends ConsumerStatefulWidget {
   const _TaskBody({required this.task});
 
   final TaskDetail task;
 
   @override
+  ConsumerState<_TaskBody> createState() => _TaskBodyState();
+}
+
+class _TaskBodyState extends ConsumerState<_TaskBody> {
+  bool _isVisible = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isVisible = TickerMode.valuesOf(context).enabled;
+    if (_isVisible && !isVisible) {
+      ref.read(draftControllerProvider(widget.task.brief.id).notifier).flush();
+    }
+    _isVisible = isVisible;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final task = widget.task;
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth < AppBreakpoints.tabletMax) {
@@ -246,6 +289,10 @@ class _TaskSidePanels extends StatelessWidget {
 }
 
 /// Решения других учеников: открываются после своего верного ответа.
+///
+/// Решена ли задача, видно по своим попыткам. Если они не загрузились, это
+/// неизвестно — вместо решений сообщение и «Повторить», а не «откроются
+/// после верного ответа».
 class _TaskSolutions extends ConsumerWidget {
   const _TaskSolutions({required this.task});
 
@@ -253,8 +300,15 @@ class _TaskSolutions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attempts = ref.watch(myAttemptsProvider(task.brief.id)).value;
-    final isSolved = attempts?.any((attempt) => attempt.isCorrect) ?? false;
+    final attempts = ref.watch(myAttemptsProvider(task.brief.id));
+    if (attempts case AsyncError(:final error)) {
+      return ReferenceErrorView(
+        error: error,
+        onRetry: () => ref.invalidate(myAttemptsProvider(task.brief.id)),
+      );
+    }
+    final isSolved =
+        attempts.value?.any((attempt) => attempt.isCorrect) ?? false;
     return SolutionsList(taskId: task.brief.id, isUnlocked: isSolved);
   }
 }

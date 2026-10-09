@@ -10,7 +10,7 @@ part 'reference_controllers.g.dart';
 
 /// Текущие условия отбора статей в разделе «Справочник».
 ///
-/// Реализует UC-25.
+/// Реализует UC-36.
 @riverpod
 class ArticleFilterController extends _$ArticleFilterController {
   @override
@@ -40,7 +40,7 @@ class ArticleFilterController extends _$ArticleFilterController {
 
 /// Список статей по текущему фильтру.
 ///
-/// Реализует UC-25.
+/// Реализует UC-36.
 @riverpod
 Future<List<ArticleBrief>> articles(Ref ref) async {
   final filter = ref.watch(articleFilterControllerProvider);
@@ -55,7 +55,7 @@ Future<List<ArticleBrief>> articles(Ref ref) async {
 ///
 /// Считается по всему справочнику один раз за сессию — статей немного.
 ///
-/// Реализует UC-25.
+/// Реализует UC-36.
 @Riverpod(keepAlive: true)
 Future<ArticleFacets> articleFacets(Ref ref) async {
   final result = await ref.watch(listArticlesUseCaseProvider)(
@@ -76,7 +76,7 @@ Future<ArticleFacets> articleFacets(Ref ref) async {
 
 /// Статья справочника по slug.
 ///
-/// Реализует UC-26.
+/// Реализует UC-37.
 @riverpod
 Future<ReferenceArticle> article(Ref ref, String slug) async {
   final result = await ref.watch(getArticleUseCaseProvider)(slug);

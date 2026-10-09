@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,7 +48,10 @@ void main() {
   });
 
   /// Открывает вкладку «Код» с полем ответа.
-  Future<void> openSolve(WidgetTester tester) async {
+  ///
+  /// Без [settle] вкладка открывается конечным числом кадров: так видно,
+  /// что сбой загрузки показан сразу, а не после автоповторов.
+  Future<void> openSolve(WidgetTester tester, {bool settle = true}) async {
     await tester.binding.setSurfaceSize(const Size(500, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -66,14 +71,41 @@ void main() {
         matching: find.text(l10n.editorTitle),
       ),
     );
-    await tester.pumpAndSettle();
+    if (settle) {
+      await tester.pumpAndSettle();
+      return;
+    }
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
   }
 
   /// Поле ответа.
   Finder answerField() =>
       find.widgetWithText(TextField, l10n.submitAnswerLabel);
 
-  testWidgets('UC-19-P-01, UC-20-P-01: верный ответ показывает вердикт и '
+  /// Переключатель «Опубликовано» у попытки.
+  Switch publishedSwitch(WidgetTester tester) =>
+      tester.widget<Switch>(find.byType(Switch));
+
+  /// Нажимает переключатель «Опубликовано».
+  Future<void> tapSwitch(WidgetTester tester) async {
+    await tester.ensureVisible(find.byType(Switch));
+    await tester.pump();
+    await tester.tap(find.byType(Switch));
+  }
+
+  /// Та же верная попытка, но опубликованная.
+  final publishedAttempt = Submission(
+    id: testCorrectAttempt.id,
+    answer: testCorrectAttempt.answer,
+    code: testCorrectAttempt.code,
+    isCorrect: true,
+    isPublished: true,
+    createdAt: testCorrectAttempt.createdAt,
+  );
+
+  testWidgets('UC-19-P-01, UC-33-P-01: верный ответ показывает вердикт и '
       'предлагает публикацию', (
     tester,
   ) async {
@@ -210,7 +242,7 @@ void main() {
     expect(submissions.lastAnswer, '446');
   });
 
-  testWidgets('UC-21-P-01: мои попытки показываются с вердиктом', (
+  testWidgets('UC-34-P-01: мои попытки показываются с вердиктом', (
     tester,
   ) async {
     submissions.attemptsResult = Ok([testCorrectAttempt]);
@@ -244,7 +276,7 @@ void main() {
     expect(find.byType(VerdictBanner), findsNothing);
   });
 
-  testWidgets('UC-20-P-03: «Не сейчас» скрывает блок и не публикует', (
+  testWidgets('UC-33-P-03: «Не сейчас» скрывает блок и не публикует', (
     tester,
   ) async {
     await openSolve(tester);
@@ -261,8 +293,8 @@ void main() {
     expect(submissions.lastPublishedId, isNull);
   });
 
-  testWidgets('UC-20-P-04: публикация не прошла — сообщения нет, блок скрыт, '
-      'переключатель прежний', (
+  testWidgets('UC-33-P-04: публикация из блока не прошла — блок остаётся, '
+      'под кнопками текст ошибки, опубликовать можно снова', (
     tester,
   ) async {
     const failure = NetworkFailure();
@@ -274,18 +306,101 @@ void main() {
     await tester.enterText(answerField(), '446');
     await tester.tap(find.widgetWithText(FilledButton, l10n.submitButton));
     await tester.pumpAndSettle();
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    expect(publishedSwitch(tester).value, isFalse);
 
-    await tester.tap(find.widgetWithText(FilledButton, l10n.submitPublish));
+    final publish = find.widgetWithText(FilledButton, l10n.submitPublish);
+    await tester.tap(publish);
     await tester.pumpAndSettle();
 
     expect(submissions.lastPublishedId, testCorrectAttempt.id);
-    expect(find.text(failure.message), findsNothing);
+    expect(find.text(l10n.submitSolvedTitle), findsOneWidget);
+    expect(find.text(failure.message), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text(failure.message)).dy,
+      greaterThan(tester.getBottomLeft(publish).dy),
+    );
+    expect(find.byType(SnackBar), findsNothing);
+    expect(publishedSwitch(tester).value, isFalse);
+
+    // Повтор: на этот раз база публикует — блок скрывается.
+    submissions
+      ..publishResult = const Ok<void>(null)
+      ..attemptsResult = Ok([publishedAttempt]);
+    await tester.tap(publish);
+    await tester.pumpAndSettle();
+
+    expect(submissions.lastPublishedValue, isTrue);
     expect(find.text(l10n.submitSolvedTitle), findsNothing);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    expect(find.text(failure.message), findsNothing);
+    expect(publishedSwitch(tester).value, isTrue);
   });
 
-  testWidgets('UC-21-P-02: без попыток — «Попыток пока не было»', (
+  testWidgets('UC-33-P-04: переключатель не переключился — внизу экрана '
+      'сообщение с текстом ошибки, переключатель прежний', (tester) async {
+    const failure = NetworkFailure();
+    submissions
+      ..attemptsResult = Ok([testCorrectAttempt])
+      ..publishResult = const Err(failure);
+    await openSolve(tester);
+    final attemptsCalls = submissions.attemptsCalls;
+
+    await tapSwitch(tester);
+    await tester.pumpAndSettle();
+
+    expect(submissions.lastPublishedValue, isTrue);
+    expect(
+      find.descendant(
+        of: find.byType(SnackBar),
+        matching: find.text(failure.message),
+      ),
+      findsOneWidget,
+    );
+    expect(publishedSwitch(tester).value, isFalse);
+    expect(submissions.attemptsCalls, attemptsCalls);
+  });
+
+  testWidgets('UC-33-P-01: после публикации из блока переключатель у попытки '
+      'включён, даже если база ответила не сразу', (tester) async {
+    submissions.attemptsResult = Ok([testCorrectAttempt]);
+    await openSolve(tester);
+    await tester.enterText(answerField(), '446');
+    await tester.tap(find.widgetWithText(FilledButton, l10n.submitButton));
+    await tester.pumpAndSettle();
+
+    submissions.publishGate = Completer<void>();
+    await tester.tap(find.widgetWithText(FilledButton, l10n.submitPublish));
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    submissions.attemptsResult = Ok([publishedAttempt]);
+    submissions.publishGate!.complete();
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.submitSolvedTitle), findsNothing);
+    expect(publishedSwitch(tester).value, isTrue);
+  });
+
+  testWidgets('UC-33-P-02: снятие с публикации переключателем — переключатель '
+      'выключен, даже если база ответила не сразу', (tester) async {
+    submissions.attemptsResult = Ok([publishedAttempt]);
+    await openSolve(tester);
+    expect(publishedSwitch(tester).value, isTrue);
+
+    submissions.publishGate = Completer<void>();
+    await tapSwitch(tester);
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    submissions.attemptsResult = Ok([testCorrectAttempt]);
+    submissions.publishGate!.complete();
+    await tester.pumpAndSettle();
+
+    expect(submissions.lastPublishedValue, isFalse);
+    expect(publishedSwitch(tester).value, isFalse);
+    expect(find.byType(SnackBar), findsNothing);
+  });
+
+  testWidgets('UC-34-P-02: без попыток — «Попыток пока не было»', (
     tester,
   ) async {
     await openSolve(tester);
@@ -293,34 +408,40 @@ void main() {
     expect(find.text(l10n.attemptsEmpty), findsOneWidget);
   });
 
-  testWidgets('UC-21-P-03: сбой загрузки попыток — ни списка, ни сообщения', (
+  testWidgets('UC-34-P-03: сбой загрузки попыток — сразу сообщение и '
+      '«Повторить» вместо списка', (
     tester,
   ) async {
     const failure = NetworkFailure();
     submissions.attemptsResult = const Err(failure);
-    await openSolve(tester);
+    await openSolve(tester, settle: false);
 
-    // Экран пути: заголовок есть, списка и сообщения нет.
-    void expectNoAttempts() {
-      expect(find.text(l10n.attemptsTitle), findsOneWidget);
-      expect(find.text(l10n.attemptsEmpty), findsNothing);
-      expect(find.byType(Switch), findsNothing);
-      expect(find.text(failure.message), findsNothing);
-    }
-
-    // Пока Riverpod повторяет загрузку — AsyncLoading с ошибкой внутри.
-    final attempts = myAttemptsProvider(testTask24.id);
-    final retrying = containerOf(tester).read(attempts);
-    expect(retrying, isA<AsyncLoading<List<Submission>>>());
-    expect(retrying.error, failure);
-    expectNoAttempts();
-
-    // После последнего повтора — AsyncError.
-    await pumpUntilRetriesEnd(tester, attempts);
+    // Автоповторов нет: провайдер сразу в AsyncError, запрос один.
     expect(
-      containerOf(tester).read(attempts),
+      containerOf(tester).read(myAttemptsProvider(testTask24.id)),
       isA<AsyncError<List<Submission>>>(),
     );
-    expectNoAttempts();
+    expect(submissions.attemptsCalls, 1);
+
+    final retry = find.widgetWithText(OutlinedButton, l10n.commonRetry);
+    expect(find.text(failure.message), findsOneWidget);
+    expect(retry, findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text(failure.message)).dy,
+      greaterThan(tester.getBottomLeft(find.text(l10n.attemptsTitle)).dy),
+    );
+    expect(find.text(l10n.attemptsEmpty), findsNothing);
+    expect(find.byType(Switch), findsNothing);
+
+    // «Повторить» запрашивает попытки заново.
+    submissions.attemptsResult = Ok([testCorrectAttempt]);
+    await tester.ensureVisible(retry);
+    await tester.pump();
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    expect(submissions.attemptsCalls, 2);
+    expect(find.text(failure.message), findsNothing);
+    expect(find.byType(Switch), findsOneWidget);
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/app.dart';
+import 'package:yege_wars/app/provider_retry.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/app/router/app_routes.dart';
 import 'package:yege_wars/core/error/result.dart';
@@ -43,6 +44,7 @@ void main() {
   Future<void> pumpWithUnknownSession(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
+        retry: noProviderRetry,
         overrides: [authRepositoryProvider.overrideWithValue(repository)],
         child: const YegeWarsApp(),
       ),

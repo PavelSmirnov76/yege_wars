@@ -5,7 +5,7 @@ import 'package:yege_wars/features/reference/domain/repositories/reference_repos
 
 /// Список статей справочника по фильтру.
 ///
-/// Реализует UC-25.
+/// Реализует UC-36.
 final class ListArticlesUseCase {
   /// Создаёт use case поверх [ReferenceRepository].
   const ListArticlesUseCase(this._repository);

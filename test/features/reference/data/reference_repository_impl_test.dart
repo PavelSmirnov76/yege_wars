@@ -42,7 +42,7 @@ void main() {
       expect(result.valueOrNull?.single.level, ArticleLevel.basic);
     });
 
-    test('UC-25-P-02: фильтр передаётся в datasource без изменений', () async {
+    test('UC-36-P-02: фильтр передаётся в datasource без изменений', () async {
       const filter = ArticleFilter(egeNumber: 24, query: 'окно');
       when(() => dataSource.fetchArticles(any())).thenAnswer((_) async => []);
 
@@ -87,7 +87,7 @@ void main() {
       expect(result.valueOrNull?.contentMd, '## Когда это нужно');
     });
 
-    test('UC-26-P-02: отсутствующая статья — понятная ошибка', () async {
+    test('UC-37-P-02: отсутствующая статья — понятная ошибка', () async {
       when(() => dataSource.fetchArticle('нет')).thenAnswer((_) async => null);
 
       final result = await repository.getArticle('нет');

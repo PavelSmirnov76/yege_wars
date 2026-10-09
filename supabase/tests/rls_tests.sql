@@ -473,7 +473,7 @@ end
 $$;
 
 -- До публикации Алиса не видит попыток Боба вообще
--- UC-22-P-01: решившему задачу неопубликованные попытки других не видны
+-- UC-35-P-01: решившему задачу неопубликованные попытки других не видны
 do $$
 declare
   v_alice uuid;
@@ -562,7 +562,7 @@ begin
 
   perform tests.login(v_alice);
 
-  -- UC-22-P-01: решившему видна ровно опубликованная попытка другого по этой задаче
+  -- UC-35-P-01: решившему видна ровно опубликованная попытка другого по этой задаче
   select count(*) into v_cnt from public.submissions where user_id = v_bob;
   if v_cnt <> 1 then
     raise exception 'ТЕСТ ПРОВАЛЕН (ж): Алиса видит % попыток Боба, ожидалась ровно 1 (опубликованная по t-pair)', v_cnt;
@@ -575,7 +575,7 @@ begin
     raise exception 'ТЕСТ ПРОВАЛЕН (ж): Алисе видна не та попытка Боба по t-pair (или она не опубликована)';
   end if;
 
-  -- UC-22-P-02: опубликованная попытка другого по задаче, которую ученик не решил, не видна
+  -- UC-35-P-02: опубликованная попытка другого по задаче, которую ученик не решил, не видна
   select count(*) into v_cnt
     from public.submissions
    where user_id = v_bob and task_id = v_other;
@@ -627,7 +627,7 @@ begin
   perform tests.login(v_alice);
 
   -- чужая попытка
-  -- UC-20-P-04: публикация чужой попытки — [not_owner]
+  -- UC-33-P-04: публикация чужой попытки — [not_owner]
   begin
     perform public.set_solution_published(v_bob_sub, true);
     raise exception 'ТЕСТ ПРОВАЛЕН (з): Алиса опубликовала чужую попытку';
@@ -640,7 +640,7 @@ begin
   end;
 
   -- своя, но неверная
-  -- UC-20-P-04: публикация своей неверной попытки — [not_correct]
+  -- UC-33-P-04: публикация своей неверной попытки — [not_correct]
   begin
     perform public.set_solution_published(v_alice_wrong, true);
     raise exception 'ТЕСТ ПРОВАЛЕН (з): опубликована неверная попытка';
@@ -653,7 +653,7 @@ begin
   end;
 
   -- своя верная: публикация
-  -- UC-20-P-01: публикация своей верной попытки — время публикации записано
+  -- UC-33-P-01: публикация своей верной попытки — время публикации записано
   perform public.set_solution_published(v_alice_correct, true);
   select published_at into v_pub_at from public.submissions where id = v_alice_correct;
   if v_pub_at is null then
@@ -662,7 +662,7 @@ begin
   raise notice 'OK: (з) публикация своей верной попытки: published_at заполнен';
 
   -- снятие публикации
-  -- UC-20-P-02: снятие с публикации — время публикации снято
+  -- UC-33-P-02: снятие с публикации — время публикации снято
   perform public.set_solution_published(v_alice_correct, false);
   select published_at into v_pub_at from public.submissions where id = v_alice_correct;
   if v_pub_at is not null then
@@ -1447,7 +1447,7 @@ begin
     raise notice 'OK: (н) прямая запись в task_files под студентом — permission denied';
   end;
 
-  -- UC-25-P-01, UC-26-P-01: опубликованная статья ученику видна
+  -- UC-36-P-01, UC-37-P-01: опубликованная статья ученику видна
   select count(*) into v_cnt from public.reference_articles where slug = 'file-reading';
   if v_cnt <> 1 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту не видна опубликованная статья';
@@ -1485,7 +1485,7 @@ begin
   perform tests.logout();
 
   perform tests.login(v_alice);
-  -- UC-25-P-01, UC-26-P-02, UC-28-P-02: неопубликованная статья ученику не видна
+  -- UC-36-P-01, UC-37-P-02, UC-28-P-02: неопубликованная статья ученику не видна
   select count(*) into v_cnt from public.reference_articles where slug = 'draft-article';
   if v_cnt <> 0 then
     raise exception 'ТЕСТ ПРОВАЛЕН (н): студенту видна неопубликованная статья';
@@ -1830,6 +1830,7 @@ begin
   insert into privileges_expected values
     ('app_settings',       'authenticated', 'SELECT,UPDATE'),
     ('audit_log',          'authenticated', 'SELECT'),
+    ('drafts',             'authenticated', 'DELETE,INSERT,SELECT,UPDATE'),
     ('profiles',           'authenticated', 'SELECT'),
     ('reference_articles', 'authenticated', 'SELECT'),
     ('submissions',        'authenticated', 'SELECT'),
@@ -2573,6 +2574,298 @@ begin
     raise notice 'OK: (у) прямой delete из submissions — permission denied';
   end;
   perform tests.logout();
+end
+$$;
+
+-- =============================================================================
+-- (ф) drafts: черновик видит и меняет только автор, пишет — по видимой задаче
+-- Запись — тем же insert … on conflict do update, что шлёт PostgREST на upsert
+-- по ключу (user_id, task_id). Пишет alice по опубликованной t-single.
+-- =============================================================================
+
+-- UC-31-P-01: автор пишет черновик и читает его
+do $$
+declare
+  v_alice uuid;
+  v_task  uuid;
+  v_code  text;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+
+  perform tests.login(v_alice);
+  insert into public.drafts (user_id, task_id, code)
+  values (v_alice, v_task, 'print(1)')
+  on conflict (user_id, task_id) do update
+    set user_id = excluded.user_id, task_id = excluded.task_id, code = excluded.code;
+
+  select code into v_code from public.drafts where task_id = v_task;
+  perform tests.logout();
+
+  if v_code is distinct from 'print(1)' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): автор прочитал черновик %, ожидался print(1)',
+      coalesce(v_code, '<нет строки>');
+  end if;
+  raise notice 'OK: (ф) автор пишет черновик и читает его';
+end
+$$;
+
+-- UC-31-P-01: автор перезаписывает черновик — строка одна, время записи новое
+do $$
+declare
+  v_alice  uuid;
+  v_task   uuid;
+  v_before timestamptz;
+  v_after  timestamptz;
+  v_code   text;
+  v_cnt    bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+  select updated_at into v_before
+    from public.drafts
+   where user_id = v_alice and task_id = v_task;
+
+  perform tests.login(v_alice);
+  insert into public.drafts (user_id, task_id, code)
+  values (v_alice, v_task, 'print(2)')
+  on conflict (user_id, task_id) do update
+    set user_id = excluded.user_id, task_id = excluded.task_id, code = excluded.code;
+
+  select count(*), max(code), max(updated_at)
+    into v_cnt, v_code, v_after
+    from public.drafts
+   where task_id = v_task;
+  perform tests.logout();
+
+  if v_cnt <> 1 or v_code is distinct from 'print(2)' then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): после перезаписи строк %, код %, ожидалась одна строка print(2)',
+      v_cnt, coalesce(v_code, '<нет>');
+  end if;
+  if not (v_after > v_before) then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): время записи не обновилось: было %, стало %',
+      v_before, v_after;
+  end if;
+  raise notice 'OK: (ф) автор перезаписывает черновик: строка одна, время записи новое';
+end
+$$;
+
+-- Чужой черновик не виден и не меняется — ни ученику, ни администратору
+do $$
+declare
+  v_alice uuid;
+  v_task  uuid;
+  v_other uuid;
+  v_name  text;
+  v_user  uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+  select id into v_other from public.tasks where slug = 't-pair';
+
+  foreach v_name in array array['bob', 'boss'] loop
+    select id into v_user from public.profiles where username = v_name;
+    perform tests.login(v_user);
+
+    select count(*) into v_cnt from public.drafts where user_id = v_alice;
+    if v_cnt <> 0 then
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % видит чужой черновик', v_name;
+    end if;
+
+    update public.drafts set code = 'чужое' where user_id = v_alice;
+    get diagnostics v_cnt = row_count;
+    if v_cnt <> 0 then
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % изменил чужой черновик', v_name;
+    end if;
+
+    delete from public.drafts where user_id = v_alice;
+    get diagnostics v_cnt = row_count;
+    if v_cnt <> 0 then
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % удалил чужой черновик', v_name;
+    end if;
+
+    -- без where строки не читаются, и select-политика их не прячет:
+    -- чужое отсекают только политики update и delete
+    update public.drafts set code = 'чужое';
+    get diagnostics v_cnt = row_count;
+    if v_cnt <> 0 then
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % изменил чужой черновик без where', v_name;
+    end if;
+
+    delete from public.drafts;
+    get diagnostics v_cnt = row_count;
+    if v_cnt <> 0 then
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % удалил чужой черновик без where', v_name;
+    end if;
+
+    -- новая строка за другого — проверка вставки
+    begin
+      insert into public.drafts (user_id, task_id, code)
+      values (v_alice, v_other, 'чужое');
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % записал черновик за другого', v_name;
+    exception when insufficient_privilege then
+      null;
+    end;
+
+    -- upsert поверх чужой строки — проверка ветки update
+    begin
+      insert into public.drafts (user_id, task_id, code)
+      values (v_alice, v_task, 'чужое')
+      on conflict (user_id, task_id) do update
+        set user_id = excluded.user_id, task_id = excluded.task_id, code = excluded.code;
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): % перезаписал чужой черновик upsert', v_name;
+    exception when insufficient_privilege then
+      null;
+    end;
+
+    perform tests.logout();
+  end loop;
+
+  select count(*) into v_cnt
+    from public.drafts
+   where user_id = v_alice and task_id = v_task and code = 'print(2)';
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): черновик автора изменился или пропал';
+  end if;
+  select count(*) into v_cnt from public.drafts where task_id = v_other;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): появился черновик, записанный за другого';
+  end if;
+  raise notice 'OK: (ф) чужой черновик не виден и не меняется — ни ученику, ни администратору';
+end
+$$;
+
+-- По невидимой задаче черновик не записать — ни новой строкой, ни переносом
+do $$
+declare
+  v_alice uuid;
+  v_task  uuid;
+  v_unpub uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+  select id into v_unpub from public.tasks where slug = 't-unpub';
+
+  perform tests.login(v_alice);
+  begin
+    insert into public.drafts (user_id, task_id, code)
+    values (v_alice, v_unpub, 'print(5)')
+    on conflict (user_id, task_id) do update
+      set user_id = excluded.user_id, task_id = excluded.task_id, code = excluded.code;
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): записан черновик по неопубликованной задаче';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    update public.drafts set task_id = v_unpub where task_id = v_task;
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): черновик перенесён на неопубликованную задачу';
+  exception when insufficient_privilege then
+    null;
+  end;
+  perform tests.logout();
+
+  select count(*) into v_cnt from public.drafts where task_id = v_unpub;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): у неопубликованной задачи черновиков: %', v_cnt;
+  end if;
+  raise notice 'OK: (ф) по невидимой задаче черновик не записать';
+end
+$$;
+
+-- Аноним не может ничего
+do $$
+declare
+  v_task uuid;
+  v_op   text;
+begin
+  select id into v_task from public.tasks where slug = 't-single';
+
+  perform set_config('role', 'anon', false);
+  foreach v_op in array array['select', 'insert', 'update', 'delete'] loop
+    begin
+      case v_op
+        when 'select' then
+          perform 1 from public.drafts limit 1;
+        when 'insert' then
+          insert into public.drafts (user_id, task_id, code)
+          values (gen_random_uuid(), v_task, 'print(1)');
+        when 'update' then
+          update public.drafts set code = 'print(1)';
+        when 'delete' then
+          delete from public.drafts;
+      end case;
+      raise exception 'ТЕСТ ПРОВАЛЕН (ф): аноним выполнил % на drafts', v_op;
+    exception when insufficient_privilege then
+      null;
+    end;
+  end loop;
+  perform set_config('role', 'none', false);
+
+  raise notice 'OK: (ф) аноним — permission denied на select, insert, update и delete';
+end
+$$;
+
+-- UC-31-P-02: автор удаляет свой черновик
+do $$
+declare
+  v_alice uuid;
+  v_task  uuid;
+  v_del   bigint;
+  v_left  bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+
+  perform tests.login(v_alice);
+  delete from public.drafts where task_id = v_task;
+  get diagnostics v_del = row_count;
+  select count(*) into v_left from public.drafts where task_id = v_task;
+  perform tests.logout();
+
+  if v_del <> 1 or v_left <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): удалено строк %, осталось %, ожидалось 1 и 0',
+      v_del, v_left;
+  end if;
+  raise notice 'OK: (ф) автор удаляет свой черновик';
+end
+$$;
+
+-- С задачей и с пользователем удаляется и черновик (сетап — суперпользователь)
+do $$
+declare
+  v_alice uuid;
+  v_henry uuid;
+  v_task  uuid;
+  v_temp  uuid;
+  v_cnt   bigint;
+begin
+  v_henry := tests.signup('henry');
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_task  from public.tasks where slug = 't-single';
+
+  insert into public.tasks (slug, ege_number, title, statement_md, difficulty, answer_format, status)
+  values ('t-drafts', null, 'Для черновиков', 'Задача для проверки каскада.', 1, 'single', 'published')
+  returning id into v_temp;
+
+  insert into public.drafts (user_id, task_id, code)
+  values (v_alice, v_temp, 'print(1)'),
+         (v_henry, v_task, 'print(2)');
+
+  delete from public.tasks where id = v_temp;
+  select count(*) into v_cnt from public.drafts where task_id = v_temp;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): черновик пережил задачу';
+  end if;
+
+  delete from auth.users where id = v_henry;
+  select count(*) into v_cnt from public.drafts where user_id = v_henry;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): черновик пережил пользователя';
+  end if;
+  raise notice 'OK: (ф) с задачей и с пользователем удаляется и черновик';
 end
 $$;
 

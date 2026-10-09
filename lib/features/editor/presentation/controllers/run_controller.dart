@@ -30,11 +30,15 @@ final class RunState {
 
   /// Грузится ли среда.
   bool get isLoadingRuntime => runtimeState == PythonRuntimeState.loading;
+
+  /// Идёт ли запуск: грузится среда или выполняется программа. Пока идёт,
+  /// «Запустить» недоступна, а «Стоп» доступна.
+  bool get isBusy => isLoadingRuntime || isRunning;
 }
 
 /// Запуск кода задачи: держит состояние среды и последний результат.
 ///
-/// Реализует UC-17.
+/// Реализует UC-32.
 @riverpod
 class RunController extends _$RunController {
   @override

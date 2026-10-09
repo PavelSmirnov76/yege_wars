@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
+import 'package:yege_wars/features/editor/presentation/controllers/draft_controller.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/features/tasks/data/datasources/tasks_remote_data_source.dart';
 import 'package:yege_wars/features/tasks/data/repositories/tasks_repository_impl.dart';
 import 'package:yege_wars/features/tasks/domain/entities/answer_format.dart';
 import 'package:yege_wars/features/tasks/domain/entities/task_detail.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:yege_wars/features/tasks/presentation/controllers/catalog_controllers.dart';
 import 'package:yege_wars/features/tasks/presentation/screens/task_screen.dart';
 import 'package:yege_wars/features/tasks/presentation/widgets/task_files_panel.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
 import '../../../helpers/fake_auth_repository.dart';
+import '../../../helpers/fake_draft_repository.dart';
 import '../../../helpers/fake_tasks_repository.dart';
 import '../../../helpers/pump_app.dart';
 
@@ -47,11 +51,15 @@ void main() {
 
   /// Открывает страницу задачи на узком экране (вкладки).
   ///
-  /// [repository] подменяет репозиторий задач вместо [tasks].
+  /// [repository] подменяет репозиторий задач вместо [tasks], [drafts] —
+  /// черновики. Без [settle] страница открывается конечным числом кадров:
+  /// так видно, что сбой показан сразу, а не после автоповторов.
   Future<void> openTask(
     WidgetTester tester, {
     Size? surface,
     TasksRepository? repository,
+    FakeDraftRepository? drafts,
+    bool settle = true,
   }) async {
     if (surface != null) {
       await tester.binding.setSurfaceSize(surface);
@@ -62,13 +70,20 @@ void main() {
       repository: auth,
       initialUserId: testStudent.id,
       tasks: repository ?? tasks,
+      drafts: drafts,
     );
     containerOf(tester)
         .read(appRouterProvider)
         .go(
           '/task/${testTask24.slug}',
         );
-    await tester.pumpAndSettle();
+    if (settle) {
+      await tester.pumpAndSettle();
+      return;
+    }
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
   }
 
   testWidgets('UC-15-P-01, UC-27-P-01: показывает условие и подсказку про '
@@ -217,6 +232,58 @@ void main() {
     expect(find.text(failure.message), findsOneWidget);
     expect(find.widgetWithText(OutlinedButton, l10n.commonRetry), findsOne);
     expect(find.byType(TaskFilesPanel), findsNothing);
+  });
+
+  testWidgets('UC-31-P-04: задача загрузилась, а черновик нет — вместо '
+      'страницы сразу сообщение и «Повторить»', (tester) async {
+    const failure = NetworkFailure();
+    final drafts = FakeDraftRepository()
+      ..drafts[testTask24.id] = 'print(1)'
+      ..loadResult = const Err(failure);
+    await openTask(tester, drafts: drafts, settle: false);
+
+    // Задача пришла, черновик — нет; автоповторов нет, запрос один.
+    final container = containerOf(tester);
+    expect(
+      container.read(taskProvider(testTask24.slug)),
+      isA<AsyncData<TaskDetail>>(),
+    );
+    expect(
+      container.read(draftControllerProvider(testTask24.id)),
+      isA<AsyncError<String>>(),
+    );
+    expect(drafts.loadCalls, 1);
+
+    final retry = find.widgetWithText(OutlinedButton, l10n.commonRetry);
+    expect(find.text(failure.message), findsOneWidget);
+    expect(retry, findsOneWidget);
+    expect(find.byType(TabBar), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    // Заголовок — «Каталог», как при сбое загрузки задачи.
+    expect(
+      find.descendant(
+        of: find.byType(TaskScreen),
+        matching: find.text(l10n.navCatalog),
+      ),
+      findsOneWidget,
+    );
+
+    // «Повторить» открывает страницу, в поле кода — черновик.
+    drafts.loadResult = null;
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    expect(drafts.loadCalls, 2);
+    expect(find.text(failure.message), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byType(TaskScreen),
+        matching: find.text(testTask24.title),
+      ),
+      findsOneWidget,
+    );
+    await openTab(tester, l10n.editorTitle);
+    expect(find.text('print(1)'), findsOneWidget);
   });
 
   group('filePreview', () {

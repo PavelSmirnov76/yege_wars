@@ -31,9 +31,9 @@ void main() {
 
   /// Открывает статью по адресу.
   ///
-  /// Без [settle] экран открывается конечным числом кадров: пока Riverpod
-  /// повторяет упавший запрос, крутится индикатор, и `pumpAndSettle`
-  /// прокрутил бы все повторы.
+  /// Без [settle] экран открывается конечным числом кадров: так видно, что
+  /// сбой показан сразу, а не после автоповторов, — пока шли бы повторы,
+  /// крутился бы индикатор, и `pumpAndSettle` прокрутил бы их.
   Future<void> openArticle(
     WidgetTester tester,
     String slug, {
@@ -79,7 +79,7 @@ void main() {
     recognizer!.onTap!();
   }
 
-  testWidgets('UC-26-P-01: показывает заголовок, сведения и '
+  testWidgets('UC-37-P-01: показывает заголовок, сведения и '
       'текст', (tester) async {
     reference.articleResult = const Ok(
       ReferenceArticle(
@@ -116,49 +116,64 @@ void main() {
     expect(find.textContaining('Регулярные выражения'), findsOneWidget);
   });
 
-  testWidgets('UC-26-P-02: ошибка загрузки показывается с '
-      'повтором', (tester) async {
+  testWidgets('UC-37-P-02: статьи нет — сразу «Статья справочника не '
+      'найдена.» и «Повторить»', (tester) async {
     reference.articleResult = const Err(
       DatabaseFailure(message: 'Статья справочника не найдена.'),
     );
-    await openArticle(tester, 'no-such-article');
+    await openArticle(tester, 'no-such-article', settle: false);
 
-    expect(find.text('Статья справочника не найдена.'), findsOneWidget);
-    expect(find.text(l10n.commonRetry), findsOneWidget);
-  });
-
-  testWidgets('UC-26-P-03: сбой связи — индикатор, пока идут повторы, затем '
-      'сообщение и «Повторить»', (tester) async {
-    reference.articleResult = const Err(testNetworkFailure);
-    await openArticle(tester, testFileReading.slug, settle: false);
-
-    final provider = articleProvider(testFileReading.slug);
-    final spinner = find.descendant(
-      of: find.byType(ArticleScreen),
-      matching: find.byType(CircularProgressIndicator),
-    );
-
-    // Пока Riverpod повторяет запрос — AsyncLoading с ошибкой внутри.
-    final retrying = containerOf(tester).read(provider);
-    expect(retrying, isA<AsyncLoading<ReferenceArticle>>());
-    expect(retrying.error, testNetworkFailure);
-    expect(spinner, findsOneWidget);
-    expect(find.text(testNetworkFailure.message), findsNothing);
-    expect(find.text(l10n.commonRetry), findsNothing);
-
-    // После последнего повтора — AsyncError.
-    await pumpUntilRetriesEnd(tester, provider);
-
+    // Автоповторов нет: провайдер сразу в AsyncError, запрос один.
     expect(
-      containerOf(tester).read(provider),
+      containerOf(tester).read(articleProvider('no-such-article')),
       isA<AsyncError<ReferenceArticle>>(),
     );
-    expect(spinner, findsNothing);
-    expect(find.text(testNetworkFailure.message), findsOneWidget);
+    expect(reference.articleCalls, 1);
+    expect(
+      find.descendant(
+        of: find.byType(ArticleScreen),
+        matching: find.byType(CircularProgressIndicator),
+      ),
+      findsNothing,
+    );
+    expect(find.text('Статья справочника не найдена.'), findsOneWidget);
     expect(
       find.widgetWithText(OutlinedButton, l10n.commonRetry),
       findsOneWidget,
     );
+  });
+
+  testWidgets('UC-37-P-03: сбой связи — сразу сообщение и «Повторить», '
+      'без автоповторов', (tester) async {
+    reference.articleResult = const Err(testNetworkFailure);
+    await openArticle(tester, testFileReading.slug, settle: false);
+
+    final retry = find.widgetWithText(OutlinedButton, l10n.commonRetry);
+    expect(
+      containerOf(tester).read(articleProvider(testFileReading.slug)),
+      isA<AsyncError<ReferenceArticle>>(),
+    );
+    expect(reference.articleCalls, 1);
+    expect(
+      find.descendant(
+        of: find.byType(ArticleScreen),
+        matching: find.byType(CircularProgressIndicator),
+      ),
+      findsNothing,
+    );
+    expect(find.text(testNetworkFailure.message), findsOneWidget);
+    expect(retry, findsOneWidget);
+
+    // «Повторить» загружает статью.
+    reference.articleResult = const Ok(
+      ReferenceArticle(brief: testFileReading, contentMd: 'Текст статьи.'),
+    );
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    expect(reference.articleCalls, 2);
+    expect(find.text(testNetworkFailure.message), findsNothing);
+    expect(find.text('Текст статьи.', findRichText: true), findsOneWidget);
   });
 
   testWidgets('UC-28-P-02: словарь заголовков не загрузился — slug текстом '

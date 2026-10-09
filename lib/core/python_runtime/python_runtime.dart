@@ -21,7 +21,7 @@ enum PythonRuntimeState {
 /// Интерфейс намеренно узкий: реализация на Pyodide в браузере может быть
 /// заменена на серверную (например, Judge0) без изменения интерфейса.
 ///
-/// Реализует UC-17.
+/// Реализует UC-32.
 abstract interface class PythonRuntime {
   /// Поток состояний: по нему UI показывает загрузку и выполнение.
   Stream<PythonRuntimeState> get states;
@@ -50,3 +50,12 @@ abstract interface class PythonRuntime {
 
 /// Время выполнения по умолчанию.
 const Duration defaultRunTimeout = Duration(seconds: 60);
+
+/// Состояние среды, когда воркер сообщил, что Python загружен.
+///
+/// Если загрузку начал запуск ([isRunPending]), он продолжается: программа
+/// выполняется, и «Стоп» по-прежнему доступна. Иначе среда просто готова.
+///
+/// Реализует UC-32.
+PythonRuntimeState runtimeStateOnReady({required bool isRunPending}) =>
+    isRunPending ? PythonRuntimeState.running : PythonRuntimeState.ready;

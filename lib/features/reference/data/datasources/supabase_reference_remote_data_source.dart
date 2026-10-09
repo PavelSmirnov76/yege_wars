@@ -8,7 +8,7 @@ import 'package:yege_wars/features/reference/domain/entities/article_filter.dart
 /// Отбор и сортировку выполняет база: тащить весь справочник на клиент,
 /// чтобы фильтровать его в памяти, незачем.
 ///
-/// Реализует UC-25, UC-26 и UC-28.
+/// Реализует UC-36, UC-37 и UC-28.
 final class SupabaseReferenceRemoteDataSource
     implements ReferenceRemoteDataSource {
   /// Создаёт datasource поверх клиента [SupabaseClient].

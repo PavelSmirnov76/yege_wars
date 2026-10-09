@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/core/python_runtime/python_runtime.dart';
 import 'package:yege_wars/core/python_runtime/run_result.dart';
-import 'package:yege_wars/features/editor/domain/draft_storage.dart';
 
 /// Среда выполнения Python для тестов.
+///
+/// «Стоп», пока [gate] не завершён, обрывает запуск, как настоящая среда:
+/// [run] отвечает исходом `stopped`, среда — снова `idle`.
 final class FakePythonRuntime implements PythonRuntime {
   final StreamController<PythonRuntimeState> _states =
       StreamController<PythonRuntimeState>.broadcast();
@@ -34,6 +36,7 @@ final class FakePythonRuntime implements PythonRuntime {
   Map<String, String>? lastFiles;
 
   PythonRuntimeState _state = PythonRuntimeState.idle;
+  bool _stopped = false;
 
   @override
   Stream<PythonRuntimeState> get states => _states.stream;
@@ -60,6 +63,11 @@ final class FakePythonRuntime implements PythonRuntime {
     lastFiles = files;
     _state = PythonRuntimeState.running;
     await gate?.future;
+    if (_stopped) {
+      _stopped = false;
+      _state = PythonRuntimeState.idle;
+      return const Ok(RunResult(outcome: RunOutcome.stopped));
+    }
     _state = PythonRuntimeState.ready;
     return runResult;
   }
@@ -67,28 +75,14 @@ final class FakePythonRuntime implements PythonRuntime {
   @override
   Future<void> stop() async {
     stopCalls++;
-    gate?.complete();
+    final pending = gate;
+    if (pending != null && !pending.isCompleted) {
+      _stopped = true;
+      pending.complete();
+    }
     gate = null;
   }
 
   @override
   void dispose() => _states.close().ignore();
-}
-
-/// Хранилище черновиков в памяти.
-final class FakeDraftStorage implements DraftStorage {
-  /// Черновики по slug задачи.
-  final Map<String, String> drafts = {};
-
-  @override
-  Future<String?> read(String taskSlug) async => drafts[taskSlug];
-
-  @override
-  Future<void> write(String taskSlug, String code) async {
-    if (code.trim().isEmpty) {
-      drafts.remove(taskSlug);
-      return;
-    }
-    drafts[taskSlug] = code;
-  }
 }

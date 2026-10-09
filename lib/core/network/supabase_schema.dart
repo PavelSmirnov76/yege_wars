@@ -21,6 +21,9 @@ abstract final class SupabaseTables {
 
   /// Попытки решения.
   static const String submissions = 'submissions';
+
+  /// Черновики кода: одна строка на пользователя и задачу.
+  static const String drafts = 'drafts';
 }
 
 /// Колонки таблицы [SupabaseTables.profiles].
@@ -162,6 +165,18 @@ abstract final class SubmissionColumns {
 
   /// Когда отправлена.
   static const String createdAt = 'created_at';
+}
+
+/// Колонки таблицы [SupabaseTables.drafts].
+abstract final class DraftColumns {
+  /// Автор черновика.
+  static const String userId = 'user_id';
+
+  /// Задача.
+  static const String taskId = 'task_id';
+
+  /// Код из поля кода.
+  static const String code = 'code';
 }
 
 /// Поля результата функции `get_task_stats`.

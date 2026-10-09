@@ -12,7 +12,7 @@ import 'package:yege_wars/features/reference/presentation/widgets/reference_erro
 
 /// Страница статьи справочника.
 ///
-/// Реализует UC-26 и UC-28.
+/// Реализует UC-37 и UC-28.
 class ArticleScreen extends ConsumerWidget {
   /// Создаёт страницу статьи с идентификатором [slug].
   const ArticleScreen({required this.slug, super.key});

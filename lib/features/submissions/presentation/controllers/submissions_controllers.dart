@@ -63,7 +63,7 @@ class SubmitController extends _$SubmitController {
 
 /// Мои попытки по задаче, сначала свежие.
 ///
-/// Реализует UC-21.
+/// Реализует UC-34.
 @riverpod
 Future<List<Submission>> myAttempts(Ref ref, String taskId) async {
   final result = await ref
@@ -80,7 +80,7 @@ Future<List<Submission>> myAttempts(Ref ref, String taskId) async {
 /// База отдаёт их только тому, кто сам верно решил задачу, поэтому пустой
 /// список — обычное дело, а не ошибка.
 ///
-/// Реализует UC-22.
+/// Реализует UC-35.
 @riverpod
 Future<List<Submission>> publishedSolutions(Ref ref, String taskId) async {
   final result = await ref
@@ -94,26 +94,35 @@ Future<List<Submission>> publishedSolutions(Ref ref, String taskId) async {
 
 /// Публикация своих верных решений.
 ///
-/// Реализует UC-20.
+/// Исход отдаётся тому, кто публиковал: блок «Задача решена!» показывает
+/// сбой под своими кнопками, переключатель «Опубликовано» — сообщением внизу
+/// экрана. Контроллер никто не слушает, поэтому на время запроса он держит
+/// себя живым: иначе он исчез бы до ответа и список попыток не обновился бы.
+///
+/// Реализует UC-33.
 @riverpod
 class PublishController extends _$PublishController {
   @override
-  Failure? build(String taskId) => null;
+  void build(String taskId) {}
 
-  /// Публикует или снимает с публикации попытку [submissionId].
-  Future<void> setPublished({
+  /// Публикует или снимает с публикации попытку [submissionId]; возвращает
+  /// сбой или `null`, если вышло.
+  Future<Failure?> setPublished({
     required String submissionId,
     required bool isPublished,
   }) async {
-    final result = await ref
-        .read(submissionsRepositoryProvider)
-        .setPublished(submissionId: submissionId, isPublished: isPublished);
-    if (!ref.mounted) {
-      return;
-    }
-    state = result.failureOrNull;
-    if (result.isOk) {
-      ref.invalidate(myAttemptsProvider(taskId));
+    final keepAlive = ref.keepAlive();
+    try {
+      final result = await ref
+          .read(submissionsRepositoryProvider)
+          .setPublished(submissionId: submissionId, isPublished: isPublished);
+      if (result.isOk) {
+        // Публикация изменилась — список попыток устарел.
+        ref.invalidate(myAttemptsProvider(taskId));
+      }
+      return result.failureOrNull;
+    } finally {
+      keepAlive.close();
     }
   }
 }

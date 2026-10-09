@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/submissions/domain/entities/submission.dart';
 import 'package:yege_wars/features/submissions/domain/entities/submit_result.dart';
@@ -54,6 +56,16 @@ final class FakeSubmissionsRepository implements SubmissionsRepository {
   /// Значение последней публикации.
   bool? lastPublishedValue;
 
+  /// Пока не завершён, [setPublished] не отвечает: так база отвечает не
+  /// сразу, а через несколько кадров.
+  Completer<void>? publishGate;
+
+  /// Сколько раз запрашивались мои попытки.
+  int attemptsCalls = 0;
+
+  /// Сколько раз запрашивались решения других.
+  int solutionsCalls = 0;
+
   @override
   FutureResult<SubmitResult> submit({
     required String taskId,
@@ -67,12 +79,16 @@ final class FakeSubmissionsRepository implements SubmissionsRepository {
   }
 
   @override
-  FutureResult<List<Submission>> myAttempts(String taskId) async =>
-      attemptsResult;
+  FutureResult<List<Submission>> myAttempts(String taskId) async {
+    attemptsCalls++;
+    return attemptsResult;
+  }
 
   @override
-  FutureResult<List<Submission>> publishedSolutions(String taskId) async =>
-      solutionsResult;
+  FutureResult<List<Submission>> publishedSolutions(String taskId) async {
+    solutionsCalls++;
+    return solutionsResult;
+  }
 
   @override
   FutureResult<void> setPublished({
@@ -81,6 +97,7 @@ final class FakeSubmissionsRepository implements SubmissionsRepository {
   }) async {
     lastPublishedId = submissionId;
     lastPublishedValue = isPublished;
+    await publishGate?.future;
     return publishResult;
   }
 }

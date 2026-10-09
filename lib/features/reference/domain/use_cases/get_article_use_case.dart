@@ -4,7 +4,7 @@ import 'package:yege_wars/features/reference/domain/repositories/reference_repos
 
 /// Статья справочника целиком.
 ///
-/// Реализует UC-26.
+/// Реализует UC-37.
 final class GetArticleUseCase {
   /// Создаёт use case поверх [ReferenceRepository].
   const GetArticleUseCase(this._repository);

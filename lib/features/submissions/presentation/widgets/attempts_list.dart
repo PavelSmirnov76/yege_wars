@@ -6,6 +6,7 @@ import 'package:yege_wars/app/theme/app_colors.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/app/theme/app_typography.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/reference/presentation/widgets/reference_error_view.dart';
 import 'package:yege_wars/features/submissions/domain/entities/submission.dart';
 import 'package:yege_wars/features/submissions/presentation/controllers/submissions_controllers.dart';
 
@@ -18,7 +19,11 @@ String attemptTimeLabel(DateTime moment) {
 
 /// Мои попытки по задаче: ответ, вердикт и переключатель публикации.
 ///
-/// Реализует UC-20 и UC-21.
+/// Не загрузились — вместо списка сообщение и «Повторить». Не удалось
+/// переключить публикацию — переключатель прежний, а внизу экрана сообщение
+/// с текстом ошибки.
+///
+/// Реализует UC-33 и UC-34.
 class AttemptsList extends ConsumerWidget {
   /// Создаёт список попыток задачи [taskId].
   const AttemptsList({required this.taskId, super.key});
@@ -49,6 +54,10 @@ class AttemptsList extends ConsumerWidget {
             _AttemptTile(attempt: attempt, taskId: taskId),
         ],
       ),
+      AsyncError(:final error) => ReferenceErrorView(
+        error: error,
+        onRetry: () => ref.invalidate(myAttemptsProvider(taskId)),
+      ),
       _ => const SizedBox.shrink(),
     };
   }
@@ -60,6 +69,21 @@ class _AttemptTile extends ConsumerWidget {
 
   final Submission attempt;
   final String taskId;
+
+  /// Переключает публикацию; сбой — сообщением внизу экрана.
+  Future<void> _setPublished(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool isPublished,
+  }) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final failure = await ref
+        .read(publishControllerProvider(taskId).notifier)
+        .setPublished(submissionId: attempt.id, isPublished: isPublished);
+    if (failure != null) {
+      messenger.showSnackBar(SnackBar(content: Text(failure.message)));
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -93,12 +117,7 @@ class _AttemptTile extends ConsumerWidget {
               child: Switch(
                 value: attempt.isPublished,
                 onChanged: (value) => unawaited(
-                  ref
-                      .read(publishControllerProvider(taskId).notifier)
-                      .setPublished(
-                        submissionId: attempt.id,
-                        isPublished: value,
-                      ),
+                  _setPublished(context, ref, isPublished: value),
                 ),
               ),
             ),
