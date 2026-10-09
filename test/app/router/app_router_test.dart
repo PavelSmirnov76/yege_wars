@@ -239,6 +239,26 @@ void main() {
       expect(find.byType(TaskScreen), findsOneWidget);
     });
 
+    testWidgets('UC-38-P-01: после тестового входа открывается запомненный '
+        'адрес', (tester) async {
+      await pumpApp(
+        tester,
+        repository: repository,
+        testAccount: fakeTestAccount,
+      );
+      containerOf(tester).read(appRouterProvider).go(_taskPath);
+      await tester.pumpAndSettle();
+
+      expect(currentLocation(tester), _withFrom(AppRoutes.login, _taskPath));
+
+      await tester.tap(find.text(l10n.authTestSignInButton));
+      await tester.pumpAndSettle();
+
+      expect(repository.lastUsername, fakeTestAccount.username);
+      expect(currentLocation(tester), _taskPath);
+      expect(find.byType(TaskScreen), findsOneWidget);
+    });
+
     testWidgets('UC-10-P-01: без входа на главной вход получает её адрес', (
       tester,
     ) async {

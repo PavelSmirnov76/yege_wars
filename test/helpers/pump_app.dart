@@ -5,6 +5,7 @@ import 'package:yege_wars/app/provider_retry.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/python_runtime/python_runtime_provider.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
+import 'package:yege_wars/features/auth/domain/entities/test_account.dart';
 import 'package:yege_wars/features/editor/editor_providers.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
 import 'package:yege_wars/features/submissions/submissions_providers.dart';
@@ -27,6 +28,8 @@ import 'fake_tasks_repository.dart';
 /// полезли бы в настоящий Supabase и в браузерные API.
 /// [tasks] — любой репозиторий задач: например, настоящий поверх
 /// заглушки datasource, когда проверяется сборка данных.
+/// [testAccount] — тестовая учётная запись вместо параметров сборки;
+/// подменяется всегда, по умолчанию её нет — кнопки «Тестовый вход» нет.
 ///
 /// Автоповтор упавших провайдеров выключен той же функцией, что в
 /// `main.dart`: сбой загрузки сразу даёт `AsyncError`.
@@ -39,6 +42,7 @@ Future<void> pumpApp(
   FakePythonRuntime? runtime,
   FakeDraftRepository? drafts,
   FakeSubmissionsRepository? submissions,
+  TestAccount? testAccount,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -60,6 +64,7 @@ Future<void> pumpApp(
         submissionsRepositoryProvider.overrideWithValue(
           submissions ?? FakeSubmissionsRepository(),
         ),
+        testAccountProvider.overrideWithValue(testAccount),
       ],
       child: const YegeWarsApp(),
     ),

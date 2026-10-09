@@ -22,6 +22,19 @@ abstract final class Env {
   static bool get isConfigured =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
 
+  /// Логин тестовой учётной записи; пустой, если не передан при сборке.
+  ///
+  /// Необязателен: без него и [testLoginPassword] кнопки «Тестовый вход»
+  /// нет.
+  static const String testLoginUsername = String.fromEnvironment(
+    'TEST_LOGIN_USERNAME',
+  );
+
+  /// Пароль тестовой учётной записи; пустой, если не передан при сборке.
+  static const String testLoginPassword = String.fromEnvironment(
+    'TEST_LOGIN_PASSWORD',
+  );
+
   /// Начало адреса публичного файла в Supabase Storage.
   ///
   /// К нему дописывается путь вида `task-assets/fipi/images/…`: именно так

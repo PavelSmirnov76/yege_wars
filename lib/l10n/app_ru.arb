@@ -10,6 +10,7 @@
   "authUsernameLabel": "Логин",
   "authPasswordLabel": "Пароль",
   "authSignInButton": "Войти",
+  "authTestSignInButton": "Тестовый вход",
   "authSignUpButton": "Зарегистрироваться",
   "authNoAccountLink": "Нет аккаунта? Зарегистрируйтесь",
   "authHaveAccountLink": "Уже есть аккаунт? Войдите",
