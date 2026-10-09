@@ -20,6 +20,9 @@ final class FakeDraftRepository implements DraftRepository {
   /// Пока не завершён, [save] и [delete] не отвечают.
   Completer<void>? writeGate;
 
+  /// Пока не завершён, [load] не отвечает: черновик ещё грузится.
+  Completer<void>? loadGate;
+
   /// Сколько раз грузили черновик.
   int loadCalls = 0;
 
@@ -29,6 +32,7 @@ final class FakeDraftRepository implements DraftRepository {
   @override
   FutureResult<String?> load(String taskId) async {
     loadCalls++;
+    await loadGate?.future;
     return loadResult ?? Ok<String?>(drafts[taskId]);
   }
 

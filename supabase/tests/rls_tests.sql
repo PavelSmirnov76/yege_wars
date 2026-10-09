@@ -2775,6 +2775,50 @@ begin
 end
 $$;
 
+-- Автор не может переписать свою строку на другого пользователя
+do $$
+declare
+  v_alice uuid;
+  v_bob   uuid;
+  v_task  uuid;
+  v_cnt   bigint;
+begin
+  select id into v_alice from public.profiles where username = 'alice';
+  select id into v_bob   from public.profiles where username = 'bob';
+  select id into v_task  from public.tasks where slug = 't-single';
+
+  perform tests.login(v_alice);
+  begin
+    update public.drafts set user_id = v_bob where task_id = v_task;
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): автор переписал свою строку на другого (с where)';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  -- без where строки не читаются, и новую строку select-политика не
+  -- проверяет: отказ — только от with check политики update
+  begin
+    update public.drafts set user_id = v_bob;
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): автор переписал свою строку на другого (без where)';
+  exception when insufficient_privilege then
+    null;
+  end;
+  perform tests.logout();
+
+  select count(*) into v_cnt
+    from public.drafts
+   where user_id = v_alice and task_id = v_task;
+  if v_cnt <> 1 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): строка автора ушла другому';
+  end if;
+  select count(*) into v_cnt from public.drafts where user_id = v_bob;
+  if v_cnt <> 0 then
+    raise exception 'ТЕСТ ПРОВАЛЕН (ф): у bob появился черновик: %', v_cnt;
+  end if;
+  raise notice 'OK: (ф) автор не может переписать свою строку на другого пользователя';
+end
+$$;
+
 -- Аноним не может ничего
 do $$
 declare

@@ -60,6 +60,9 @@ final class FakeSubmissionsRepository implements SubmissionsRepository {
   /// сразу, а через несколько кадров.
   Completer<void>? publishGate;
 
+  /// Пока не завершён, [submit] не отвечает: проверка ответа ещё идёт.
+  Completer<void>? submitGate;
+
   /// Сколько раз запрашивались мои попытки.
   int attemptsCalls = 0;
 
@@ -75,6 +78,7 @@ final class FakeSubmissionsRepository implements SubmissionsRepository {
     submitCalls++;
     lastAnswer = answer;
     lastCode = code;
+    await submitGate?.future;
     return submitResult;
   }
 

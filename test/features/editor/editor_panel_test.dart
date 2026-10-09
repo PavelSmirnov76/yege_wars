@@ -302,39 +302,51 @@ void main() {
   });
 
   testWidgets('UC-31-P-01, UC-32-P-01: «Запустить» сразу записывает '
-      'черновик, а запуск записи не ждёт', (tester) async {
+      'черновик — программа ещё выполняется, а запуск записи не '
+      'ждёт', (tester) async {
     drafts.writeGate = Completer<void>();
+    runtime.gate = Completer<void>();
     await openEditor(tester);
 
     await tester.enterText(find.byType(CodeEditor), 'print(446)');
     await tester.tap(runButton());
     await tester.pump();
 
+    // Программа выполняется, запись без ответа — до паузы в 1 с запись уже
+    // ушла, а запуск начался.
+    expect(find.text(l10n.editorRunning), findsOneWidget);
     expect(drafts.writes, ['print(446)']);
     expect(runtime.runCalls, 1);
     expect(runtime.lastCode, 'print(446)');
 
     drafts.writeGate!.complete();
+    runtime.gate!.complete();
     await tester.pumpAndSettle();
     await tester.pump(const Duration(seconds: 2));
 
     expect(drafts.writes, ['print(446)']);
   });
 
-  testWidgets('UC-31-P-01: «Отправить ответ» сразу записывает черновик, '
-      'отправка записи не ждёт, после неё черновик остаётся', (tester) async {
+  testWidgets('UC-31-P-01: «Отправить ответ» сразу записывает черновик — '
+      'проверка ещё не ответила, а отправка записи не ждёт; после неё '
+      'черновик остаётся', (tester) async {
     drafts.writeGate = Completer<void>();
+    submissions.submitGate = Completer<void>();
     await openEditor(tester);
 
     await tester.enterText(find.byType(CodeEditor), 'print(446)');
     await submitAnswer(tester, '446');
     await tester.pump();
 
+    // Проверка ответа идёт, запись без ответа — до паузы в 1 с запись уже
+    // ушла, а ответ отправлен.
+    expect(find.text(l10n.submitSending), findsOneWidget);
     expect(drafts.writes, ['print(446)']);
     expect(submissions.submitCalls, 1);
     expect(submissions.lastCode, 'print(446)');
 
     drafts.writeGate!.complete();
+    submissions.submitGate!.complete();
     await tester.pumpAndSettle();
     await tester.pump(const Duration(seconds: 2));
 

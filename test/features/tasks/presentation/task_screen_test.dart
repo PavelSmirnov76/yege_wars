@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +8,7 @@ import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/features/editor/presentation/controllers/draft_controller.dart';
+import 'package:yege_wars/features/editor/presentation/widgets/code_editor.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/features/tasks/data/datasources/tasks_remote_data_source.dart';
 import 'package:yege_wars/features/tasks/data/repositories/tasks_repository_impl.dart';
@@ -232,6 +235,46 @@ void main() {
     expect(find.text(failure.message), findsOneWidget);
     expect(find.widgetWithText(OutlinedButton, l10n.commonRetry), findsOne);
     expect(find.byType(TaskFilesPanel), findsNothing);
+  });
+
+  testWidgets('UC-31-P-01, UC-31-P-04: пока черновик грузится, страница '
+      'задачи не открыта — затем в поле кода черновик', (tester) async {
+    final drafts = FakeDraftRepository()
+      ..drafts[testTask24.id] = 'print(1)'
+      ..loadGate = Completer<void>();
+    // Широкий экран: поле кода на странице сразу, без вкладок.
+    await openTask(
+      tester,
+      surface: const Size(1600, 900),
+      drafts: drafts,
+      settle: false,
+    );
+
+    // Задача пришла, черновик ещё нет — страница не открыта, поля кода нет.
+    expect(
+      containerOf(tester).read(taskProvider(testTask24.slug)),
+      isA<AsyncData<TaskDetail>>(),
+    );
+    expect(drafts.loadCalls, 1);
+    expect(find.byType(CodeEditor), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byType(TaskScreen),
+        matching: find.byType(CircularProgressIndicator),
+      ),
+      findsOneWidget,
+    );
+
+    drafts.loadGate!.complete();
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byType(CodeEditor),
+        matching: find.text('print(1)'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('UC-31-P-04: задача загрузилась, а черновик нет — вместо '
