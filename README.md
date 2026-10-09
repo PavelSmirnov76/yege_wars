@@ -126,4 +126,34 @@ python3 -m sdlc_tool check
 
 ## Деплой
 
-Появится на соответствующем этапе.
+Сайт: <https://pavelsmirnov76.github.io/yege_wars/>. Он обновляется только по
+ручному запуску владельца, выкладывается текущий `main`. Workflow выкладки —
+`.github/workflows/deploy.yml`.
+
+Один раз, в настройках репозитория на GitHub:
+
+1. Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+2. Settings → Secrets and variables → Actions → New repository secret —
+   `SUPABASE_URL` и `SUPABASE_ANON_KEY`: адрес проекта Supabase и его
+   публичный ключ, те же, что в `supabase/.env.local`.
+
+Запуск: Actions → «Выкладка сайта» → Run workflow → ветка `main` → Run
+workflow. Кнопка есть, только когда workflow лежит в `main`.
+
+Выкладка по шагам:
+
+1. Ветка — `main`, иначе остановка.
+2. Оба секрета заданы, иначе остановка с именем пустого.
+3. Pages включён с источником «GitHub Actions».
+4. Проверки, как в CI: форматирование, кодогенерация, `flutter analyze`,
+   `custom_lint`, `flutter test`.
+5. Сборка:
+   `flutter build web --release --base-href /yege_wars/
+   --dart-define=SUPABASE_URL=… --dart-define=SUPABASE_ANON_KEY=…` —
+   значения из секретов.
+6. Публикация `build/web` на GitHub Pages — задача `deploy`.
+
+Если выкладка упала, на сайте остаётся прежняя версия. Причина — в прогоне:
+Actions → «Выкладка сайта» → прогон → упавший шаг, отмечен красным; у шагов
+1–2 причина ещё и в аннотации на странице прогона. После исправления
+выкладку запускают заново.
