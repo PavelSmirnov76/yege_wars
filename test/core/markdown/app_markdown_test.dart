@@ -5,23 +5,25 @@ import 'package:yege_wars/core/markdown/app_markdown.dart';
 import 'package:yege_wars/core/markdown/code_block.dart';
 
 /// Собирает экран с разметкой [data].
+///
+/// Область выделения задаёт экран, как условие задачи и статья.
 Future<void> pumpMarkdown(
   WidgetTester tester,
   String data, {
   Map<String, String> articleTitles = const {},
   ValueChanged<String>? onArticleTap,
-  bool selectable = true,
 }) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: AppTheme.dark(),
       home: Scaffold(
         body: SingleChildScrollView(
-          child: AppMarkdown(
-            data: data,
-            articleTitles: articleTitles,
-            onArticleTap: onArticleTap,
-            selectable: selectable,
+          child: SelectionArea(
+            child: AppMarkdown(
+              data: data,
+              articleTitles: articleTitles,
+              onArticleTap: onArticleTap,
+            ),
           ),
         ),
       ),
@@ -51,8 +53,6 @@ void main() {
       'Смотри [[regex-basics]] дальше.',
       articleTitles: const {'regex-basics': 'Регулярные выражения'},
       onArticleTap: (slug) => tapped = slug,
-      // Нажатие по подстроке ищется только в невыделяемом тексте.
-      selectable: false,
     );
 
     expect(find.textContaining('Регулярные выражения'), findsOneWidget);

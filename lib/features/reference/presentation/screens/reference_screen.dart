@@ -14,7 +14,7 @@ import 'package:yege_wars/features/reference/presentation/widgets/reference_erro
 
 /// Раздел «Справочник»: список статей с поиском и фильтрами.
 ///
-/// Реализует UC-36.
+/// Реализует UC-39.
 class ReferenceScreen extends ConsumerStatefulWidget {
   /// Создаёт экран справочника.
   const ReferenceScreen({super.key});

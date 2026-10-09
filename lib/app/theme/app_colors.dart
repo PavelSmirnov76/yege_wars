@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 /// Цветовые токены приложения (тёмная тема).
 ///
 /// Единственный источник цветов: вне этого класса цвета не хардкодятся.
-/// Палитра — тёмный графит с одним красно-оранжевым акцентом; текстовые
-/// цвета подобраны с контрастом не ниже WCAG AA относительно [background].
+/// Палитра — тёмный графит с одним приглушённым оранжевым акцентом;
+/// текстовые цвета подобраны с контрастом не ниже WCAG AA относительно
+/// [background].
 ///
-/// Воплощает TOKEN-1.
+/// Воплощает TOKEN-7.
 abstract final class AppColors {
   /// Основной фон приложения — графитовый.
   static const Color background = Color(0xFF0F1115);
@@ -29,14 +30,14 @@ abstract final class AppColors {
   /// Неактивный текст и подписи disabled-элементов.
   static const Color textDisabled = Color(0xFF5D6572);
 
-  /// Акцент — насыщенный красно-оранжевый.
-  static const Color accent = Color(0xFFFF4E2A);
+  /// Акцент — приглушённый оранжевый.
+  static const Color accent = Color(0xFFE8865A);
 
   /// Акцент при наведении/нажатии — светлее основного.
-  static const Color accentHover = Color(0xFFFF6A47);
+  static const Color accentHover = Color(0xFFF0A07E);
 
-  /// Текст и иконки поверх акцентного цвета (контраст ~5.7:1).
-  static const Color onAccent = Color(0xFF140A06);
+  /// Текст и иконки поверх акцентного цвета (контраст ~6.8:1).
+  static const Color onAccent = Color(0xFF2A1006);
 
   /// Успех: верное решение, пройденные тесты.
   static const Color success = Color(0xFF3ECF8E);

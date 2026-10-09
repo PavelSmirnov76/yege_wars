@@ -75,7 +75,7 @@ void main() {
     expect(find.text(l10n.navReference), findsOneWidget);
   });
 
-  testWidgets('UC-36-P-01: показывает список статей', (tester) async {
+  testWidgets('UC-39-P-01: показывает список статей', (tester) async {
     await openReference(tester);
 
     expect(find.text(testFileReading.title), findsOneWidget);
@@ -83,14 +83,14 @@ void main() {
     expect(find.text(testFileReading.summary), findsOneWidget);
   });
 
-  testWidgets('UC-36-P-03: пустой справочник объясняет себя', (tester) async {
+  testWidgets('UC-39-P-03: пустой справочник объясняет себя', (tester) async {
     reference.articlesResult = const Ok([]);
     await openReference(tester);
 
     expect(find.text(l10n.referenceEmpty), findsOneWidget);
   });
 
-  testWidgets('UC-36-P-02: выбор уровня уходит в запрос', (tester) async {
+  testWidgets('UC-39-P-02: выбор уровня уходит в запрос', (tester) async {
     await openReference(tester);
 
     await tester.tap(
@@ -101,7 +101,7 @@ void main() {
     expect(reference.lastFilter?.level, ArticleLevel.medium);
   });
 
-  testWidgets('UC-36-P-04: ошибка списка показывается с кнопкой '
+  testWidgets('UC-39-P-04: ошибка списка показывается с кнопкой '
       'повтора', (tester) async {
     reference.articlesResult = const Err(testNetworkFailure);
     await openReference(tester);
@@ -118,7 +118,7 @@ void main() {
     expect(find.text(testFileReading.title), findsOneWidget);
   });
 
-  testWidgets('UC-36-P-01: нажатие на карточку открывает '
+  testWidgets('UC-39-P-01: нажатие на карточку открывает '
       'статью', (tester) async {
     await openReference(tester);
 
@@ -129,23 +129,63 @@ void main() {
     expect(reference.lastSlug, testFileReading.slug);
   });
 
-  testWidgets('UC-36-P-02: чипы номеров и тегов — из значений '
-      'фильтров', (tester) async {
+  testWidgets('UC-39-P-02: чипы номеров и разделов кодификатора — из '
+      'значений фильтров, темы чипами не показываются', (tester) async {
     await openReference(tester);
 
-    // Номера и теги — ровно те, что есть у статей справочника.
+    // Номера и разделы — ровно те, что есть у статей справочника: у первой
+    // статьи раздел 3, у второй — 1; разделы идут по номеру. Темы «3.12» и
+    // «1.4» и разделов 2 и 4, которых у статей нет, среди чипов нет.
     expect(chipLabels(tester), [
       ...levelChips(),
       l10n.referenceEgeNumber(17),
       l10n.referenceEgeNumber(24),
-      'files',
-      'regex',
-      'strings',
+      '1 · Цифровая грамотность',
+      '3 · Алгоритмы и программирование',
     ]);
   });
 
-  testWidgets('UC-36-P-02: значения фильтров не загрузились — чипов номеров '
-      'и тегов нет до перезагрузки страницы, а список работает', (
+  testWidgets('UC-39-P-02: чип раздела отбирает по тегу раздела, повторное '
+      'нажатие снимает условие', (tester) async {
+    await openReference(tester);
+    final section = find.widgetWithText(
+      FilterChip,
+      l10n.referenceSection3,
+    );
+
+    await tester.tap(section);
+    await tester.pumpAndSettle();
+
+    expect(reference.lastFilter, const ArticleFilter(tag: '3'));
+    expect(tester.widget<FilterChip>(section).selected, isTrue);
+
+    await tester.tap(section);
+    await tester.pumpAndSettle();
+
+    expect(reference.lastFilter, const ArticleFilter());
+    expect(tester.widget<FilterChip>(section).selected, isFalse);
+  });
+
+  testWidgets('UC-39-P-02: у статей нет разделов — строки разделов нет', (
+    tester,
+  ) async {
+    reference.articlesResult = const Ok([
+      ArticleBrief(
+        slug: 'no-section',
+        title: 'Статья без раздела',
+        summary: 'Только тема кодификатора.',
+        level: ArticleLevel.basic,
+        readingMinutes: 3,
+        tags: ['2.1'],
+      ),
+    ]);
+    await openReference(tester);
+
+    expect(chipLabels(tester), levelChips());
+  });
+
+  testWidgets('UC-39-P-02: значения фильтров не загрузились — чипов номеров '
+      'и разделов нет до перезагрузки страницы, а список работает', (
     tester,
   ) async {
     // При открытии нет связи: не загрузились ни список, ни значения
@@ -179,7 +219,7 @@ void main() {
     expect(chipLabels(tester), levelChips());
   });
 
-  testWidgets('UC-36-P-02: строка поиска уходит в запрос через 300 мс после '
+  testWidgets('UC-39-P-02: строка поиска уходит в запрос через 300 мс после '
       'ввода', (tester) async {
     await openReference(tester);
     final calls = reference.listCalls;
@@ -197,7 +237,7 @@ void main() {
     expect(reference.lastFilter?.query, 'файл');
   });
 
-  testWidgets('UC-36-P-02: «Сбросить фильтры» снимает все условия и строку '
+  testWidgets('UC-39-P-02: «Сбросить фильтры» снимает все условия и строку '
       'поиска, а текст в поле остаётся', (tester) async {
     await openReference(tester);
     final reset = find.widgetWithText(TextButton, l10n.referenceResetFilters);
@@ -215,7 +255,7 @@ void main() {
       find.widgetWithText(FilterChip, l10n.referenceEgeNumber(24)),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilterChip, 'regex'));
+    await tester.tap(find.widgetWithText(FilterChip, l10n.referenceSection1));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'окно');
     await tester.pump(const Duration(milliseconds: 300));
@@ -225,7 +265,7 @@ void main() {
       reference.lastFilter,
       const ArticleFilter(
         egeNumber: 24,
-        tag: 'regex',
+        tag: '1',
         level: ArticleLevel.medium,
         query: 'окно',
       ),
@@ -242,7 +282,7 @@ void main() {
     );
   });
 
-  testWidgets('UC-36-P-03: по заданным условиям статей нет', (tester) async {
+  testWidgets('UC-39-P-03: по заданным условиям статей нет', (tester) async {
     reference.articlesResult = const Ok([]);
     await openReference(tester);
 
@@ -255,7 +295,7 @@ void main() {
     expect(find.text(l10n.referenceEmpty), findsNothing);
   });
 
-  testWidgets('UC-36-P-04: сбой связи — сразу сообщение и «Повторить», '
+  testWidgets('UC-39-P-04: сбой связи — сразу сообщение и «Повторить», '
       'без автоповторов', (tester) async {
     reference.articlesResult = const Err(testNetworkFailure);
     await openReference(tester, settle: false);

@@ -80,10 +80,13 @@ abstract final class AppTheme {
           color: AppColors.textSecondary,
         ),
       ),
+      // Обрезка по форме держит подсветку и всплеск нажатия внутри
+      // скругления: без неё отклик InkWell рисуется прямоугольником.
       cardTheme: const CardThemeData(
         color: AppColors.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: _containerRadius,
           side: BorderSide(color: AppColors.border),

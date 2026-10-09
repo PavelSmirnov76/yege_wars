@@ -7,5 +7,5 @@
 /// Передаётся в `retry` каждого `ProviderScope` приложения — в `main.dart`
 /// и в тестах: настройка одна, а не копии.
 ///
-/// Реализует UC-31, UC-34, UC-35, UC-36 и UC-37.
+/// Реализует UC-31, UC-34, UC-35, UC-37 и UC-39.
 Duration? noProviderRetry(int retryCount, Object error) => null;

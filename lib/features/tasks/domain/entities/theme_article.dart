@@ -4,7 +4,7 @@ import 'package:yege_wars/features/tasks/domain/entities/task_article_link.dart'
 
 /// Статья справочника, которая полагается задаче по одной из её тем.
 ///
-/// Реализует UC-27.
+/// Реализует UC-40.
 @immutable
 final class ThemeArticle {
   /// Создаёт статью темы.

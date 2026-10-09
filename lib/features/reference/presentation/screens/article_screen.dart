@@ -50,7 +50,9 @@ class ArticleScreen extends ConsumerWidget {
   }
 }
 
-/// Содержимое статьи: заголовок, сведения, текст и теги.
+/// Содержимое статьи: заголовок, сведения, теги и текст.
+///
+/// Вся статья — одна область выделения: от названия до конца текста.
 class _ArticleBody extends ConsumerWidget {
   const _ArticleBody({required this.article, required this.maxWidth});
 
@@ -70,37 +72,39 @@ class _ArticleBody extends ConsumerWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(brief.title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: AppSpacing.sm),
-              ArticleMeta(brief),
-              if (brief.tags.isNotEmpty) ...[
+          child: SelectionArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(brief.title, style: theme.textTheme.headlineSmall),
                 const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  runSpacing: AppSpacing.xs,
-                  children: [
-                    for (final tag in brief.tags)
-                      Chip(
-                        label: Text(tag),
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
-                      ),
-                  ],
+                ArticleMeta(brief),
+                if (brief.tags.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      for (final tag in brief.tags)
+                        Chip(
+                          label: Text(tag),
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                        ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.lg),
+                AppMarkdown(
+                  data: article.contentMd,
+                  articleTitles: titles,
+                  onArticleTap: (slug) => context.goNamed(
+                    AppRoutes.referenceArticleName,
+                    pathParameters: {AppRoutes.slugParam: slug},
+                  ),
                 ),
               ],
-              const SizedBox(height: AppSpacing.lg),
-              AppMarkdown(
-                data: article.contentMd,
-                articleTitles: titles,
-                onArticleTap: (slug) => context.goNamed(
-                  AppRoutes.referenceArticleName,
-                  pathParameters: {AppRoutes.slugParam: slug},
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

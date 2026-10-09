@@ -16,14 +16,17 @@ import 'package:yege_wars/core/markdown/wiki_link_syntax.dart';
 /// участки и блоки кода с подсветкой Python, а также внутренние ссылки
 /// справочника `[[slug]]`.
 ///
-/// Реализует UC-28, воплощает COMP-15.
+/// Своей области выделения у разметки нет: её задаёт экран вокруг
+/// (`SelectionArea`), и текст выделяется одним куском вместе с текстом
+/// экрана — через абзацы, списки, таблицы, цитаты и блоки кода.
+///
+/// Реализует UC-28, воплощает COMP-16.
 class AppMarkdown extends StatelessWidget {
   /// Создаёт рендерер разметки [data].
   const AppMarkdown({
     required this.data,
     this.articleTitles = const {},
     this.onArticleTap,
-    this.selectable = true,
     super.key,
   });
 
@@ -44,13 +47,6 @@ class AppMarkdown extends StatelessWidget {
   /// Вызывается при нажатии на внутреннюю ссылку справочника.
   final ValueChanged<String>? onArticleTap;
 
-  /// Можно ли выделять текст.
-  ///
-  /// По умолчанию да: ученику нужно копировать примеры кода. Выделяемый
-  /// текст рисуется полем ввода, поэтому в виджет-тестах нажатие по
-  /// подстроке ищется только при `selectable: false`.
-  final bool selectable;
-
   @override
   Widget build(BuildContext context) {
     return MarkdownBody(
@@ -60,8 +56,10 @@ class AppMarkdown extends StatelessWidget {
       key: ValueKey(
         Object.hash(data, Object.hashAllUnordered(articleTitles.keys)),
       ),
+      // selectable не включается: абзацы — обычный текст. Выделяемый
+      // SelectableText выделялся бы сам по себе и в общую область экрана
+      // не входил.
       data: data,
-      selectable: selectable,
       // Картинки условий записаны относительным путём внутри Storage,
       // поэтому адрес проекта подставляется при отрисовке.
       imageDirectory: Env.storagePublicBase,

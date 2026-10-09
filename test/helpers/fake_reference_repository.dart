@@ -7,6 +7,8 @@ import 'package:yege_wars/features/reference/domain/entities/reference_article.d
 import 'package:yege_wars/features/reference/domain/repositories/reference_repository.dart';
 
 /// Статья про чтение файлов для тестов.
+///
+/// Теги — как у статей на боевой: код темы кодификатора и её раздел.
 const ArticleBrief testFileReading = ArticleBrief(
   slug: 'file-reading',
   title: 'Чтение файлов в Python',
@@ -14,7 +16,7 @@ const ArticleBrief testFileReading = ArticleBrief(
   level: ArticleLevel.basic,
   readingMinutes: 6,
   egeNumbers: [17, 24],
-  tags: ['files'],
+  tags: ['3.12', '3'],
 );
 
 /// Статья про регулярные выражения для тестов.
@@ -25,7 +27,7 @@ const ArticleBrief testRegexBasics = ArticleBrief(
   level: ArticleLevel.medium,
   readingMinutes: 8,
   egeNumbers: [24],
-  tags: ['regex', 'strings'],
+  tags: ['1.4', '1'],
 );
 
 /// Репозиторий справочника для тестов: результаты задаются полями,

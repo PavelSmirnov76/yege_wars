@@ -11,6 +11,10 @@ import 'package:yege_wars/core/markdown/python_highlighter.dart';
 /// на экране шириной 360 px и не должна переноситься — в коде перенос
 /// меняет смысл отступов.
 ///
+/// Внутри области выделения экрана (`SelectionArea`) код — обычный текст и
+/// выделяется вместе с текстом вокруг; вне её, как в решениях других, —
+/// выделяемый сам по себе. Так же решает и `Text`.
+///
 /// Воплощает COMP-11.
 class CodeBlock extends StatelessWidget {
   /// Создаёт блок кода.
@@ -50,6 +54,7 @@ class CodeBlock extends StatelessWidget {
               ),
           ]
         : [TextSpan(text: code, style: style)];
+    final text = TextSpan(children: spans);
 
     return Container(
       width: double.infinity,
@@ -61,7 +66,9 @@ class CodeBlock extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: SelectableText.rich(TextSpan(children: spans)),
+        child: SelectionContainer.maybeOf(context) == null
+            ? SelectableText.rich(text)
+            : Text.rich(text),
       ),
     );
   }

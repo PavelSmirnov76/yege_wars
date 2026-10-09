@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/app/router/app_routes.dart';
+import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/error/failure.dart';
 import 'package:yege_wars/core/error/result.dart';
 import 'package:yege_wars/core/python_runtime/python_runtime.dart';
@@ -115,6 +116,28 @@ void main() {
     await tester.pump();
     await tester.tap(submit);
   }
+
+  testWidgets('UC-32-P-01: «Запустить» и «Стоп» делят строку поровну — на '
+      'узком и на широком экране', (tester) async {
+    /// Ширины кнопок равны и вместе с промежутком занимают ширину поля
+    /// кода.
+    void expectEqualHalves() {
+      final run = tester.getSize(runButton()).width;
+      final stop = tester.getSize(stopButton()).width;
+      final row = tester.getSize(find.byType(CodeEditor)).width;
+      expect(run, stop);
+      expect(run + AppSpacing.sm + stop, moreOrLessEquals(row));
+    }
+
+    await openEditor(tester);
+    expectEqualHalves();
+
+    await tester.binding.setSurfaceSize(const Size(1600, 900));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.taskTabProblem), findsOneWidget);
+    expectEqualHalves();
+  });
 
   testWidgets('UC-32-P-01: запуск передаёт код и файлы задачи', (tester) async {
     await openEditor(tester);
@@ -411,7 +434,13 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1600, 900));
     await tester.pump();
 
-    expect(find.byType(TabBar), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byType(TabBar),
+        matching: find.text(l10n.taskTabProblem),
+      ),
+      findsOneWidget,
+    );
     expect(codeText(tester), 'print(2)');
     expect(drafts.loadCalls, 1);
 

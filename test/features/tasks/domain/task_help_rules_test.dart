@@ -27,7 +27,7 @@ List<String> _view(List<TaskArticleLink> links) => [
 
 void main() {
   group('TaskHelpRules.merge', () {
-    test('UC-27-P-01: статья основной темы главная, других тем — '
+    test('UC-40-P-01: статья основной темы главная, других тем — '
         'сопутствующая', () {
       final links = TaskHelpRules.merge(
         byTheme: [_byTheme('kes-3-2', 0), _byTheme('kes-3-3', 1)],
@@ -37,7 +37,7 @@ void main() {
       expect(_view(links), ['kes-3-2: primary', 'kes-3-3: related']);
     });
 
-    test('UC-27-P-01: без ручных связей справка состоит из статей по '
+    test('UC-40-P-01: без ручных связей справка состоит из статей по '
         'темам', () {
       final links = TaskHelpRules.merge(
         byTheme: [_byTheme('kes-3-9', 0)],
@@ -48,7 +48,7 @@ void main() {
       expect(links.single.isPrimary, isTrue);
     });
 
-    test('UC-27-P-01: без тем справка — ручные связи', () {
+    test('UC-40-P-01: без тем справка — ручные связи', () {
       final links = TaskHelpRules.merge(
         byTheme: const [],
         manual: [
@@ -63,7 +63,7 @@ void main() {
       ]);
     });
 
-    test('UC-27-P-01: главные первыми, внутри — по порядку темы, затем '
+    test('UC-40-P-01: главные первыми, внутри — по порядку темы, затем '
         'ручные', () {
       final links = TaskHelpRules.merge(
         // Темы пришли не по порядку: порядок задаёт правило, а не запрос.
@@ -91,7 +91,7 @@ void main() {
       ]);
     });
 
-    test('UC-27-P-01: статья по теме и вручную — один раз, с более сильной '
+    test('UC-40-P-01: статья по теме и вручную — один раз, с более сильной '
         'значимостью и на месте темы', () {
       final links = TaskHelpRules.merge(
         byTheme: [
@@ -114,7 +114,7 @@ void main() {
       ]);
     });
 
-    test('UC-27-P-01: повтор ручной связи не дублирует статью', () {
+    test('UC-40-P-01: повтор ручной связи не дублирует статью', () {
       final links = TaskHelpRules.merge(
         byTheme: const [],
         manual: [
@@ -126,7 +126,7 @@ void main() {
       expect(_view(links), ['file-reading: primary']);
     });
 
-    test('UC-27-P-01: статья двух тем — один раз, по ранней теме', () {
+    test('UC-40-P-01: статья двух тем — один раз, по ранней теме', () {
       final links = TaskHelpRules.merge(
         byTheme: [
           _byTheme('kes-3-3', 1),
@@ -144,7 +144,7 @@ void main() {
       ]);
     });
 
-    test('UC-27-P-02: нет ни тем, ни ручных связей — справка пустая', () {
+    test('UC-40-P-02: нет ни тем, ни ручных связей — справка пустая', () {
       expect(
         TaskHelpRules.merge(byTheme: const [], manual: const []),
         isEmpty,

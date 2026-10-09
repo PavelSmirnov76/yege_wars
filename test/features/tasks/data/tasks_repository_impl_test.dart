@@ -137,7 +137,7 @@ void main() {
   });
 
   group('getTask', () {
-    test('UC-15-P-01, UC-27-P-01: собирает условие, файлы и справку', () async {
+    test('UC-15-P-01, UC-40-P-01: собирает условие, файлы и справку', () async {
       when(() => dataSource.fetchTask('e24-longest-run')).thenAnswer(
         (_) async => {
           ..._task24,
@@ -188,7 +188,7 @@ void main() {
       expect(task.primaryArticles.single.article.slug, 'string-scan');
     });
 
-    test('UC-27-P-01: справка по темам: статьи вторым запросом, ручные — '
+    test('UC-40-P-01: справка по темам: статьи вторым запросом, ручные — '
         'следом', () async {
       when(
         () => dataSource.fetchTask('e24-longest-run'),
@@ -235,7 +235,7 @@ void main() {
       verify(() => dataSource.fetchArticles(['a-39', 'a-32'])).called(1);
     });
 
-    test('UC-27-P-02: без тем со статьями второй запрос не уходит', () async {
+    test('UC-40-P-02: без тем со статьями второй запрос не уходит', () async {
       when(
         () => dataSource.fetchTask('e24-longest-run'),
       ).thenAnswer((_) async => {..._task24, 'answer_format': 'single'});

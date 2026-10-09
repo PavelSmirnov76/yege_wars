@@ -5,10 +5,14 @@ import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/features/reference/domain/entities/article_level.dart';
 import 'package:yege_wars/features/reference/presentation/controllers/reference_controllers.dart';
 import 'package:yege_wars/features/reference/presentation/widgets/article_level_label.dart';
+import 'package:yege_wars/features/reference/presentation/widgets/codifier_section_label.dart';
 
-/// Фильтры справочника: уровень, номер задания и тема.
+/// Фильтры справочника: уровень, номер задания и раздел кодификатора.
 ///
-/// Реализует UC-36.
+/// Чип раздела отбирает статьи по тегу раздела — весь раздел; темы
+/// кодификатора чипами не показываются.
+///
+/// Реализует UC-39.
 class ArticleFiltersBar extends ConsumerWidget {
   /// Создаёт панель фильтров.
   const ArticleFiltersBar({super.key});
@@ -60,17 +64,17 @@ class ArticleFiltersBar extends ConsumerWidget {
             ),
           ),
         ],
-        if (facets != null && facets.tags.isNotEmpty) ...[
+        if (facets != null && facets.sections.isNotEmpty) ...[
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.xs,
             children: [
-              for (final tag in facets.tags)
+              for (final section in facets.sections)
                 FilterChip(
-                  label: Text(tag),
-                  selected: filter.tag == tag,
-                  onSelected: (_) => controller.toggleTag(tag),
+                  label: Text(codifierSectionLabel(section, l10n)),
+                  selected: filter.tag == section.tag,
+                  onSelected: (_) => controller.toggleTag(section.tag),
                 ),
             ],
           ),
