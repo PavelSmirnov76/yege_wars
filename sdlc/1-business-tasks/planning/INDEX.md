@@ -17,7 +17,7 @@
 | [BT-13](BT-13-PLANNING-REFERENCE.md) | Справочник | [R35](../../0-vibes/prd/PRD.md#r35), [R36](../../0-vibes/prd/PRD.md#r36), [R38](../../0-vibes/prd/PRD.md#r38) | да |
 | [BT-14](BT-14-PLANNING-ARTICLE.md) | Статья и ссылки | [R37](../../0-vibes/prd/PRD.md#r37), [R38](../../0-vibes/prd/PRD.md#r38), [R40](../../0-vibes/prd/PRD.md#r40) | да |
 | [BT-15](BT-15-PLANNING-HELP.md) | Справка к задаче | [R38](../../0-vibes/prd/PRD.md#r38), [R39](../../0-vibes/prd/PRD.md#r39) | да |
-| [BT-16](BT-16-PLANNING-SITE.md) | Сайт | [R41](../../0-vibes/prd/PRD.md#r41), [R42](../../0-vibes/prd/PRD.md#r42) | нет — не проверено: [UC-29-P-01](../../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-01), [UC-29-P-02](../../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-02), [UC-30-P-01](../../2-specs/use-cases/UC-30-ACTOR-1-EVT-10-ENT-16-SITE-OPENED-IN-SITE.md#uc-30-p-01) |
+| [BT-16](BT-16-PLANNING-SITE.md) | Сайт | [R41](../../0-vibes/prd/PRD.md#r41), [R42](../../0-vibes/prd/PRD.md#r42) | да |
 | [BT-17](BT-17-PLANNING-RUN-AND-DRAFT.md) | Запуск программы и черновик | [BT-10](obsolete/BT-10-PLANNING-RUN.md), [R24](../../0-vibes/prd/PRD.md#r24), [R25](../../0-vibes/prd/PRD.md#r25), [R43](../../0-vibes/prd/PRD.md#r43), [R44](../../0-vibes/prd/PRD.md#r44), [R45](../../0-vibes/prd/PRD.md#r45) | да |
 | [BT-18](BT-18-PLANNING-LOAD-FAILURES.md) | Сбои загрузки | [R46](../../0-vibes/prd/PRD.md#r46) | да |
 | [BT-19](BT-19-PLANNING-PUBLICATION-FAILURE.md) | Сбой публикации решения | [R47](../../0-vibes/prd/PRD.md#r47) | да |
