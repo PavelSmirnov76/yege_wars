@@ -21,7 +21,7 @@
 | [BT-17](BT-17-PLANNING-RUN-AND-DRAFT.md) | Запуск программы и черновик | [BT-10](obsolete/BT-10-PLANNING-RUN.md), [R24](../../0-vibes/prd/PRD.md#r24), [R25](../../0-vibes/prd/PRD.md#r25), [R43](../../0-vibes/prd/PRD.md#r43), [R44](../../0-vibes/prd/PRD.md#r44), [R45](../../0-vibes/prd/PRD.md#r45) | да |
 | [BT-18](BT-18-PLANNING-LOAD-FAILURES.md) | Сбои загрузки | [R46](../../0-vibes/prd/PRD.md#r46) | да |
 | [BT-19](BT-19-PLANNING-PUBLICATION-FAILURE.md) | Сбой публикации решения | [R47](../../0-vibes/prd/PRD.md#r47) | да |
-| [BT-20](BT-20-PLANNING-TEST-LOGIN.md) | Тестовый вход | [R48](../../0-vibes/prd/PRD.md#r48), [R49](../../0-vibes/prd/PRD.md#r49) | нет — не проверено: [UC-38-P-01](../../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-01), [UC-38-P-02](../../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-02), [UC-38-P-03](../../2-specs/use-cases/UC-38-ACTOR-1-EVT-2-ENT-17-TEST-SESSION-STARTED-IN-AUTH.md#uc-38-p-03) |
+| [BT-20](BT-20-PLANNING-TEST-LOGIN.md) | Тестовый вход | [R48](../../0-vibes/prd/PRD.md#r48), [R49](../../0-vibes/prd/PRD.md#r49) | да |
 
 ## Похоронены
 

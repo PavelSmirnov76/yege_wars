@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:yege_wars/core/error/result.dart';
+import 'package:yege_wars/features/auth/domain/entities/test_account.dart';
 import 'package:yege_wars/features/auth/domain/entities/user_profile.dart';
 import 'package:yege_wars/features/auth/domain/entities/user_role.dart';
 import 'package:yege_wars/features/auth/domain/repositories/auth_repository.dart';
@@ -17,6 +18,12 @@ const UserProfile testAdmin = UserProfile(
   id: 'admin-id',
   username: 'admin',
   role: UserRole.admin,
+);
+
+/// Тестовая учётная запись (ENT-17) с поддельными логином и паролем.
+const TestAccount fakeTestAccount = TestAccount(
+  username: 'tester',
+  password: 'tester-password',
 );
 
 /// Репозиторий авторизации для тестов: результаты задаются полями,

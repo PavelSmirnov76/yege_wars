@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:yege_wars/app/router/app_routes.dart';
 import 'package:yege_wars/app/theme/app_spacing.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
+import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/auth/domain/auth_state.dart';
+import 'package:yege_wars/features/auth/domain/entities/test_account.dart';
 import 'package:yege_wars/features/auth/presentation/auth_field_validators.dart';
 import 'package:yege_wars/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:yege_wars/features/auth/presentation/widgets/auth_form_card.dart';
@@ -15,7 +17,7 @@ import 'package:yege_wars/features/auth/presentation/widgets/auth_submit_button.
 
 /// Экран входа по логину и паролю.
 ///
-/// Реализует UC-10 и UC-1.
+/// Реализует UC-10, UC-38 и UC-1.
 class LoginScreen extends ConsumerStatefulWidget {
   /// Создаёт экран входа с адресом [from], который откроется после входа.
   const LoginScreen({this.from, super.key});
@@ -68,6 +70,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
+  /// Тестовый вход (UC-38): подставляет логин и пароль [account] в поля и
+  /// отправляет форму, как «Войти».
+  void _submitTestAccount(TestAccount account) {
+    _usernameController.text = account.username;
+    _passwordController.text = account.password;
+    unawaited(_submit());
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -78,6 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _ => null,
     };
     final message = _errorMessage ?? sessionFailure?.message;
+    final testAccount = ref.watch(testAccountProvider);
 
     return AuthFormCard(
       title: l10n.authLoginTitle,
@@ -116,6 +127,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           isLoading: _isSubmitting,
           onPressed: () => unawaited(_submit()),
         ),
+        if (testAccount != null) ...[
+          const SizedBox(height: AppSpacing.sm),
+          OutlinedButton(
+            onPressed: _isSubmitting
+                ? null
+                : () => _submitTestAccount(testAccount),
+            child: Text(l10n.authTestSignInButton),
+          ),
+        ],
         const SizedBox(height: AppSpacing.sm),
         TextButton(
           onPressed: _isSubmitting

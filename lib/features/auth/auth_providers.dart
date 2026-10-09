@@ -1,7 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:yege_wars/core/config/env.dart';
 import 'package:yege_wars/core/network/supabase_client_provider.dart';
 import 'package:yege_wars/features/auth/data/datasources/supabase_auth_remote_data_source.dart';
 import 'package:yege_wars/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:yege_wars/features/auth/domain/entities/test_account.dart';
 import 'package:yege_wars/features/auth/domain/repositories/auth_repository.dart';
 import 'package:yege_wars/features/auth/domain/use_cases/get_current_profile_use_case.dart';
 import 'package:yege_wars/features/auth/domain/use_cases/is_registration_open_use_case.dart';
@@ -50,6 +52,17 @@ WatchAuthUserUseCase watchAuthUserUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 IsRegistrationOpenUseCase isRegistrationOpenUseCase(Ref ref) =>
     IsRegistrationOpenUseCase(ref.watch(authRepositoryProvider));
+
+/// Тестовая учётная запись из параметров сборки; `null` — тестового входа
+/// нет (UC-38).
+///
+/// Тесты подменяют провайдер своими логином и паролем: параметры сборки
+/// они не переопределят.
+@Riverpod(keepAlive: true)
+TestAccount? testAccount(Ref ref) => TestAccount.fromBuild(
+  username: Env.testLoginUsername,
+  password: Env.testLoginPassword,
+);
 
 /// Открыта ли регистрация новых пользователей.
 ///

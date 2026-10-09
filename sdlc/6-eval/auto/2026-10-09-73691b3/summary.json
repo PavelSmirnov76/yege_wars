@@ -1,0 +1,2787 @@
+{
+  "commit": "73691b354e261f182c91357f1043f11e9b748ebc",
+  "commit_short": "73691b3",
+  "date": "2026-10-09",
+  "started_at": "2026-10-09T10:34:22+00:00",
+  "finished_at": "2026-10-09T10:35:25+00:00",
+  "dirty": false,
+  "checks": [
+    {
+      "name": "pub_get",
+      "command": "flutter pub get",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "gen_l10n",
+      "command": "flutter gen-l10n",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "build_runner",
+      "command": "dart run build_runner build --delete-conflicting-outputs",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "analyze",
+      "command": "flutter analyze --fatal-infos --fatal-warnings",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "custom_lint",
+      "command": "dart run custom_lint",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "format",
+      "command": "dart format --output=none --set-exit-if-changed <.dart из lib/ и test/ без *.g.dart и lib/l10n/gen/>",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "flutter_test",
+      "command": "flutter test --reporter json",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "rls",
+      "command": "bash supabase/tests/run_local.sh",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "tools_tests",
+      "command": "python3 -m unittest discover -s tools/tests -t .",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    },
+    {
+      "name": "sdlc_tool_tests",
+      "command": "python3 -m unittest discover -s sdlc_tool/tests -t .",
+      "verdict": "PASS",
+      "exit_code": 0,
+      "reason": null,
+      "output_tail": null
+    }
+  ],
+  "tests": [
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-1-P-02: короче 3 символов",
+      "label": "UC-1-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-1-P-02: недопустимые символы",
+      "label": "UC-1-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-1-P-03: занятый логин с другой почтой — [username_taken] из триггера",
+      "label": "UC-1-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-1-P-04: закрытая регистрация — [registration_closed]",
+      "label": "UC-1-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-14-P-01, UC-15-P-02: tasks_public отдаёт опубликованную задачу и не отдаёт черновик",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-14-P-01, UC-15-P-02: tasks_public отдаёт опубликованную задачу и не отдаёт черновик",
+      "label": "UC-15-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-14-P-01, UC-15-P-02: студенту видны только опубликованные задачи, неопубликованная — нет",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-14-P-01, UC-15-P-02: студенту видны только опубликованные задачи, неопубликованная — нет",
+      "label": "UC-15-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-14-P-01: доля решивших в каталоге считается только по ученикам",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-15-P-01: файл опубликованной задачи ученику виден",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-15-P-02: файл неопубликованной задачи ученику не виден",
+      "label": "UC-15-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-01, UC-19-P-02: single — верный ответ засчитан, '012' равен '12', неверный не засчитан",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-01, UC-19-P-02: single — верный ответ засчитан, '012' равен '12', неверный не засчитан",
+      "label": "UC-19-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-01, UC-19-P-02: string — посимвольно с учётом регистра, другой регистр не засчитан",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-01, UC-19-P-02: string — посимвольно с учётом регистра, другой регистр не засчитан",
+      "label": "UC-19-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-01: pair — лишние пробелы не влияют на верный ответ",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-02: задача без эталонного ответа — любой ответ неверен, попытка записана",
+      "label": "UC-19-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-04: отправка сверх лимита за минуту — [rate_limit]",
+      "label": "UC-19-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-19-P-05: неопубликованная и несуществующая задача — [task_not_found], попытки нет",
+      "label": "UC-19-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-23-P-01: select answer_explanation под студентом — permission denied",
+      "label": "UC-23-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-23-P-01: select reference_solution под студентом — permission denied",
+      "label": "UC-23-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-23-P-01: select из task_answers под админом — permission denied",
+      "label": "UC-23-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-23-P-01: select из task_answers под студентом — permission denied",
+      "label": "UC-23-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-23-P-01: у клиентских ролей нет прав на task_answers и колонки эталона и разбора в tasks",
+      "label": "UC-23-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-24-P-01: прямой delete из submissions — permission denied",
+      "label": "UC-24-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-24-P-01: прямой insert в submissions — permission denied",
+      "label": "UC-24-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-24-P-01: прямой update submissions — permission denied",
+      "label": "UC-24-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-24-P-01: у клиентских ролей на submissions только select — ни insert, ни update, ни delete",
+      "label": "UC-24-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-27-P-01: task_articles отдаёт статью задачи по её теме",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-31-P-01: автор перезаписывает черновик — строка одна, время записи новое",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-31-P-01: автор пишет черновик и читает его",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-31-P-02: автор удаляет свой черновик",
+      "label": "UC-31-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-33-P-01: публикация своей верной попытки — время публикации записано",
+      "label": "UC-33-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-33-P-02: снятие с публикации — время публикации снято",
+      "label": "UC-33-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-33-P-04: публикация своей неверной попытки — [not_correct]",
+      "label": "UC-33-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-33-P-04: публикация чужой попытки — [not_owner]",
+      "label": "UC-33-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-35-P-01: решившему видна ровно опубликованная попытка другого по этой задаче",
+      "label": "UC-35-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-35-P-01: решившему задачу неопубликованные попытки других не видны",
+      "label": "UC-35-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-35-P-02: опубликованная попытка другого по задаче, которую ученик не решил, не видна",
+      "label": "UC-35-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-36-P-01, UC-37-P-01: опубликованная статья ученику видна",
+      "label": "UC-36-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-36-P-01, UC-37-P-01: опубликованная статья ученику видна",
+      "label": "UC-37-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-36-P-01, UC-37-P-02, UC-28-P-02: неопубликованная статья ученику не видна",
+      "label": "UC-28-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-36-P-01, UC-37-P-02, UC-28-P-02: неопубликованная статья ученику не видна",
+      "label": "UC-36-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-36-P-01, UC-37-P-02, UC-28-P-02: неопубликованная статья ученику не видна",
+      "label": "UC-37-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: admin_get_task под учеником",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: admin_reset_password под студентом — [forbidden]",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: admin_set_role под учеником — [forbidden]",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: admin_set_task_answer под учеником — [forbidden]",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: admin_upsert_article под студентом",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: админские RPC под студентом",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-6-P-01: под студентом — [forbidden]",
+      "label": "UC-6-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-7-P-01: администратор закрывает и открывает регистрацию, is_registration_open() и триггер следуют флагу",
+      "label": "UC-7-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-7-P-02: ученик меняет registration_open — без ошибки, 0 строк, значение прежнее",
+      "label": "UC-7-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-8-P-01: администратор назначает и снимает роль администратора",
+      "label": "UC-8-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-8-P-02: снять роль администратора с себя — [self_demote]",
+      "label": "UC-8-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-8-P-03: недопустимая роль — [bad_role]",
+      "label": "UC-8-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-8-P-04: роль несуществующему пользователю — [user_not_found]",
+      "label": "UC-8-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-9-P-01: новым паролем можно войти — хэш bcrypt сходится с ним и не сходится с другим",
+      "label": "UC-9-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-9-P-01: нормальный пароль — проходит",
+      "label": "UC-9-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-9-P-01: хэш действительно изменился",
+      "label": "UC-9-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-9-P-02: короткий пароль — [weak_password]",
+      "label": "UC-9-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "supabase/tests/rls_tests.sql",
+      "name": "UC-9-P-03: пароль несуществующему пользователю — [user_not_found]",
+      "label": "UC-9-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/app_test.dart",
+      "name": "smoke: приложение стартует на экране входа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-01: с адресом и ключом bootstrap поднимает Supabase",
+      "label": "UC-12-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: без адреса и ключа bootstrap возвращает понятную ошибку",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: без параметров сборки адреса и ключа проекта нет",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-02: заглушка объясняет, чего не хватает",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-03: Supabase не поднялся — bootstrap возвращает ошибку подключения",
+      "label": "UC-12-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/bootstrap_test.dart",
+      "name": "UC-12-P-03: заглушка показывает переданные подробности",
+      "label": "UC-12-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-10-P-01: без авторизации любой путь ведёт на вход",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-10-P-05, UC-13-P-03: после входа открывается каталог, после выхода — вход",
+      "label": "UC-10-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-10-P-05, UC-13-P-03: после входа открывается каталог, после выхода — вход",
+      "label": "UC-13-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-10-P-05: адрес, открытый до проверки сессии, восстанавливается",
+      "label": "UC-10-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-10-P-05: вошедшего с /login и /register уводит на главную",
+      "label": "UC-10-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-5-P-01: админ открывает админку и видит пункт меню",
+      "label": "UC-5-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "UC-5-P-02: ученика не пускает в админку и прячет пункт меню",
+      "label": "UC-5-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-1-P-01: адрес переживает перезагрузку страницы регистрации",
+      "label": "UC-1-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01, UC-5-P-02: ученик с адресом админки после входа попадает в каталог",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01, UC-5-P-02: ученик с адресом админки после входа попадает в каталог",
+      "label": "UC-5-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: адрес переживает перезагрузку страницы входа",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: адрес, открытый без входа, открывается после входа",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: адрес, открытый до проверки сессии, когда сессии нет, открывается после входа",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: без входа на главной вход получает её адрес",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: негодные адреса после входа ведут на главную",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-10-P-01: путь с параметрами запроса сохраняется целиком",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после входа UC-38-P-01: после тестового входа открывается запомненный адрес",
+      "label": "UC-38-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после конца сессии UC-10-P-01: после конца сессии адрес, открытый заново без входа, запоминается",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "адрес после конца сессии UC-13-P-03: сессия закончилась на открытой странице — адрес не запоминается, следующий вход открывает главную",
+      "label": "UC-13-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "неизвестный путь показывает экран 404",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/router/app_router_test.dart",
+      "name": "пока сессия не проверена, показывается заставка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark primary цветовой схемы — AppColors.accent",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark возвращает тёмную тему",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark использует Material 3",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/app/theme/app_theme_test.dart",
+      "name": "AppTheme.dark фон Scaffold — AppColors.background",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.fold для Err вызывает onErr с ошибкой",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.fold для Ok вызывает onOk со значением",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.isOk / isErr Err: isOk false, isErr true",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.isOk / isErr Ok: isOk true, isErr false",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Err сохраняет исходную ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Ok меняет тип значения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.map для Ok преобразует значение",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.valueOrNull / failureOrNull Err возвращает ошибку и null вместо значения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/result_test.dart",
+      "name": "Result.valueOrNull / failureOrNull Ok возвращает значение и null вместо ошибки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse возвращает null для сообщения без кода",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse игнорирует ведущие пробелы и перенос строки в тексте",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/error/rpc_error_test.dart",
+      "name": "RpcError.tryParse разбирает формат «[код] Текст»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "UC-28-P-01: нажатие на внутреннюю ссылку отдаёт slug",
+      "label": "UC-28-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "UC-28-P-02: неизвестная ссылка остаётся текстом",
+      "label": "UC-28-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "UC-37-P-01: рисует заголовок, абзац и блок кода",
+      "label": "UC-37-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/app_markdown_test.dart",
+      "name": "UC-37-P-01: таблица и цитата не ломают разметку",
+      "label": "UC-37-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter имя, похожее на ключевое слово, не подсвечивается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter ключевые слова и встроенные функции",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter комментарий идёт до конца строки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter незакрытая строка не ломает разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter одинарная строка не переносится на следующую строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter пустой код даёт пустой разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter разбор ничего не теряет",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter строки: одинарные, двойные и тройные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter цифра внутри имени числом не считается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter числа: целые, дробные, шестнадцатеричные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/python_highlighter_test.dart",
+      "name": "PythonHighlighter экранированная кавычка не закрывает строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax UC-28-P-01: известный slug становится ссылкой с заголовком статьи",
+      "label": "UC-28-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax UC-28-P-02: неизвестный slug остаётся обычным текстом",
+      "label": "UC-28-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax slug узнаётся по адресу ссылки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax внутри блока кода ссылка не создаётся",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/markdown/wiki_link_syntax_test.dart",
+      "name": "WikiLinkSyntax внутри участка кода ссылка не создаётся",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "при ширине 1280 показывается развёрнутый NavigationRail без NavigationBar",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "при ширине 400 показывается NavigationBar без NavigationRail",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "тап по пункту NavigationBar вызывает onDestinationSelected с верным индексом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/core/widgets/adaptive_navigation_scaffold_test.dart",
+      "name": "тап по пункту NavigationRail вызывает onDestinationSelected с верным индексом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01, UC-38-P-01: сборка по ENT-16 и ENT-17 — release, base href /yege_wars/, параметры и тестовый вход из секретов",
+      "label": "UC-29-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01, UC-38-P-01: сборка по ENT-16 и ENT-17 — release, base href /yege_wars/, параметры и тестовый вход из секретов",
+      "label": "UC-38-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01: выкладка запускается только вручную — workflow_dispatch, других триггеров нет",
+      "label": "UC-29-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01: выкладывается только main — другая ветка останавливает сборку первым шагом",
+      "label": "UC-29-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01: перед сборкой — анализ и тесты, как в CI",
+      "label": "UC-29-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-01: сборка публикуется на GitHub Pages из build/web",
+      "label": "UC-29-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: не задан SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: не задан SUPABASE_URL и SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: не задан SUPABASE_URL — выкладка падает до сборки, в логе — имя секрета",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: оба секрета заданы — проверка проходит и значений не печатает",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: сборка упала — шаг сборки падает, дальше выкладка не идёт",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: секреты проверяются до checkout, проверок и сборки",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: упавшая сборка не публикуется — публикация только в deploy после build",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-29-P-02: упала проверка перед сборкой — шаг падает, дальше выкладка не идёт",
+      "label": "UC-29-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/deploy/deploy_workflow_test.dart",
+      "name": "UC-38-P-02: секреты тестового входа не заданы — проверка секретов проходит, сборка идёт с пустыми значениями",
+      "label": "UC-38-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth занятая почта — ошибка валидации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth лимит запросов",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth неверные учётные данные",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth ошибка триггера при регистрации объясняет причины",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth потерянная сессия",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth слабый пароль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки Supabase Auth та же ошибка при входе остаётся непредвиденной",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных неизвестный код БД сохраняет русский текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных ошибка занятого логина — ошибка валидации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: ошибки базы данных текст «[код] Текст» из RPC показывается пользователю",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее любое другое исключение — непредвиденная ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее неожиданные данные профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее обрыв запроса PostgREST — сетевая ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее обрыв запроса Supabase Auth — сетевая ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_error_mapper_test.dart",
+      "name": "AuthErrorMapper: сеть и прочее просроченный токен — ошибка авторизации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile без сессии возвращает ошибку авторизации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile битая строка профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "currentProfile с сессией читает профиль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn возвращает профиль после успешного входа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn вход без пользователя в ответе — ошибка",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn неверные учётные данные превращаются в AuthFailure",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signIn отсутствие строки профиля — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen ошибка RPC состояния регистрации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen ошибка выхода превращается в Failure",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen состояние регистрации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signOut и isRegistrationOpen успешный выход",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp возвращает профиль, созданный триггером",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp ошибка триггера объясняет причины",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "signUp сообщение триггера «[код] Текст» доходит как есть",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/auth_repository_impl_test.dart",
+      "name": "поток сессии проксируется из datasource",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto бросает FormatException без обязательных полей",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto неизвестная роль трактуется как ученик",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto разбирает строку профиля и отдаёт сущность",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "ProfileDto роль без значения трактуется как ученик",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "SupabaseAuthRemoteDataSource.emailFor логин превращается в техническую почту",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/profile_dto_test.dart",
+      "name": "SupabaseAuthRemoteDataSource.emailFor регистр логина в почте не важен",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "вход идёт по технической почте",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "выход делегируется Supabase Auth",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "идентификатор текущей сессии",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "поток сессии отдаёт id и не повторяет одно и то же значение",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/data/supabase_auth_remote_data_source_test.dart",
+      "name": "регистрация передаёт логин в метаданные без изменения регистра",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState признаки состояния",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState профиль доступен только в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "AuthState равенство состояний",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserProfile в текстовом виде видны логин и роль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserProfile равенство по полям",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserRole признак администратора",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_entities_test.dart",
+      "name": "UserRole разбирает значения из базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidPassword отклоняет короткий пароль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidPassword принимает пароль от 8 символов",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidUsername отклоняет короткий, длинный и недопустимый логин",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "AuthRules.isValidUsername принимает латиницу, цифры и подчёркивание",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation ничего не возвращает для корректных данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation сначала сообщает об ошибке логина",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/auth_rules_test.dart",
+      "name": "CredentialsValidation сообщает об ошибке пароля при верном логине",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase UC-10-P-03: не идёт в репозиторий при коротком пароле",
+      "label": "UC-10-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase UC-10-P-03: не идёт в репозиторий при неверном логине",
+      "label": "UC-10-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignInUseCase передаёт корректные данные в репозиторий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignUpUseCase UC-1-P-02: проверяет ввод до обращения к репозиторию",
+      "label": "UC-1-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "SignUpUseCase регистрирует при корректных данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию GetCurrentProfileUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию IsRegistrationOpenUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию SignOutUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/domain/use_cases_test.dart",
+      "name": "остальные use case делегируют репозиторию WatchAuthUserUseCase",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя UC-10-P-02: неуспешный вход не меняет состояние",
+      "label": "UC-10-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя UC-13-P-01: выход возвращает в unauthenticated",
+      "label": "UC-13-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя UC-13-P-02: ошибка выхода сохраняет вход",
+      "label": "UC-13-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя успешная регистрация переводит в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "действия пользователя успешный вход переводит в authenticated",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию UC-10-P-05: восстановленная сессия загружает профиль",
+      "label": "UC-10-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию UC-10-P-06: ошибка чтения профиля оставляет пользователя снаружи",
+      "label": "UC-10-P-06",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию UC-13-P-03: выход из аккаунта в другой вкладке сбрасывает состояние",
+      "label": "UC-13-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию до первого события статус неизвестен",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию повторное событие того же пользователя не грузит профиль заново",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/auth_controller_test.dart",
+      "name": "подписка на сессию пустая сессия — пользователь не авторизован",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-10-P-01: успешный вход ведёт в каталог",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-10-P-02: показывает ошибку сервера",
+      "label": "UC-10-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-10-P-03: не отправляет форму с некорректным вводом",
+      "label": "UC-10-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-10-P-04: сбой связи показывается сообщением",
+      "label": "UC-10-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-10-P-06: показывает ошибку восстановления сессии",
+      "label": "UC-10-P-06",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-01: «Тестовый вход» подставляет логин и пароль и входит; пока идёт отправка, обе кнопки недоступны",
+      "label": "UC-38-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-01: пока отправляет «Войти», «Тестовый вход» недоступна",
+      "label": "UC-38-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-02: задан только логин — кнопки «Тестовый вход» нет",
+      "label": "UC-38-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-02: задан только пароль — кнопки «Тестовый вход» нет",
+      "label": "UC-38-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-02: не заданы логин и пароль — кнопки «Тестовый вход» нет",
+      "label": "UC-38-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "UC-38-P-03: тестовый вход отклонён — сообщение над формой, в полях подставленные значения",
+      "label": "UC-38-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "показывает индикатор на время отправки",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/login_screen_test.dart",
+      "name": "тестовый вход с логином и паролем не по правилам — ошибки у полей, запрос не отправлен",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-01: адрес переходит со входа на регистрацию и открывается после регистрации",
+      "label": "UC-1-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-01: успешная регистрация ведёт в каталог",
+      "label": "UC-1-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-02: не отправляет форму с некорректным вводом",
+      "label": "UC-1-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-03: ошибка регистрации показывается на экране",
+      "label": "UC-1-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-04: при закрытой регистрации форма заблокирована",
+      "label": "UC-1-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-1-P-05: ошибка проверки регистрации показывается",
+      "label": "UC-1-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/auth/presentation/register_screen_test.dart",
+      "name": "UC-10-P-01: ссылка с регистрации на вход сохраняет адрес",
+      "label": "UC-10-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01, UC-32-P-01: «Запустить» сразу записывает черновик — программа ещё выполняется, а запуск записи не ждёт",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01, UC-32-P-01: «Запустить» сразу записывает черновик — программа ещё выполняется, а запуск записи не ждёт",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: «Отправить ответ» сразу записывает черновик — проверка ещё не ответила, а отправка записи не ждёт; после неё черновик остаётся",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: без правок ни кнопки, ни уход черновик не пишут",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: переход в другой раздел записывает черновик сразу",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: правка переживает смену вкладки и раскладки",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: уход со страницы назад в каталог записывает черновик сразу",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-01: черновик из базы стоит в поле, правка записывается через 1 с после последней",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-02: код из одних пробельных символов удаляет черновик — при следующем открытии поле пустое",
+      "label": "UC-31-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-31-P-03: сбой записи экран не показывает, следующая запись — по кнопке и при уходе — пишет код снова",
+      "label": "UC-31-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-01, UC-32-P-03: во время выполнения «Стоп» доступен, а «Запустить» — нет",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-01, UC-32-P-03: во время выполнения «Стоп» доступен, а «Запустить» — нет",
+      "label": "UC-32-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-01: Ctrl+Enter во время запуска не запускает программу второй раз",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-01: запуск передаёт код и файлы задачи",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-01: пока грузится среда и пока выполняется программа, «Запустить» недоступна, а «Стоп» доступна",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-02: ошибка программы показывается в консоли",
+      "label": "UC-32-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-03: «Стоп» во время загрузки среды прерывает её — «Остановлено»",
+      "label": "UC-32-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_panel_test.dart",
+      "name": "UC-32-P-04: таймаут — сообщение в консоли и своя строка состояния",
+      "label": "UC-32-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "DraftRepositoryImpl UC-31-P-01: загрузка ждёт незаконченной записи той же задачи",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "DraftRepositoryImpl UC-31-P-01: записи задачи идут по очереди — следующая после ответа на предыдущую",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "DraftRepositoryImpl UC-31-P-01: черновик читается из строки базы, нет строки — черновика нет",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "DraftRepositoryImpl UC-31-P-03: сбой записи — ошибка в результате, следующая запись уходит",
+      "label": "UC-31-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PythonEditingController подсвечивает ключевые слова, не теряя текста",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "PythonEditingController цвет подбирается по роли фрагмента",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController UC-32-P-01: запуск передаёт код, ввод и файлы задачи",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController UC-32-P-01: состояние среды приходит из потока",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController UC-32-P-03: «Стоп» доходит до среды",
+      "label": "UC-32-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController UC-32-P-05: ошибка среды попадает в состояние",
+      "label": "UC-32-P-05",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunController очистка убирает прошлый вывод",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "RunResult успешен только запуск, завершившийся сам",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SaveDraftUseCase UC-31-P-01: код записывается черновиком задачи",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SaveDraftUseCase UC-31-P-02: код из одних пробельных символов удаляет черновик",
+      "label": "UC-31-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SupabaseDraftRemoteDataSource UC-31-P-01: черновик пишется upsert по ключу «пользователь, задача»",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SupabaseDraftRemoteDataSource UC-31-P-01: черновик читается своей строкой задачи",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SupabaseDraftRemoteDataSource UC-31-P-02: удаляется своя строка задачи",
+      "label": "UC-31-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "SupabaseDraftRemoteDataSource без сессии черновик не читается и не пишется",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel до первого запуска строка пустая",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel итог запуска называется своими словами",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runStatusLabel состояния среды важнее прошлого результата",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runtimeStateOnReady UC-32-P-01: Python загрузился во время запуска — программа выполняется",
+      "label": "UC-32-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/editor/editor_test.dart",
+      "name": "runtimeStateOnReady без запуска загруженная среда просто готова",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "UC-13-P-01: кнопка «Выйти» возвращает на экран входа",
+      "label": "UC-13-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "UC-13-P-01: после «Выйти» адрес профиля не запоминается — следующий вход открывает главную",
+      "label": "UC-13-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "UC-13-P-02: ошибка выхода показывается сообщением",
+      "label": "UC-13-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "UC-4-P-01: показывает логин и роль",
+      "label": "UC-4-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/profile/profile_screen_test.dart",
+      "name": "UC-4-P-01: показывает роль администратора",
+      "label": "UC-4-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto без обязательных полей и без текста — FormatException",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto пропуски в необязательных полях не ломают разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto разбирает карточку статьи",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto статья целиком содержит текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "ArticleDto чужеродные значения в массивах отбрасываются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "SupabaseReferenceRemoteDataSource.escapeSearch обычный запрос не меняется",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/article_dto_test.dart",
+      "name": "SupabaseReferenceRemoteDataSource.escapeSearch убирает символы, ломающие фильтр PostgREST",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "articleTitles UC-28-P-01: собирает словарь «slug — заголовок»",
+      "label": "UC-28-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "articleTitles строки без нужных полей пропускаются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "getArticle UC-37-P-02: отсутствующая статья — понятная ошибка",
+      "label": "UC-37-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "getArticle возвращает статью с текстом",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles UC-36-P-02: фильтр передаётся в datasource без изменений",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles битая строка — ошибка базы данных",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles возвращает карточки статей",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/reference_repository_impl_test.dart",
+      "name": "listArticles обрыв связи превращается в сетевую ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/data/supabase_reference_remote_data_source_test.dart",
+      "name": "UC-36-P-01: статьи идут по уровню, затем по названию — по возрастанию",
+      "label": "UC-36-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilter copyWith меняет одно поле и сбрасывает по признаку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilter пустой фильтр не задаёт условий",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController UC-36-P-02: выбор другого значения заменяет прежнее",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController UC-36-P-02: повторный выбор снимает условие",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/domain/article_filter_test.dart",
+      "name": "ArticleFilterController UC-36-P-02: сброс очищает все условия",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-28-P-01: заголовки статей передаются в разметку",
+      "label": "UC-28-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-28-P-02: словарь заголовков не загрузился — slug текстом до конца сессии",
+      "label": "UC-28-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-28-P-03: обычная ссылка не открывается",
+      "label": "UC-28-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-37-P-01: показывает заголовок, сведения и текст",
+      "label": "UC-37-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-37-P-02: статьи нет — сразу «Статья справочника не найдена.» и «Повторить»",
+      "label": "UC-37-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/article_screen_test.dart",
+      "name": "UC-37-P-03: сбой связи — сразу сообщение и «Повторить», без автоповторов",
+      "label": "UC-37-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-01: нажатие на карточку открывает статью",
+      "label": "UC-36-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-01: показывает список статей",
+      "label": "UC-36-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-02: «Сбросить фильтры» снимает все условия и строку поиска, а текст в поле остаётся",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-02: выбор уровня уходит в запрос",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-02: значения фильтров не загрузились — чипов номеров и тегов нет до перезагрузки страницы, а список работает",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-02: строка поиска уходит в запрос через 300 мс после ввода",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-02: чипы номеров и тегов — из значений фильтров",
+      "label": "UC-36-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-03: по заданным условиям статей нет",
+      "label": "UC-36-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-03: пустой справочник объясняет себя",
+      "label": "UC-36-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-04: ошибка списка показывается с кнопкой повтора",
+      "label": "UC-36-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "UC-36-P-04: сбой связи — сразу сообщение и «Повторить», без автоповторов",
+      "label": "UC-36-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/reference/presentation/reference_screen_test.dart",
+      "name": "пункт «Справочник» есть в навигации",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerFormat.fromValue знает все форматы базы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerFormat.fromValue неизвестное или пустое значение — строка, без падения",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput multi: пустые строки и пробельные края выбрасываются",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput multi: таблица по строкам превращается в одну строку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput pair: последняя строка, а не весь вывод",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput single: последняя непустая строка вывода",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput string: последняя строка без пробельных краёв",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/answer_rules_test.dart",
+      "name": "AnswerRules.fromOutput пустой вывод — пустой ответ при любом формате",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "UC-35-P-01: после верного ответа видны чужие решения",
+      "label": "UC-35-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "UC-35-P-02: без своего верного ответа решения закрыты",
+      "label": "UC-35-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "UC-35-P-03: решивший видит пустое состояние, если решений нет",
+      "label": "UC-35-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "UC-35-P-04: сбой загрузки решений — сразу сообщение и «Повторить» вместо списка",
+      "label": "UC-35-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/solutions_list_test.dart",
+      "name": "UC-35-P-04: свои попытки не загрузились — в «Решениях» сообщение и «Повторить», а не «откроются после верного ответа»",
+      "label": "UC-35-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl вердикт приходит из базы",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl ошибка базы с кодом превращается в понятный текст",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl публикация доходит до RPC",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl свои попытки разбираются вместе с датой",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmissionsRepositoryImpl у чужого решения виден логин автора",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase UC-19-P-01: непустой ответ уходит в репозиторий",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase UC-19-P-01: ответ уходит без пробельных краёв, включая переводы строк",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase UC-19-P-03: ответ из одних переводов строк считается пустым",
+      "label": "UC-19-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitAnswerUseCase UC-19-P-03: пустой ответ до сервера не доходит",
+      "label": "UC-19-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController UC-19-P-01: успешная отправка кладёт вердикт в состояние",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController UC-19-P-04: ошибка отправки видна в состоянии",
+      "label": "UC-19-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController UC-33-P-01: публикация зовёт репозиторий",
+      "label": "UC-33-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "SubmitController сброс убирает вердикт",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submissions_test.dart",
+      "name": "время попытки выводится коротко",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-18-P-01: для multi из вывода берётся вся таблица одной строкой",
+      "label": "UC-18-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-18-P-01: для остальных форматов из вывода берётся последняя строка",
+      "label": "UC-18-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-18-P-01: ответ подставляется из вывода программы",
+      "label": "UC-18-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-01, UC-33-P-01: верный ответ показывает вердикт и предлагает публикацию",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-01, UC-33-P-01: верный ответ показывает вердикт и предлагает публикацию",
+      "label": "UC-33-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-01: ответ уходит без пробельных краёв",
+      "label": "UC-19-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-02: неверный ответ публиковать не предлагают",
+      "label": "UC-19-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-04: ошибка отправки показывается текстом из базы",
+      "label": "UC-19-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-19-P-06: сбой связи при отправке — текст под кнопкой, вердикта нет",
+      "label": "UC-19-P-06",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-33-P-01: после публикации из блока переключатель у попытки включён, даже если база ответила не сразу",
+      "label": "UC-33-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-33-P-02: снятие с публикации переключателем — переключатель выключен, даже если база ответила не сразу",
+      "label": "UC-33-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-33-P-03: «Не сейчас» скрывает блок и не публикует",
+      "label": "UC-33-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-33-P-04: переключатель не переключился — внизу экрана сообщение с текстом ошибки, переключатель прежний",
+      "label": "UC-33-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-33-P-04: публикация из блока не прошла — блок остаётся, под кнопками текст ошибки, опубликовать можно снова",
+      "label": "UC-33-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-34-P-01: мои попытки показываются с вердиктом",
+      "label": "UC-34-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-34-P-02: без попыток — «Попыток пока не было»",
+      "label": "UC-34-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "UC-34-P-03: сбой загрузки попыток — сразу сообщение и «Повторить» вместо списка",
+      "label": "UC-34-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "подсказка под полем зависит от формата ответа",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/submissions/submit_panel_test.dart",
+      "name": "у табличной задачи подсказка про таблицу по строкам",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "UC-14-P-01: каталог идёт по номеру, затем по названию — по возрастанию",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "UC-14-P-02: номера для фильтра идут по возрастанию",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/supabase_tasks_remote_data_source_test.dart",
+      "name": "UC-15-P-01: файлы задачи идут по sort_order по возрастанию",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief задание без номера КИМ получает null, а не ноль",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief строка без обязательных полей — ошибка формата",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toBrief читает номер задания",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toDetail неизвестный формат ответа не роняет разбор",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toDetail формат ответа разбирается в перечисление",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toThemeArticles прикладывает карточку статьи к строке темы по id",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/task_dto_test.dart",
+      "name": "TaskDto.toThemeArticles строка темы без видимой статьи пропускается",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "UC-14-P-02: номера заданий приходят без повторов и по порядку",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask UC-15-P-01, UC-27-P-01: собирает условие, файлы и справку",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask UC-15-P-01, UC-27-P-01: собирает условие, файлы и справку",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask UC-15-P-02: неизвестная задача — понятная ошибка",
+      "label": "UC-15-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask UC-27-P-01: справка по темам: статьи вторым запросом, ручные — следом",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "getTask UC-27-P-02: без тем со статьями второй запрос не уходит",
+      "label": "UC-27-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog UC-14-P-01: задача без моих попыток — не начата",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog UC-14-P-01: собирает карточки, прогресс и статистику",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog UC-14-P-02: отбор по прогрессу выполняется на клиенте",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog UC-14-P-02: фильтр уходит в datasource без изменений",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/data/tasks_repository_impl_test.dart",
+      "name": "listCatalog обрыв связи превращается в сетевую ошибку",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: без ручных связей справка состоит из статей по темам",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: без тем справка — ручные связи",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: главные первыми, внутри — по порядку темы, затем ручные",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: повтор ручной связи не дублирует статью",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: статья двух тем — один раз, по ранней теме",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: статья основной темы главная, других тем — сопутствующая",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-01: статья по теме и вручную — один раз, с более сильной значимостью и на месте темы",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/domain/task_help_rules_test.dart",
+      "name": "TaskHelpRules.merge UC-27-P-02: нет ни тем, ни ручных связей — справка пустая",
+      "label": "UC-27-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-01: задача без номера КИМ попадает в группу «Без номера»",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-01: нажатие на карточку открывает задачу",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-01: показывает задачи с группировкой по номеру",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-01: показывает статус и статистику",
+      "label": "UC-14-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-02: фильтр по сложности уходит в запрос",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-02: фильтр по состоянию решения уходит в запрос",
+      "label": "UC-14-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-03: пустой каталог объясняет себя",
+      "label": "UC-14-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/catalog_screen_test.dart",
+      "name": "UC-14-P-04: ошибка каталога показывается с повтором",
+      "label": "UC-14-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/ege_group_label_test.dart",
+      "name": "задание без номера КИМ попадает в группу «Без номера»",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/ege_group_label_test.dart",
+      "name": "номер задания подписывается номером",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-01, UC-27-P-01: на узком экране условие, справка и файлы — вкладки",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-01, UC-27-P-01: на узком экране условие, справка и файлы — вкладки",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-01, UC-27-P-01: показывает условие и подсказку про справку",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-01, UC-27-P-01: показывает условие и подсказку про справку",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-01: файл разворачивается и показывает первые строки",
+      "label": "UC-15-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-02: ошибка загрузки показывается с повтором",
+      "label": "UC-15-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-15-P-03: сбой связи показывается сообщением с повтором",
+      "label": "UC-15-P-03",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-27-P-01: без ручных связей справка показывает статью по теме",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-27-P-01: из справки к задаче можно перейти в статью",
+      "label": "UC-27-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-27-P-02: у задачи без статей справка пустая, подсказки над условием нет",
+      "label": "UC-27-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-31-P-01, UC-31-P-04: пока черновик грузится, страница задачи не открыта — затем в поле кода черновик",
+      "label": "UC-31-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-31-P-01, UC-31-P-04: пока черновик грузится, страница задачи не открыта — затем в поле кода черновик",
+      "label": "UC-31-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "UC-31-P-04: задача загрузилась, а черновик нет — вместо страницы сразу сообщение и «Повторить»",
+      "label": "UC-31-P-04",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview длинная строка обрезается с многоточием",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview короткий файл показывается целиком",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview лишние строки заменяются многоточием",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "filePreview файл задания в одну строку не тянет за собой мегабайт",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "fileSizeLabel большой файл — в килобайтах",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/features/tasks/presentation/task_screen_test.dart",
+      "name": "fileSizeLabel маленький файл — в байтах",
+      "label": null,
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/main_test.dart",
+      "name": "UC-12-P-02: без параметров сборки приложение показывает экран «не сконфигурировано» с причиной",
+      "label": "UC-12-P-02",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/web/site_base_href_test.dart",
+      "name": "UC-30-P-01: <base href> в web/index.html — из параметра сборки --base-href",
+      "label": "UC-30-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/web/site_base_href_test.dart",
+      "name": "UC-30-P-01: адреса в web/index.html относительные и ведут в web/",
+      "label": "UC-30-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/web/site_base_href_test.dart",
+      "name": "UC-30-P-01: адреса в web/manifest.json относительные и ведут в web/",
+      "label": "UC-30-P-01",
+      "verdict": "PASS"
+    },
+    {
+      "file": "test/web/site_base_href_test.dart",
+      "name": "UC-30-P-01: воркер Python грузится с адреса сайта — адрес относительный",
+      "label": "UC-30-P-01",
+      "verdict": "PASS"
+    }
+  ],
+  "paths": {
+    "UC-1-P-01": "PASS",
+    "UC-1-P-02": "PASS",
+    "UC-1-P-03": "PASS",
+    "UC-1-P-04": "PASS",
+    "UC-1-P-05": "PASS",
+    "UC-4-P-01": "PASS",
+    "UC-5-P-01": "PASS",
+    "UC-5-P-02": "PASS",
+    "UC-6-P-01": "PASS",
+    "UC-7-P-01": "PASS",
+    "UC-7-P-02": "PASS",
+    "UC-8-P-01": "PASS",
+    "UC-8-P-02": "PASS",
+    "UC-8-P-03": "PASS",
+    "UC-8-P-04": "PASS",
+    "UC-9-P-01": "PASS",
+    "UC-9-P-02": "PASS",
+    "UC-9-P-03": "PASS",
+    "UC-10-P-01": "PASS",
+    "UC-10-P-02": "PASS",
+    "UC-10-P-03": "PASS",
+    "UC-10-P-04": "PASS",
+    "UC-10-P-05": "PASS",
+    "UC-10-P-06": "PASS",
+    "UC-12-P-01": "PASS",
+    "UC-12-P-02": "PASS",
+    "UC-12-P-03": "PASS",
+    "UC-13-P-01": "PASS",
+    "UC-13-P-02": "PASS",
+    "UC-13-P-03": "PASS",
+    "UC-14-P-01": "PASS",
+    "UC-14-P-02": "PASS",
+    "UC-14-P-03": "PASS",
+    "UC-14-P-04": "PASS",
+    "UC-15-P-01": "PASS",
+    "UC-15-P-02": "PASS",
+    "UC-15-P-03": "PASS",
+    "UC-18-P-01": "PASS",
+    "UC-19-P-01": "PASS",
+    "UC-19-P-02": "PASS",
+    "UC-19-P-03": "PASS",
+    "UC-19-P-04": "PASS",
+    "UC-19-P-05": "PASS",
+    "UC-19-P-06": "PASS",
+    "UC-23-P-01": "PASS",
+    "UC-24-P-01": "PASS",
+    "UC-27-P-01": "PASS",
+    "UC-27-P-02": "PASS",
+    "UC-28-P-01": "PASS",
+    "UC-28-P-02": "PASS",
+    "UC-28-P-03": "PASS",
+    "UC-29-P-01": "PASS",
+    "UC-29-P-02": "PASS",
+    "UC-30-P-01": "PASS",
+    "UC-31-P-01": "PASS",
+    "UC-31-P-02": "PASS",
+    "UC-31-P-03": "PASS",
+    "UC-31-P-04": "PASS",
+    "UC-32-P-01": "PASS",
+    "UC-32-P-02": "PASS",
+    "UC-32-P-03": "PASS",
+    "UC-32-P-04": "PASS",
+    "UC-32-P-05": "PASS",
+    "UC-33-P-01": "PASS",
+    "UC-33-P-02": "PASS",
+    "UC-33-P-03": "PASS",
+    "UC-33-P-04": "PASS",
+    "UC-34-P-01": "PASS",
+    "UC-34-P-02": "PASS",
+    "UC-34-P-03": "PASS",
+    "UC-35-P-01": "PASS",
+    "UC-35-P-02": "PASS",
+    "UC-35-P-03": "PASS",
+    "UC-35-P-04": "PASS",
+    "UC-36-P-01": "PASS",
+    "UC-36-P-02": "PASS",
+    "UC-36-P-03": "PASS",
+    "UC-36-P-04": "PASS",
+    "UC-37-P-01": "PASS",
+    "UC-37-P-02": "PASS",
+    "UC-37-P-03": "PASS",
+    "UC-38-P-01": "PASS",
+    "UC-38-P-02": "PASS",
+    "UC-38-P-03": "PASS"
+  },
+  "totals": {
+    "pass": 434,
+    "fail": 0,
+    "blocked": 0
+  }
+}

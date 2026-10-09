@@ -10,9 +10,17 @@ const String _workflowPath = '.github/workflows/deploy.yml';
 /// Поддельные значения секретов: тест следит, чтобы их не было в логе.
 const String _fakeUrl = 'https://fake-project.invalid';
 const String _fakeKey = 'fake-publishable-key';
+const String _fakeTestUsername = 'fake-test-user';
+const String _fakeTestPassword = 'fake-test-password';
 
-/// Имена секретов сборки (ENT-5).
+/// Имена обязательных секретов сборки (ENT-5).
 const List<String> _secretNames = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
+
+/// Имена необязательных секретов тестового входа (ENT-17).
+const List<String> _testLoginSecretNames = [
+  'TEST_LOGIN_USERNAME',
+  'TEST_LOGIN_PASSWORD',
+];
 
 /// Команда сборки — по ней ищется шаг сборки.
 const String _buildCommand = 'flutter build web';
@@ -130,30 +138,66 @@ void main() {
   );
 
   test(
-    'UC-29-P-01: сборка по ENT-16 — release, base href /yege_wars/, '
-    'параметры из секретов',
+    'UC-29-P-01, UC-38-P-01: сборка по ENT-16 и ENT-17 — release, base href '
+    '/yege_wars/, параметры и тестовый вход из секретов',
     () async {
       final step = buildSteps[_indexRunning(buildSteps, _buildCommand)];
-      _expectSecretsEnv(step);
+      _expectSecretsEnv(step, [..._secretNames, ..._testLoginSecretNames]);
 
       final (result, calls) = await _runWithFakeTools(
         step,
-        env: {'SUPABASE_URL': _fakeUrl, 'SUPABASE_ANON_KEY': _fakeKey},
+        env: _buildEnv(
+          testUsername: _fakeTestUsername,
+          testPassword: _fakeTestPassword,
+        ),
       );
 
       expect(result.exitCode, 0, reason: '${result.stderr}');
       expect(calls, [
-        [
-          'flutter',
-          'build',
-          'web',
-          '--release',
-          '--base-href',
-          '/yege_wars/',
-          '--dart-define=SUPABASE_URL=$_fakeUrl',
-          '--dart-define=SUPABASE_ANON_KEY=$_fakeKey',
-        ],
+        _buildCall(
+          testUsername: _fakeTestUsername,
+          testPassword: _fakeTestPassword,
+        ),
       ]);
+    },
+  );
+
+  test(
+    'UC-38-P-02: секреты тестового входа не заданы — проверка секретов '
+    'проходит, сборка идёт с пустыми значениями',
+    () async {
+      // Незаданный секрет GitHub подставляет пустой строкой.
+      final env = _buildEnv(testUsername: '', testPassword: '');
+
+      final check = _stepNamed(buildSteps, 'Секреты заданы');
+      _expectSecretsEnv(check, _secretNames);
+      final checked = await _runStep(check, env);
+      expect(checked.exitCode, 0, reason: '${checked.stdout}');
+
+      final step = buildSteps[_indexRunning(buildSteps, _buildCommand)];
+      final (result, calls) = await _runWithFakeTools(step, env: env);
+
+      expect(result.exitCode, 0, reason: '${result.stderr}');
+      expect(calls, [_buildCall(testUsername: '', testPassword: '')]);
+    },
+  );
+
+  test(
+    'UC-29-P-02: сборка упала — шаг сборки падает, дальше выкладка не идёт',
+    () async {
+      final step = buildSteps[_indexRunning(buildSteps, _buildCommand)];
+
+      final (result, calls) = await _runWithFakeTools(
+        step,
+        env: _buildEnv(
+          testUsername: _fakeTestUsername,
+          testPassword: _fakeTestPassword,
+        ),
+        toolExitCode: 1,
+      );
+
+      expect(calls, isNotEmpty);
+      expect(result.exitCode, isNot(0));
     },
   );
 
@@ -185,7 +229,7 @@ void main() {
       'сборки, в логе — имя секрета',
       () async {
         final check = _stepNamed(buildSteps, 'Секреты заданы');
-        _expectSecretsEnv(check);
+        _expectSecretsEnv(check, _secretNames);
 
         final result = await _runStep(check, {
           'SUPABASE_URL': url,
@@ -280,12 +324,42 @@ int _indexRunning(List<YamlMap> steps, String command) => steps.indexWhere(
       '${step['run'] ?? ''}'.replaceAll(RegExp(r'\s+'), ' ').contains(command),
 );
 
-/// Проверяет, что шаг берёт переменные сборки из секретов GitHub.
-void _expectSecretsEnv(YamlMap step) {
+/// Проверяет, что `env` шага — ровно секреты GitHub [names] под теми же
+/// именами.
+void _expectSecretsEnv(YamlMap step, List<String> names) {
   expect(step['env'], {
-    for (final name in _secretNames) name: '\${{ secrets.$name }}',
+    for (final name in names) name: '\${{ secrets.$name }}',
   });
 }
+
+/// Окружение шага сборки: обязательные секреты — поддельные, секреты
+/// тестового входа — [testUsername] и [testPassword].
+Map<String, String> _buildEnv({
+  required String testUsername,
+  required String testPassword,
+}) => {
+  'SUPABASE_URL': _fakeUrl,
+  'SUPABASE_ANON_KEY': _fakeKey,
+  'TEST_LOGIN_USERNAME': testUsername,
+  'TEST_LOGIN_PASSWORD': testPassword,
+};
+
+/// Вызов `flutter`, который делает шаг сборки с окружением [_buildEnv].
+List<String> _buildCall({
+  required String testUsername,
+  required String testPassword,
+}) => [
+  'flutter',
+  'build',
+  'web',
+  '--release',
+  '--base-href',
+  '/yege_wars/',
+  '--dart-define=SUPABASE_URL=$_fakeUrl',
+  '--dart-define=SUPABASE_ANON_KEY=$_fakeKey',
+  '--dart-define=TEST_LOGIN_USERNAME=$testUsername',
+  '--dart-define=TEST_LOGIN_PASSWORD=$testPassword',
+];
 
 /// Запускает команду шага так же, как GitHub на Linux: при `shell: bash` —
 /// `bash --noprofile --norc -eo pipefail`, без `shell` — `bash -e`.

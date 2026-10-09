@@ -146,6 +146,25 @@ abstract final class AppTheme {
           textStyle: WidgetStatePropertyAll(textTheme.labelLarge),
         ),
       ),
+      // Кнопка-контур — того же размера и формы, что FilledButton; цвета —
+      // из цветовой схемы: текст акцентом, контур — AppColors.border.
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(
+            Size(_minTapTarget, _minTapTarget),
+          ),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.md,
+            ),
+          ),
+          shape: const WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: _controlRadius),
+          ),
+          textStyle: WidgetStatePropertyAll(textTheme.labelLarge),
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith(

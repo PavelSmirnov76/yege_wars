@@ -54,11 +54,18 @@ fvm use
 set -a; . supabase/.env.local; set +a
 flutter run -d chrome \
   --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+  --dart-define=TEST_LOGIN_USERNAME="$TEST_LOGIN_USERNAME" \
+  --dart-define=TEST_LOGIN_PASSWORD="$TEST_LOGIN_PASSWORD"
 ```
 
-Без этих параметров приложение не падает, а показывает экран
-«Приложение не сконфигурировано» с подсказкой.
+Без `SUPABASE_URL` и `SUPABASE_ANON_KEY` приложение не падает, а показывает
+экран «Приложение не сконфигурировано» с подсказкой.
+
+`TEST_LOGIN_USERNAME` и `TEST_LOGIN_PASSWORD` — логин и пароль тестовой
+учётной записи, обычного ученика, тоже из `supabase/.env.local`. Они
+необязательны: когда заданы оба, на экране входа под «Войти» есть кнопка
+«Тестовый вход» — она подставляет их в форму и входит. Без них кнопки нет.
 
 ## Команды разработки
 
@@ -136,6 +143,11 @@ python3 -m sdlc_tool check
 2. Settings → Secrets and variables → Actions → New repository secret —
    `SUPABASE_URL` и `SUPABASE_ANON_KEY`: адрес проекта Supabase и его
    публичный ключ, те же, что в `supabase/.env.local`.
+3. Необязательно, там же — `TEST_LOGIN_USERNAME` и `TEST_LOGIN_PASSWORD`:
+   логин и пароль тестовой учётной записи, те же, что в
+   `supabase/.env.local`. Заданы оба — на сайте есть кнопка «Тестовый
+   вход»; не заданы — сайт выкладывается без неё. Чтобы убрать тестовый вход
+   с сайта, удалить эти секреты и выложить сайт заново.
 
 Запуск: Actions → «Выкладка сайта» → Run workflow → ветка `main` → Run
 workflow. Кнопка есть, только когда workflow лежит в `main`.
@@ -143,14 +155,16 @@ workflow. Кнопка есть, только когда workflow лежит в 
 Выкладка по шагам:
 
 1. Ветка — `main`, иначе остановка.
-2. Оба секрета заданы, иначе остановка с именем пустого.
+2. `SUPABASE_URL` и `SUPABASE_ANON_KEY` заданы, иначе остановка с именем
+   пустого.
 3. Pages включён с источником «GitHub Actions».
 4. Проверки, как в CI: форматирование, кодогенерация, `flutter analyze`,
    `custom_lint`, `flutter test`.
 5. Сборка:
    `flutter build web --release --base-href /yege_wars/
-   --dart-define=SUPABASE_URL=… --dart-define=SUPABASE_ANON_KEY=…` —
-   значения из секретов.
+   --dart-define=SUPABASE_URL=… --dart-define=SUPABASE_ANON_KEY=…
+   --dart-define=TEST_LOGIN_USERNAME=… --dart-define=TEST_LOGIN_PASSWORD=…` —
+   значения из секретов; незаданный секрет тестового входа — пустая строка.
 6. Публикация `build/web` на GitHub Pages — задача `deploy`.
 
 Если выкладка упала, на сайте остаётся прежняя версия. Причина — в прогоне:
