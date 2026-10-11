@@ -1,4 +1,4 @@
-# RESULT-TASK-7-01: Выкладка сайта на GitHub Pages по ручному запуску
+# RESULT-TASK-7-01: Публикация сайта на GitHub Pages по ручному запуску
 
 ## Задание
 
@@ -6,14 +6,14 @@
 
 ## Коммит работы
 
-`0cb6a3f` — «TASK-7: выкладка сайта на GitHub Pages по ручному запуску»,
+`0cb6a3f` — «TASK-7: публикация сайта на GitHub Pages по ручному запуску»,
 ветка `task/TASK-7`, после «да» владельца на СТОПе 1 («Обсуждение», п. 15).
 Индексы в этом коммите собраны без сдачи; сдача и индексы с ней — отдельным
 коммитом. Push не было.
 
 ```
 0cb6a3f56c5fd527b7d87407c58a84dffb64a758
-TASK-7: выкладка сайта на GitHub Pages по ручному запуску
+TASK-7: публикация сайта на GitHub Pages по ручному запуску
 
  .github/workflows/deploy.yml                 | 127 ++++++++++++
  README.md                                    |  32 ++-
@@ -29,16 +29,16 @@ TASK-7: выкладка сайта на GitHub Pages по ручному зап
 
 ## Выполнено
 
-### 1.1. Workflow выкладки — UC-29
+### 1.1. Workflow публикации — UC-29
 
-Новый `.github/workflows/deploy.yml`, `name: Выкладка сайта`:
+Новый `.github/workflows/deploy.yml`, `name: Публикация сайта`:
 
 - `on: workflow_dispatch` без входов, других триггеров нет; `permissions:
   contents: read` на весь workflow; `concurrency: {group: pages,
   cancel-in-progress: false}`.
 - Задача `build` (`ubuntu-24.04`, права `contents: read`, `pages: read`), шаги
   по порядку:
-  1. «Только main» — `GITHUB_REF` не `refs/heads/main`: `::error::Выкладка
+  1. «Только main» — `GITHUB_REF` не `refs/heads/main`: `::error::Публикация
      только из main, а запущена из <ref>. Запустите заново с веткой main.`,
      выход 1.
   2. «Секреты заданы» — `env` из `secrets.SUPABASE_URL` и
@@ -75,8 +75,8 @@ Workflow не запускался: задание запрещает, а кно
 Раздел «Деплой» вместо заглушки: адрес сайта; что владелец делает один раз —
 Pages с источником «GitHub Actions», секреты `SUPABASE_URL` и
 `SUPABASE_ANON_KEY` (без значений, «те же, что в `supabase/.env.local`»);
-запуск — Actions → «Выкладка сайта» → Run workflow → `main`, кнопка есть,
-только когда workflow в `main`; шаги выкладки; если упала — сайт прежний,
+запуск — Actions → «Публикация сайта» → Run workflow → `main`, кнопка есть,
+только когда workflow в `main`; шаги публикации; если упала — сайт прежний,
 причина — в упавшем шаге прогона, у шагов ветки и секретов — ещё и в
 аннотации; после исправления — запуск заново.
 
@@ -111,8 +111,8 @@ VM не импортируется (`dart:js_interop`).
 
 | Путь | Тесты с его меткой |
 |---|---|
-| [UC-29-P-01](../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-01) | `deploy_workflow_test.dart`: «выкладка запускается только вручную — workflow_dispatch, других триггеров нет»; «выкладывается только main — другая ветка останавливает сборку первым шагом» (шаг первый; `refs/heads/main` — код 0, `refs/heads/task/TASK-7` — не 0, `::error::` и ref в выводе; у checkout нет `ref`); «перед сборкой — анализ и тесты, как в CI» (7 команд есть и стоят раньше сборки); «сборка по ENT-16 — release, base href /yege_wars/, параметры из секретов» (`env` шага — из секретов, аргументы `flutter` — ровно `build web --release --base-href /yege_wars/ --dart-define=SUPABASE_URL=<знач.> --dart-define=SUPABASE_ANON_KEY=<знач.>`); «сборка публикуется на GitHub Pages из build/web» (`configure-pages` есть; артефакт из `build/web` после сборки; `deploy` — `needs: build`, окружение `github-pages`, права `pages: write`, `id-token: write`, единственный шаг — `deploy-pages`) |
-| [UC-29-P-02](../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-02) | `deploy_workflow_test.dart`: «не задан SUPABASE_URL — выкладка падает до сборки, в логе — имя секрета»; «не задан SUPABASE_ANON_KEY — …»; «не задан SUPABASE_URL и SUPABASE_ANON_KEY — …» (код не 0, `::error::Секрет <имя> не задан` — ровно у пустых, поддельных значений в выводе нет); «оба секрета заданы — проверка проходит и значений не печатает»; «секреты проверяются до checkout, проверок и сборки»; «упавшая сборка не публикуется — публикация только в deploy после build» (`needs: build`; у задач и шагов `build` нет `if` и `continue-on-error`; `deploy-pages` в `build` нет) |
+| [UC-29-P-01](../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-01) | `deploy_workflow_test.dart`: «публикация запускается только вручную — workflow_dispatch, других триггеров нет»; «публикуется только main — другая ветка останавливает сборку первым шагом» (шаг первый; `refs/heads/main` — код 0, `refs/heads/task/TASK-7` — не 0, `::error::` и ref в выводе; у checkout нет `ref`); «перед сборкой — анализ и тесты, как в CI» (7 команд есть и стоят раньше сборки); «сборка по ENT-16 — release, base href /yege_wars/, параметры из секретов» (`env` шага — из секретов, аргументы `flutter` — ровно `build web --release --base-href /yege_wars/ --dart-define=SUPABASE_URL=<знач.> --dart-define=SUPABASE_ANON_KEY=<знач.>`); «сборка публикуется на GitHub Pages из build/web» (`configure-pages` есть; артефакт из `build/web` после сборки; `deploy` — `needs: build`, окружение `github-pages`, права `pages: write`, `id-token: write`, единственный шаг — `deploy-pages`) |
+| [UC-29-P-02](../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-02) | `deploy_workflow_test.dart`: «не задан SUPABASE_URL — публикация падает до сборки, в логе — имя секрета»; «не задан SUPABASE_ANON_KEY — …»; «не задан SUPABASE_URL и SUPABASE_ANON_KEY — …» (код не 0, `::error::Секрет <имя> не задан` — ровно у пустых, поддельных значений в выводе нет); «оба секрета заданы — проверка проходит и значений не печатает»; «секреты проверяются до checkout, проверок и сборки»; «упавшая сборка не публикуется — публикация только в deploy после build» (`needs: build`; у задач и шагов `build` нет `if` и `continue-on-error`; `deploy-pages` в `build` нет) |
 | [UC-30-P-01](../2-specs/use-cases/UC-30-ACTOR-1-EVT-10-ENT-16-SITE-OPENED-IN-SITE.md#uc-30-p-01) | `site_base_href_test.dart`: «<base href> в web/index.html — из параметра сборки --base-href» (один `<base>`, значение `$FLUTTER_BASE_HREF`); «адреса в web/index.html относительные и ведут в web/» (все `href` и `src`, кроме `<base>`: без `/` в начале и без схемы, файл есть в `web/`, кроме `flutter_bootstrap.js` — его пишет сборка); «адреса в web/manifest.json относительные и ведут в web/» (`start_url`, `scope`, если есть, `src` иконок); «воркер Python грузится с адреса сайта — адрес относительный» (`defaultWorkerUrl` из исходника — относительный, `web/pyodide_worker.js` есть) |
 
 Нехолостость — раздел «Проверки».
@@ -124,7 +124,7 @@ VM не импортируется (`dart:js_interop`).
   закреплён текст workflow и поведение шагов ветки и сборки. Что сайт
   действительно обновился — только TC-1.
 - [UC-29-P-02](../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-02)
-  — пустой секрет роняет выкладку вторым шагом с именем секрета в логе;
+  — пустой секрет роняет публикацию вторым шагом с именем секрета в логе;
   любая неудача в `build` до публикации не пускает `deploy`. Что сайт после
   этого прежний — только TC-1.
 - [UC-30-P-01](../2-specs/use-cases/UC-30-ACTOR-1-EVT-10-ENT-16-SITE-OPENED-IN-SITE.md#uc-30-p-01)
@@ -136,14 +136,14 @@ VM не импортируется (`dart:js_interop`).
 ### Что проверит только TC-1
 
 Тестом не проверить — нужен настоящий прогон на GitHub или браузер на
-выложенном сайте:
+опубликованном сайте:
 
 - кнопка Run workflow есть, запуск из `main` проходит до публикации;
 - `configure-pages` проходит при включённом Pages и падает при выключенном;
 - секреты из настроек репозитория доходят до сборки, сайт открывается не на
   экране «не сконфигурировано»;
 - `deploy-pages` публикует, по адресу сайта — новая версия; после упавшей
-  выкладки — прежняя;
+  публикации — прежняя;
 - в браузере по `https://pavelsmirnov76.github.io/yege_wars/` грузятся
   `main.dart.js`, манифест, иконки и `pyodide_worker.js` с адреса сайта,
   запуск Python работает; адреса внутри приложения — с `#`, перезагрузка на
@@ -154,7 +154,7 @@ VM не импортируется (`dart:js_interop`).
 
 ## Не выполнено
 
-Нет. Первая выкладка, включение Pages, секреты и TC-1 — вне задания.
+Нет. Первая публикация, включение Pages, секреты и TC-1 — вне задания.
 
 ## Проверки
 
@@ -238,8 +238,8 @@ $ python3 -m sdlc_tool views && python3 -m sdlc_tool check
 До начала работы — план СТОПа 0, 2026-10-09, вопросами с вариантами по
 пунктам. Штатный механизм платформы, названный в плане: шаблон GitHub
 `starter-workflows/pages/static.yml` и README `actions/deploy-pages` — задача
-сборки загружает артефакт `upload-pages-artifact`, задача выкладки с `needs`
-публикует его `deploy-pages` в окружение `github-pages`, права выкладки
+сборки загружает артефакт `upload-pages-artifact`, задача публикации с `needs`
+публикует его `deploy-pages` в окружение `github-pages`, права публикации
 `pages: write` и `id-token: write`, `concurrency: pages` без обрыва. Версии
 по API GitHub 2026-10-09: `configure-pages` v6.0.0, `upload-pages-artifact`
 v5.0.0, `deploy-pages` v5.0.1.
@@ -248,12 +248,12 @@ v5.0.0, `deploy-pages` v5.0.1.
    права `pages: write` и `id-token: write` только у `deploy`, на весь
    workflow `contents: read`; одна задача с правами на весь workflow, как
    `static.yml`; три задачи `checks → build → deploy`. Общее: файл
-   `.github/workflows/deploy.yml`, `name: Выкладка сайта`, только
+   `.github/workflows/deploy.yml`, `name: Публикация сайта`, только
    `workflow_dispatch` без входов, `concurrency: {group: pages,
    cancel-in-progress: false}`, `runs-on: ubuntu-24.04`,
    `subosito/flutter-action@v2` 3.41.0 stable `cache: true` — как в CI.
    Выбрано: **`build` + `deploy`**.
-2. «Выкладывается текущий `main`», в форме выбрана другая ветка. Варианты:
+2. «Публикуется текущий `main`», в форме выбрана другая ветка. Варианты:
    первый шаг `build` проверяет `GITHUB_REF` и падает с `::error::` и именем
    ветки до секретов и проверок; `checkout` с `ref: main`; `if:` у задачи —
    прогон зелёный, причины в логе нет; только правило окружения
@@ -301,8 +301,8 @@ v5.0.0, `deploy-pages` v5.0.1.
    `defaultWorkerUrl`**.
 9. README «Деплой»: адрес сайта; один раз — Pages с источником «GitHub
    Actions» и секреты `SUPABASE_URL`, `SUPABASE_ANON_KEY` без значений;
-   запуск — Actions → «Выкладка сайта» → Run workflow → `main`, кнопка есть,
-   только когда workflow в `main`; что делает выкладка; упала — красный шаг и
+   запуск — Actions → «Публикация сайта» → Run workflow → `main`, кнопка есть,
+   только когда workflow в `main`; что делает публикация; упала — красный шаг и
    аннотация, сайт прежний. Вопрос: добавлять ли шаг владельца — правило
    окружения `github-pages` «только `main`». Варианты: без него — только
    предусловия UC-29; с ним — второй замок к п. 2. Выбрано: **без правила
@@ -353,6 +353,6 @@ v5.0.0, `deploy-pages` v5.0.1.
    but found (MaterialIcons)…». В `lib/` нет `CupertinoIcons`, в
    `pubspec.yaml` нет `cupertino_icons`; откуда ссылка, не искал. Сборка
    проходит.
-4. Проверки выкладки повторяют задачу `build` из `ci.yml` (решение п. 3): при
+4. Проверки публикации повторяют задачу `build` из `ci.yml` (решение п. 3): при
    правке проверок CI ту же правку нужно вносить в `deploy.yml`. Тест
-   сверяет команды выкладки, но с `ci.yml` их не сравнивает.
+   сверяет команды публикации, но с `ci.yml` их не сравнивает.

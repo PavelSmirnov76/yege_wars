@@ -9,7 +9,7 @@
    казалось: Flutter 3.41 создаёт `build/web` до компиляции
    (`flutter_tools/lib/src/web/compile.dart`, `createSync` перед сборкой), а
    `actions/upload-pages-artifact` v5.0.0 архивирует папку как есть — упавшая
-   сборка с `|| true` выложила бы на сайт пустую или неполную папку вопреки
+   сборка с `|| true` опубликовала бы на сайт пустую или неполную папку вопреки
    [UC-29-P-02](../../../2-specs/use-cases/UC-29-ACTOR-5-EVT-24-ENT-16-SITE-DEPLOYED-IN-SITE.md#uc-29-p-02).
    В самом workflow `|| true` нет.
 2. Адреса `web/index.html` в атрибутах без кавычек (`href=/favicon.png`)

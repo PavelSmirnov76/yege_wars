@@ -273,6 +273,13 @@ class HeaderTest(unittest.TestCase):
                   '# UC-5\n\n[R1](../../../0-vibes/prd/PRD.md#r1)\n')
         self.assertEqual(model.frozen_form(live), model.frozen_form(buried))
 
+    def test_term_renames(self):
+        self.assertEqual(
+            model.apply_term_renames('Выкладка упала; выкладку запускают; сайт выложен.'),
+            'Публикация упала; публикацию запускают; сайт опубликован.')
+        self.assertEqual(model.apply_term_renames('выкладчик'), 'выкладчик')
+        self.assertEqual(model.frozen_form('Выкладка сайта'), model.frozen_form('Публикация сайта'))
+
     def test_snapshot_header(self):
         text = ('> **Сменён:** 2026-11-02\n> **Почему:** новый вход\n'
                 '> **Вход:** [0-vibes/raw/2026-11-02/](../../raw/2026-11-02/)\n\n# PRD\n')

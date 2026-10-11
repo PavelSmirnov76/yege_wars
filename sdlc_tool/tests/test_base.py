@@ -53,6 +53,19 @@ class FreezeTest(BaseTestCase):
         self.tree.replace(ACTOR_1, '[ENT-1]', '[EVT-1]')
         self.assertMessage(self.errors(), ACTOR_1, 'артефакт ACTOR-1 изменён')
 
+    def test_term_rename_may_change(self):
+        self.tree.replace(ACTOR_1, 'Сущность:', 'Выкладка сайта, сайт выложен. Сущность:')
+        self.tree.commit('термин в замороженном')
+        self.tree.replace(ACTOR_1, 'Выкладка сайта, сайт выложен.',
+                          'Публикация сайта, сайт опубликован.')
+        self.assertEqual(self.errors(), [])
+
+    def test_other_word_may_not_change(self):
+        self.tree.replace(ACTOR_1, 'Сущность:', 'Выкладка сайта. Сущность:')
+        self.tree.commit('термин в замороженном')
+        self.tree.replace(ACTOR_1, 'Выкладка сайта.', 'Сборка сайта.')
+        self.assertMessage(self.errors(), ACTOR_1, 'артефакт ACTOR-1 изменён')
+
     def test_burial_is_allowed(self):
         bury(self.tree, UC_1)
         self.assertEqual(self.errors(), [])
@@ -123,6 +136,14 @@ class RequirementFreezeTest(BaseTestCase):
 
     def test_text_changed(self):
         self.write_prd(requirement(1, R1_TEXT), requirement(2, 'Ученик видит каталог.'))
+        self.assertOnly(self.errors(), f'{PRD}:11', 'текст требования R2 изменён')
+
+    def test_term_rename_in_requirement(self):
+        self.write_prd(requirement(1, R1_TEXT), requirement(2, 'Сайт выкладывается вручную.'))
+        self.tree.commit('R2 с термином')
+        self.write_prd(requirement(1, R1_TEXT), requirement(2, 'Сайт публикуется вручную.'))
+        self.assertEqual(self.errors(), [])
+        self.write_prd(requirement(1, R1_TEXT), requirement(2, 'Сайт собирается вручную.'))
         self.assertOnly(self.errors(), f'{PRD}:11', 'текст требования R2 изменён')
 
     def test_mark_may_be_added(self):

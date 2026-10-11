@@ -1070,9 +1070,46 @@ def strip_tomb_header(text: str) -> str:
     return '\n'.join(text.split('\n')[size:])
 
 
+# Замены термина по решению владельца (закон, «Артефакт закрыт для
+# изменения»): слово меняют во всех файлах сразу, а сравнение с базой
+# считает старую и новую словоформу одной. Пары — словоформы со строчной
+# буквы; с заглавной заменяются так же.
+TERM_RENAMES: Tuple[Tuple[str, str], ...] = (
+    # 2026-10-12: «выкладка» → «публикация».
+    ('выкладка', 'публикация'),
+    ('выкладки', 'публикации'),
+    ('выкладке', 'публикации'),
+    ('выкладку', 'публикацию'),
+    ('выкладывается', 'публикуется'),
+    ('выкладывает', 'публикует'),
+    ('выкладывать', 'публиковать'),
+    ('выложен', 'опубликован'),
+    ('выложенный', 'опубликованный'),
+    ('выложенном', 'опубликованном'),
+    ('выложил', 'опубликовал'),
+    ('выложила', 'опубликовала'),
+    ('выложить', 'опубликовать'),
+)
+
+_TERM_MAP = {
+    form: new
+    for old_word, new_word in TERM_RENAMES
+    for form, new in ((old_word, new_word), (old_word.capitalize(), new_word.capitalize()))
+}
+_TERM_RE = re.compile(
+    r'\b(?:' + '|'.join(sorted(map(re.escape, _TERM_MAP), key=len, reverse=True)) + r')\b'
+)
+
+
+def apply_term_renames(text: str) -> str:
+    """Текст, в котором старые словоформы `TERM_RENAMES` заменены новыми."""
+    return _TERM_RE.sub(lambda match: _TERM_MAP[match.group(0)], text)
+
+
 def frozen_form(text: str) -> str:
-    """Текст для сравнения с базой: без шапки похороненного и путей ссылок."""
-    return strip_link_paths(strip_tomb_header(text))
+    """Текст для сравнения с базой: без шапки похороненного и путей ссылок,
+    с заменами терминов `TERM_RENAMES`."""
+    return apply_term_renames(strip_link_paths(strip_tomb_header(text)))
 
 
 def _one_line(text: str) -> str:

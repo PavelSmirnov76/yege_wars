@@ -864,13 +864,13 @@
     },
     {
       "file": "test/deploy/deploy_workflow_test.dart",
-      "name": "UC-29-P-01: выкладка запускается только вручную — workflow_dispatch, других триггеров нет",
+      "name": "UC-29-P-01: публикация запускается только вручную — workflow_dispatch, других триггеров нет",
       "label": "UC-29-P-01",
       "verdict": "PASS"
     },
     {
       "file": "test/deploy/deploy_workflow_test.dart",
-      "name": "UC-29-P-01: выкладывается только main — другая ветка останавливает сборку первым шагом",
+      "name": "UC-29-P-01: публикуется только main — другая ветка останавливает сборку первым шагом",
       "label": "UC-29-P-01",
       "verdict": "PASS"
     },
@@ -894,19 +894,19 @@
     },
     {
       "file": "test/deploy/deploy_workflow_test.dart",
-      "name": "UC-29-P-02: не задан SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета",
+      "name": "UC-29-P-02: не задан SUPABASE_ANON_KEY — публикация падает до сборки, в логе — имя секрета",
       "label": "UC-29-P-02",
       "verdict": "PASS"
     },
     {
       "file": "test/deploy/deploy_workflow_test.dart",
-      "name": "UC-29-P-02: не задан SUPABASE_URL и SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета",
+      "name": "UC-29-P-02: не задан SUPABASE_URL и SUPABASE_ANON_KEY — публикация падает до сборки, в логе — имя секрета",
       "label": "UC-29-P-02",
       "verdict": "PASS"
     },
     {
       "file": "test/deploy/deploy_workflow_test.dart",
-      "name": "UC-29-P-02: не задан SUPABASE_URL — выкладка падает до сборки, в логе — имя секрета",
+      "name": "UC-29-P-02: не задан SUPABASE_URL — публикация падает до сборки, в логе — имя секрета",
       "label": "UC-29-P-02",
       "verdict": "PASS"
     },

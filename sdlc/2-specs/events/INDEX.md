@@ -26,7 +26,7 @@
 | [EVT-21](EVT-21-ARTICLE-OPENED-IN-REFERENCE.md) | Статья открыта | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
 | [EVT-22](EVT-22-LINK-SHOWN-IN-REFERENCE.md) | Показана ссылка | [ENT-12](../entities/ENT-12-ARTICLE-IN-REFERENCE.md) |
 | [EVT-23](EVT-23-DRAFT-SAVED-IN-CODE.md) | Черновик сохранён | [EVT-13](obsolete/EVT-13-CODE-EDITED-IN-EDITOR.md), [ENT-15](../entities/ENT-15-DRAFT-IN-CODE.md) |
-| [EVT-24](EVT-24-SITE-DEPLOYED-IN-SITE.md) | Сайт выложен | [ENT-16](../entities/ENT-16-SITE-IN-SITE.md) |
+| [EVT-24](EVT-24-SITE-DEPLOYED-IN-SITE.md) | Сайт опубликован | [ENT-16](../entities/ENT-16-SITE-IN-SITE.md) |
 
 ## Похоронены
 

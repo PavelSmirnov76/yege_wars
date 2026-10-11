@@ -185,14 +185,14 @@
 | UC-28-P-02 | `test/core/markdown/wiki_link_syntax_test.dart` — WikiLinkSyntax UC-28-P-02: неизвестный slug остаётся обычным текстом | PASS |
 | UC-28-P-02 | `test/features/reference/presentation/article_screen_test.dart` — UC-28-P-02: словарь заголовков не загрузился — slug текстом до конца сессии | PASS |
 | UC-28-P-03 | `test/features/reference/presentation/article_screen_test.dart` — UC-28-P-03: обычная ссылка не открывается | PASS |
-| UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: выкладка запускается только вручную — workflow_dispatch, других триггеров нет | PASS |
-| UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: выкладывается только main — другая ветка останавливает сборку первым шагом | PASS |
+| UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: публикация запускается только вручную — workflow_dispatch, других триггеров нет | PASS |
+| UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: публикуется только main — другая ветка останавливает сборку первым шагом | PASS |
 | UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: перед сборкой — анализ и тесты, как в CI | PASS |
 | UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: сборка по ENT-16 — release, base href /yege_wars/, параметры из секретов | PASS |
 | UC-29-P-01 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-01: сборка публикуется на GitHub Pages из build/web | PASS |
-| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета | PASS |
-| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_URL и SUPABASE_ANON_KEY — выкладка падает до сборки, в логе — имя секрета | PASS |
-| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_URL — выкладка падает до сборки, в логе — имя секрета | PASS |
+| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_ANON_KEY — публикация падает до сборки, в логе — имя секрета | PASS |
+| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_URL и SUPABASE_ANON_KEY — публикация падает до сборки, в логе — имя секрета | PASS |
+| UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: не задан SUPABASE_URL — публикация падает до сборки, в логе — имя секрета | PASS |
 | UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: оба секрета заданы — проверка проходит и значений не печатает | PASS |
 | UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: секреты проверяются до checkout, проверок и сборки | PASS |
 | UC-29-P-02 | `test/deploy/deploy_workflow_test.dart` — UC-29-P-02: упавшая сборка не публикуется — публикация только в deploy после build | PASS |

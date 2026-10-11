@@ -462,7 +462,8 @@ def _check_frozen_requirements(repo: model.Repo, base: BaseContext, out: _Messag
             out.error(where, 0, f'требование {old.id} пропало из PRD: требования не '
                                 'удаляют, а отмечают устаревшими')
             continue
-        if model.strip_link_paths(old.body) != model.strip_link_paths(current.body):
+        if (model.apply_term_renames(model.strip_link_paths(old.body))
+                != model.apply_term_renames(model.strip_link_paths(current.body))):
             out.error(current.path, current.line,
                       f'текст требования {old.id} изменён: изменить смысл — значит '
                       'выдать новый R')

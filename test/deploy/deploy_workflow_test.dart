@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
 
-/// Workflow выкладки; путь от корня проекта — `flutter test` идёт из него.
+/// Workflow публикации; путь от корня проекта — `flutter test` идёт из него.
 const String _workflowPath = '.github/workflows/deploy.yml';
 
 /// Поддельные значения секретов: тест следит, чтобы их не было в логе.
@@ -62,7 +62,7 @@ void main() {
   });
 
   test(
-    'UC-29-P-01: выкладка запускается только вручную — workflow_dispatch, '
+    'UC-29-P-01: публикация запускается только вручную — workflow_dispatch, '
     'других триггеров нет',
     () {
       final on = workflow['on'];
@@ -77,7 +77,7 @@ void main() {
   );
 
   test(
-    'UC-29-P-01: выкладывается только main — другая ветка останавливает '
+    'UC-29-P-01: публикуется только main — другая ветка останавливает '
     'сборку первым шагом',
     () async {
       final guard = _stepNamed(buildSteps, 'Только main');
@@ -123,7 +123,7 @@ void main() {
   });
 
   test(
-    'UC-29-P-02: упала проверка перед сборкой — шаг падает, дальше выкладка '
+    'UC-29-P-02: упала проверка перед сборкой — шаг падает, дальше публикация '
     'не идёт',
     () async {
       for (final (command, _) in _checks) {
@@ -183,7 +183,7 @@ void main() {
   );
 
   test(
-    'UC-29-P-02: сборка упала — шаг сборки падает, дальше выкладка не идёт',
+    'UC-29-P-02: сборка упала — шаг сборки падает, дальше публикация не идёт',
     () async {
       final step = buildSteps[_indexRunning(buildSteps, _buildCommand)];
 
@@ -225,7 +225,7 @@ void main() {
     ];
 
     test(
-      'UC-29-P-02: не задан ${missing.join(' и ')} — выкладка падает до '
+      'UC-29-P-02: не задан ${missing.join(' и ')} — публикация падает до '
       'сборки, в логе — имя секрета',
       () async {
         final check = _stepNamed(buildSteps, 'Секреты заданы');
