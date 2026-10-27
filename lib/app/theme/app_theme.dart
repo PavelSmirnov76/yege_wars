@@ -14,6 +14,12 @@ abstract final class AppTheme {
   /// Толщина рамки поля ввода в фокусе.
   static const double _focusedBorderWidth = 2;
 
+  /// Наибольшее число строк подписи ошибки под полем ввода: самая длинная
+  /// подпись в поле карточки формы на телефоне занимает две строки шрифтом
+  /// Inter и четыре — более широким тестовым шрифтом, которым текст
+  /// рисуется в тестах.
+  static const int _errorMaxLines = 4;
+
   /// Скругление контролов (кнопки, поля ввода, снэкбары).
   static const BorderRadius _controlRadius = BorderRadius.all(
     Radius.circular(AppRadius.md),
@@ -101,6 +107,9 @@ abstract final class AppTheme {
         labelStyle: textTheme.bodyMedium?.copyWith(
           color: AppColors.textSecondary,
         ),
+        // Без ограничения строк Flutter обрезает подпись ошибки многоточием
+        // в одну строку.
+        errorMaxLines: _errorMaxLines,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
@@ -134,6 +143,9 @@ abstract final class AppTheme {
             _filledButtonBackground,
           ),
           foregroundColor: WidgetStateProperty.resolveWith(_buttonForeground),
+          // Плотность платформы на компьютере уменьшила бы кнопку на 8 —
+          // ниже тап-цели.
+          visualDensity: VisualDensity.standard,
           minimumSize: const WidgetStatePropertyAll(
             Size(_minTapTarget, _minTapTarget),
           ),
@@ -153,6 +165,7 @@ abstract final class AppTheme {
       // из цветовой схемы: текст акцентом, контур — AppColors.border.
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
+          visualDensity: VisualDensity.standard,
           minimumSize: const WidgetStatePropertyAll(
             Size(_minTapTarget, _minTapTarget),
           ),
@@ -173,6 +186,7 @@ abstract final class AppTheme {
           foregroundColor: WidgetStateProperty.resolveWith(
             _textButtonForeground,
           ),
+          visualDensity: VisualDensity.standard,
           minimumSize: const WidgetStatePropertyAll(
             Size(_minTapTarget, _minTapTarget),
           ),
