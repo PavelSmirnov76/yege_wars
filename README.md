@@ -67,6 +67,26 @@ flutter run -d chrome \
 необязательны: когда заданы оба, на экране входа под «Войти» есть кнопка
 «Тестовый вход» — она подставляет их в форму и входит. Без них кнопки нет.
 
+### Локальная сборка с тестовым проектом
+
+Ручные тест-кейсы прогоняют на локальной сборке с тестовым проектом Supabase
+`yege_wars_dev`, а не с боевым. Его доступы лежат в `supabase/.env.dev.local`
+(в `.gitignore`) под теми же именами, что в `supabase/.env.local`, плюс
+`YEGE_ENV=dev` — поэтому команды сборки и скрипты `tools/` работают с ним,
+если подставить этот файл. Регистрация на тестовом проекте открыта.
+
+```sh
+flutter pub get && flutter gen-l10n
+dart run build_runner build --delete-conflicting-outputs
+set -a; . supabase/.env.dev.local; set +a
+flutter build web --release \
+  --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+  --dart-define=TEST_LOGIN_USERNAME="$TEST_LOGIN_USERNAME" \
+  --dart-define=TEST_LOGIN_PASSWORD="$TEST_LOGIN_PASSWORD"
+python3 -m http.server 8080 --directory build/web   # http://localhost:8080/
+```
+
 ## Команды разработки
 
 ```sh
