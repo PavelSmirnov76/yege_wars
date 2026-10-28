@@ -8,7 +8,7 @@
 | [TOKEN-3](TOKEN-3-SPACING.md) | Отступы | — | [`lib/app/theme/app_spacing.dart`](../../../lib/app/theme/app_spacing.dart) |
 | [TOKEN-4](TOKEN-4-RADIUS.md) | Радиусы | — | [`lib/app/theme/app_radius.dart`](../../../lib/app/theme/app_radius.dart) |
 | [TOKEN-5](TOKEN-5-BREAKPOINT.md) | Брейкпоинты | — | [`lib/app/theme/app_breakpoints.dart`](../../../lib/app/theme/app_breakpoints.dart) |
-| [TOKEN-6](TOKEN-6-TAP.md) | Тап-цели и фокус | — | [`lib/app/theme/app_theme.dart`](../../../lib/app/theme/app_theme.dart) |
+| [TOKEN-6](TOKEN-6-TAP.md) | Тап-цели и фокус | — | [`lib/app/theme/app_theme.dart`](../../../lib/app/theme/app_theme.dart), [`test/app/theme/app_theme_test.dart`](../../../test/app/theme/app_theme_test.dart), [`test/helpers/button_height.dart`](../../../test/helpers/button_height.dart) |
 | [TOKEN-7](TOKEN-7-COLOR.md) | Цвета | [TOKEN-1](obsolete/TOKEN-1-COLOR.md) | [`lib/app/theme/app_colors.dart`](../../../lib/app/theme/app_colors.dart) |
 | [COMP-1](COMP-1-AUTH-FORM-CARD.md) | Карточка формы | [TOKEN-3](TOKEN-3-SPACING.md), [TOKEN-4](TOKEN-4-RADIUS.md), [TOKEN-1](obsolete/TOKEN-1-COLOR.md) | [`lib/features/auth/presentation/widgets/auth_form_card.dart`](../../../lib/features/auth/presentation/widgets/auth_form_card.dart) |
 | [COMP-2](COMP-2-AUTH-MESSAGE.md) | Сообщение формы | [TOKEN-1](obsolete/TOKEN-1-COLOR.md), [TOKEN-3](TOKEN-3-SPACING.md) | [`lib/features/auth/presentation/widgets/auth_message.dart`](../../../lib/features/auth/presentation/widgets/auth_message.dart) |

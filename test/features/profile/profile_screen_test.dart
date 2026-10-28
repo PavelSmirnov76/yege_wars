@@ -9,6 +9,7 @@ import 'package:yege_wars/features/profile/presentation/screens/profile_screen.d
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
+import '../../helpers/button_height.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/pump_app.dart';
 
@@ -65,6 +66,27 @@ void main() {
 
     expect(find.byType(LoginScreen), findsOneWidget);
   });
+
+  testWidgets(
+    'UC-13-P-01: на компьютере «Выйти» не ниже тап-цели 44',
+    (tester) async {
+      await openProfile(tester);
+
+      expect(
+        visibleButtonHeight(
+          tester,
+          find.ancestor(
+            of: find.text(l10n.profileSignOut),
+            matching: find.byWidgetPredicate(
+              (widget) => widget is OutlinedButton,
+            ),
+          ),
+        ),
+        greaterThanOrEqualTo(minTapTarget),
+      );
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.macOS),
+  );
 
   testWidgets('UC-13-P-02: ошибка выхода показывается сообщением', (
     tester,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yege_wars/app/router/app_router.dart';
 import 'package:yege_wars/app/router/app_routes.dart';
@@ -10,6 +11,7 @@ import 'package:yege_wars/features/profile/presentation/screens/profile_screen.d
 import 'package:yege_wars/features/tasks/presentation/screens/catalog_screen.dart';
 import 'package:yege_wars/l10n/gen/app_localizations_ru.dart';
 
+import '../../../helpers/button_height.dart';
 import '../../../helpers/fake_auth_repository.dart';
 import '../../../helpers/pump_app.dart';
 
@@ -59,6 +61,50 @@ void main() {
     expect(repository.lastUsername, isNull);
     expect(find.byType(RegisterScreen), findsOneWidget);
   });
+
+  for (final window in const [Size(360, 800), Size(1440, 900)]) {
+    testWidgets('UC-1-P-02: на окне ${window.width.toInt()}×'
+        '${window.height.toInt()} ошибки полей видны целиком', (tester) async {
+      await tester.binding.setSurfaceSize(window);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await openRegister(tester);
+
+      final fields = find.byType(TextFormField);
+      await tester.enterText(fields.first, 'a-b');
+      await tester.enterText(fields.last, '123');
+      await tester.tap(find.text(l10n.authSignUpButton));
+      await tester.pumpAndSettle();
+
+      for (final error in [
+        l10n.authUsernameInvalid,
+        l10n.authPasswordInvalid,
+      ]) {
+        expect(
+          tester
+              .renderObject<RenderParagraph>(find.text(error))
+              .didExceedMaxLines,
+          isFalse,
+          reason: error,
+        );
+      }
+    });
+  }
+
+  testWidgets(
+    'UC-1-P-01: на компьютере «Зарегистрироваться» не ниже тап-цели 44',
+    (tester) async {
+      await openRegister(tester);
+
+      expect(
+        visibleButtonHeight(
+          tester,
+          find.widgetWithText(FilledButton, l10n.authSignUpButton),
+        ),
+        greaterThanOrEqualTo(minTapTarget),
+      );
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.macOS),
+  );
 
   testWidgets('UC-1-P-04: при закрытой регистрации форма заблокирована', (
     tester,
