@@ -22,6 +22,8 @@ class CatalogFiltersBar extends ConsumerWidget {
     final controller = ref.read(taskFilterControllerProvider.notifier);
     final egeNumbers = ref.watch(catalogEgeNumbersProvider).value ?? const [];
 
+    // TOKEN-6: стандартная плотность сохраняет минимальную тап-цель
+    // на настольных платформах.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,6 +36,7 @@ class CatalogFiltersBar extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: AppSpacing.sm),
                     child: FilterChip(
+                      visualDensity: VisualDensity.standard,
                       label: Text(l10n.referenceEgeNumber(number)),
                       selected: filter.egeNumber == number,
                       onSelected: (_) => controller.toggleEgeNumber(number),
@@ -50,12 +53,14 @@ class CatalogFiltersBar extends ConsumerWidget {
           children: [
             for (final difficulty in TaskDifficulty.values)
               FilterChip(
+                visualDensity: VisualDensity.standard,
                 label: Text(difficultyLabel(difficulty, l10n)),
                 selected: filter.difficulty == difficulty,
                 onSelected: (_) => controller.toggleDifficulty(difficulty),
               ),
             for (final progress in TaskProgress.values)
               FilterChip(
+                visualDensity: VisualDensity.standard,
                 label: Text(progressLabel(progress, l10n)),
                 selected: filter.progress == progress,
                 onSelected: (_) => controller.toggleProgress(progress),
