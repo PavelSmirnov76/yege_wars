@@ -11,7 +11,7 @@
 | [BT-6](BT-6-PLANNING-BUILD-CONFIG.md) | Конфигурация сборки вне репозитория | [BT-5](../observation/warnings/BT-5-WARNING-KEYS-IN-REPOSITORY.md), [R15](../../0-vibes/prd/PRD.md#r15), [R16](../../0-vibes/prd/PRD.md#r16) | да |
 | [BT-7](BT-7-PLANNING-SESSION-END.md) | Конец сессии — следующий вход с главной | [R17](../../0-vibes/prd/PRD.md#r17) | да |
 | [BT-8](BT-8-PLANNING-CATALOG.md) | Каталог задач | [R18](../../0-vibes/prd/PRD.md#r18), [R19](../../0-vibes/prd/PRD.md#r19), [R20](../../0-vibes/prd/PRD.md#r20), [R23](../../0-vibes/prd/PRD.md#r23) | да |
-| [BT-9](BT-9-PLANNING-PROBLEM-PAGE.md) | Страница задачи | [R21](../../0-vibes/prd/PRD.md#r21), [R22](../../0-vibes/prd/PRD.md#r22), [R23](../../0-vibes/prd/PRD.md#r23) | нет — BLOCKED: [UC-15-P-01](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-01), [UC-15-P-02](../../2-specs/use-cases/UC-15-ACTOR-4-EVT-12-ENT-6-PROBLEM-SHOWN-IN-CATALOG.md#uc-15-p-02) |
+| [BT-9](BT-9-PLANNING-PROBLEM-PAGE.md) | Страница задачи | [R21](../../0-vibes/prd/PRD.md#r21), [R22](../../0-vibes/prd/PRD.md#r22), [R23](../../0-vibes/prd/PRD.md#r23) | да |
 | [BT-11](BT-11-PLANNING-ANSWER-CHECK.md) | Проверка ответа и попытки | [R27](../../0-vibes/prd/PRD.md#r27), [R28](../../0-vibes/prd/PRD.md#r28), [R29](../../0-vibes/prd/PRD.md#r29), [R30](../../0-vibes/prd/PRD.md#r30), [R31](../../0-vibes/prd/PRD.md#r31), [R32](../../0-vibes/prd/PRD.md#r32) | да |
 | [BT-12](BT-12-PLANNING-SOLUTIONS.md) | Решения | [R33](../../0-vibes/prd/PRD.md#r33), [R34](../../0-vibes/prd/PRD.md#r34) | да |
 | [BT-14](BT-14-PLANNING-ARTICLE.md) | Статья и ссылки | [R37](../../0-vibes/prd/PRD.md#r37), [R38](../../0-vibes/prd/PRD.md#r38), [R40](../../0-vibes/prd/PRD.md#r40) | да |

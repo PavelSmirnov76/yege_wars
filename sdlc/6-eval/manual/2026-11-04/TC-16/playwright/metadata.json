@@ -1,0 +1,15 @@
+{
+  "node": "v24.15.0",
+  "playwright": "1.64.1",
+  "chromiumRuntimeVersion": "156.0.8078.4",
+  "chromiumVersionProbe": "Запуск отдельного browser, browser.version(), закрытие; страницы не открывались",
+  "postRunSourceChanges": [
+    "OUT определяется через TC16_SCREENSHOTS_DIR или repo-relative default",
+    "result.pass дополнительно зависит от успешного финального восстановления clipboard до закрытия context"
+  ],
+  "postRunChecks": [
+    "node --check smoke.cjs — exit 0",
+    "node --check phase2.cjs — exit 0",
+    "source review; UI-прогон не повторялся"
+  ]
+}
