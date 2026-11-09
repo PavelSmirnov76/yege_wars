@@ -10,6 +10,7 @@ import 'package:yege_wars/features/auth/domain/auth_state.dart';
 import 'package:yege_wars/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:yege_wars/features/auth/presentation/screens/login_screen.dart';
 import 'package:yege_wars/features/auth/presentation/screens/register_screen.dart';
+import 'package:yege_wars/features/profile/presentation/progress_providers.dart';
 import 'package:yege_wars/features/profile/presentation/screens/profile_screen.dart';
 import 'package:yege_wars/features/reference/presentation/screens/article_screen.dart';
 import 'package:yege_wars/features/reference/presentation/screens/reference_screen.dart';
@@ -125,7 +126,31 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
   );
-  ref.onDispose(router.dispose);
+  // UC-41: сохранённая ветка обновляется при входе через любой маршрут,
+  // в том числе при возврате по истории браузера.
+  var wasProfile =
+      router.routerDelegate.currentConfiguration.lastOrNull?.matchedLocation ==
+      AppRoutes.profile;
+  void refreshProfileOnEntry() {
+    final isProfile =
+        router
+            .routerDelegate
+            .currentConfiguration
+            .lastOrNull
+            ?.matchedLocation ==
+        AppRoutes.profile;
+    if (isProfile && !wasProfile) {
+      final userId = ref.read(authControllerProvider).profileOrNull?.id;
+      if (userId != null) ref.invalidate(profileProgressProvider(userId));
+    }
+    wasProfile = isProfile;
+  }
+
+  router.routerDelegate.addListener(refreshProfileOnEntry);
+  ref.onDispose(() {
+    router.routerDelegate.removeListener(refreshProfileOnEntry);
+    router.dispose();
+  });
   return router;
 }
 

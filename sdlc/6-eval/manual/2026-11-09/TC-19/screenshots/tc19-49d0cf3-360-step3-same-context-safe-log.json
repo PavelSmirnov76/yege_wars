@@ -1,0 +1,418 @@
+{
+  "driver": "TC-19 Playwright route fixture",
+  "viewport": {
+    "width": 360,
+    "height": 800
+  },
+  "appOrigin": "http://127.0.0.1:8081",
+  "fixture": "/private/tmp/tc19-current/fixtures.json",
+  "scenario": "normal",
+  "fixtureIds": {
+    "users": {
+      "tc19_a": "a1000000-0000-4000-8000-000000000001",
+      "tc19_b": "b1000000-0000-4000-8000-000000000002",
+      "tc19_outsider": "c1000000-0000-4000-8000-000000000003"
+    },
+    "baseExpectedRecentIds": [
+      "a2000000-0000-4000-8000-000000000014",
+      "a2000000-0000-4000-8000-000000000013",
+      "a2000000-0000-4000-8000-000000000012",
+      "a2000000-0000-4000-8000-000000000011",
+      "a2000000-0000-4000-8000-000000000010",
+      "a2000000-0000-4000-8000-000000000009",
+      "a2000000-0000-4000-8000-000000000008",
+      "a2000000-0000-4000-8000-000000000007",
+      "a2000000-0000-4000-8000-000000000006",
+      "a2000000-0000-4000-8000-000000000005"
+    ],
+    "currentExpectedRecentIds": [
+      "a3000000-0000-4000-8000-000000000018",
+      "a3000000-0000-4000-8000-000000000017",
+      "a2000000-0000-4000-8000-000000000014",
+      "a2000000-0000-4000-8000-000000000013",
+      "a2000000-0000-4000-8000-000000000012",
+      "a2000000-0000-4000-8000-000000000011",
+      "a2000000-0000-4000-8000-000000000010",
+      "a2000000-0000-4000-8000-000000000009",
+      "a2000000-0000-4000-8000-000000000008",
+      "a2000000-0000-4000-8000-000000000007"
+    ]
+  },
+  "events": [
+    {
+      "at": "2026-11-09T16:27:09.818Z",
+      "kind": "browser",
+      "playwright": "1.64.1",
+      "chromium": "156.0.8078.4"
+    },
+    {
+      "at": "2026-11-09T16:27:10.018Z",
+      "kind": "driver-ready",
+      "appUrl": "http://127.0.0.1:8081",
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "scenario": "normal",
+      "fixture": "tc19-current"
+    },
+    {
+      "at": "2026-11-09T16:27:42.425Z",
+      "kind": "auth-login",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:42.446Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:42.447Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:42.488Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:42.488Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T16:27:42.488Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:42.488Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T16:27:55.255Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags",
+        "order": "ege_number.asc.nullslast,title.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.256Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "task_id,is_correct",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.256Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_task_stats",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.257Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "ege_number",
+        "order": "ege_number.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.257Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags,statement_md,answer_format,source",
+        "slug": "eq.tc19-t2"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.260Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_files",
+      "params": {
+        "select": "filename,content,size_bytes",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.261Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_references",
+      "params": {
+        "select": "relevance,sort_order,reference_articles(slug,title,summary,level,reading_minutes,ege_numbers,tags)",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.261Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_articles",
+      "params": {
+        "select": "article_id,sort_order",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.266Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "drafts",
+      "params": {
+        "select": "code",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:27:55.288Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "reference_articles",
+      "params": {
+        "select": "slug,title"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:28:10.549Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,answer,code,is_correct,is_published,created_at",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "order": "created_at.desc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:28:16.665Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/1794241696630-360x800-01-before-submit-controls.png"
+    },
+    {
+      "at": "2026-11-09T16:28:39.473Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/1794241719443-360x800-02-answer-controls-visible.png"
+    },
+    {
+      "at": "2026-11-09T16:29:02.485Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "submit_solution",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:29:02.485Z",
+      "kind": "submit-fixture-update",
+      "account": "tc19_a",
+      "task_slug": "tc19-t2",
+      "correct": true,
+      "id": "a3000000-0000-4000-8000-000000000017"
+    },
+    {
+      "at": "2026-11-09T16:29:02.493Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,answer,code,is_correct,is_published,created_at",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "order": "created_at.desc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:29:12.634Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:29:12.634Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T16:29:12.635Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:29:12.635Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T16:29:19.184Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/1794241759147-360x800-03-mobile-after-first-submit.png"
+    },
+    {
+      "at": "2026-11-09T16:29:28.159Z",
+      "kind": "report-saved",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/tc19-360x800-safe-log.json"
+    },
+    {
+      "at": "2026-11-09T16:29:58.191Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/1794241798154-360x800-04-before-second-submit-controls.png"
+    },
+    {
+      "at": "2026-11-09T16:30:12.752Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "submit_solution",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:30:12.752Z",
+      "kind": "submit-fixture-update",
+      "account": "tc19_a",
+      "task_slug": "tc19-t2",
+      "correct": true,
+      "id": "a3000000-0000-4000-8000-000000000018"
+    },
+    {
+      "at": "2026-11-09T16:30:12.760Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,answer,code,is_correct,is_published,created_at",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "order": "created_at.desc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:30:23.564Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:30:23.564Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T16:30:23.564Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T16:30:23.564Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T16:30:30.850Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-step3-final/1794241830813-360x800-05-mobile-after-second-submit.png"
+    }
+  ]
+}

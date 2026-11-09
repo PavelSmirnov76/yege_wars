@@ -1,0 +1,1326 @@
+{
+  "driver": "TC-19 Playwright route fixture",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "appOrigin": "http://127.0.0.1:8081",
+  "fixture": "/private/tmp/tc19-current/fixtures.json",
+  "scenario": "normal",
+  "fixtureIds": {
+    "users": {
+      "tc19_a": "a1000000-0000-4000-8000-000000000001",
+      "tc19_b": "b1000000-0000-4000-8000-000000000002",
+      "tc19_outsider": "c1000000-0000-4000-8000-000000000003"
+    },
+    "baseExpectedRecentIds": [
+      "a2000000-0000-4000-8000-000000000014",
+      "a2000000-0000-4000-8000-000000000013",
+      "a2000000-0000-4000-8000-000000000012",
+      "a2000000-0000-4000-8000-000000000011",
+      "a2000000-0000-4000-8000-000000000010",
+      "a2000000-0000-4000-8000-000000000009",
+      "a2000000-0000-4000-8000-000000000008",
+      "a2000000-0000-4000-8000-000000000007",
+      "a2000000-0000-4000-8000-000000000006",
+      "a2000000-0000-4000-8000-000000000005"
+    ],
+    "currentExpectedRecentIds": [
+      "a3000000-0000-4000-8000-000000000018",
+      "a3000000-0000-4000-8000-000000000017",
+      "a2000000-0000-4000-8000-000000000014",
+      "a2000000-0000-4000-8000-000000000013",
+      "a2000000-0000-4000-8000-000000000012",
+      "a2000000-0000-4000-8000-000000000011",
+      "a2000000-0000-4000-8000-000000000010",
+      "a2000000-0000-4000-8000-000000000009",
+      "a2000000-0000-4000-8000-000000000008",
+      "a2000000-0000-4000-8000-000000000007"
+    ]
+  },
+  "events": [
+    {
+      "at": "2026-11-09T13:09:03.609Z",
+      "kind": "browser",
+      "playwright": "1.64.1",
+      "chromium": "156.0.8078.4"
+    },
+    {
+      "at": "2026-11-09T13:09:03.982Z",
+      "kind": "driver-ready",
+      "appUrl": "http://127.0.0.1:8081",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "scenario": "normal",
+      "fixture": "tc19-current"
+    },
+    {
+      "at": "2026-11-09T13:09:37.276Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-1440/1794229777228-1440x900-pre-login.png"
+    },
+    {
+      "at": "2026-11-09T13:09:54.685Z",
+      "kind": "auth-login",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:09:54.834Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:09:54.835Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:09:54.902Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:09:54.903Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:09:54.903Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:09:54.903Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:10:17.347Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-1440/1794229817294-1440x900-A1-loaded.png"
+    },
+    {
+      "at": "2026-11-09T13:10:31.353Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags",
+        "order": "ege_number.asc.nullslast,title.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.354Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "task_id,is_correct",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.355Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_task_stats",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.355Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "ege_number",
+        "order": "ege_number.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.355Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags,statement_md,answer_format,source",
+        "slug": "eq.tc19-t2"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.361Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_files",
+      "params": {
+        "select": "filename,content,size_bytes",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.361Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_references",
+      "params": {
+        "select": "relevance,sort_order,reference_articles(slug,title,summary,level,reading_minutes,ege_numbers,tags)",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.362Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_articles",
+      "params": {
+        "select": "article_id,sort_order",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.368Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "drafts",
+      "params": {
+        "select": "code",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:10:31.400Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "reference_articles",
+      "params": {
+        "select": "slug,title"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:12:13.207Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:12:13.207Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:12:13.208Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:12:13.208Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:14:32.749Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "submit_solution",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:14:32.749Z",
+      "kind": "submit-fixture-update",
+      "account": "tc19_a",
+      "task_slug": "tc19-t2",
+      "correct": true,
+      "id": "a3000000-0000-4000-8000-000000000017"
+    },
+    {
+      "at": "2026-11-09T13:14:51.505Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:14:51.505Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:14:51.507Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:14:51.507Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:15:22.166Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "submit_solution",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:15:22.166Z",
+      "kind": "submit-fixture-update",
+      "account": "tc19_a",
+      "task_slug": "tc19-t2",
+      "correct": true,
+      "id": "a3000000-0000-4000-8000-000000000018"
+    },
+    {
+      "at": "2026-11-09T13:15:22.945Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:15:22.945Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:15:22.946Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:15:22.946Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:15:50.262Z",
+      "kind": "scenario",
+      "value": "progress-error"
+    },
+    {
+      "at": "2026-11-09T13:16:08.241Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:16:08.241Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:16:08.241Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:16:08.241Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:16:52.869Z",
+      "kind": "scenario",
+      "value": "normal"
+    },
+    {
+      "at": "2026-11-09T13:17:04.588Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:17:04.588Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:17:04.589Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:17:04.589Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:17:27.931Z",
+      "kind": "scenario",
+      "value": "attempts-error"
+    },
+    {
+      "at": "2026-11-09T13:17:38.500Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:17:38.500Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:17:38.501Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:17:38.501Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:17:53.345Z",
+      "kind": "scenario",
+      "value": "normal"
+    },
+    {
+      "at": "2026-11-09T13:18:03.346Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:18:03.346Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:18:03.347Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:18:03.347Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:18:47.698Z",
+      "kind": "auth-login",
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:18:47.710Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:18:47.710Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:18:47.748Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags",
+        "order": "ege_number.asc.nullslast,title.asc.nullslast"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:18:47.750Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "task_id,is_correct",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:18:47.750Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_task_stats",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:20:26.164Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:20:26.164Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_b",
+      "p_user_id": "b1000000-0000-4000-8000-000000000002",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:20:26.165Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:20:26.165Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_b",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:20:46.996Z",
+      "kind": "scenario",
+      "value": "no-tasks"
+    },
+    {
+      "at": "2026-11-09T13:20:56.826Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:20:56.827Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_b",
+      "p_user_id": "b1000000-0000-4000-8000-000000000002",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:20:56.827Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:20:56.827Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_b",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:21:22.162Z",
+      "kind": "scenario",
+      "value": "normal"
+    },
+    {
+      "at": "2026-11-09T13:21:53.027Z",
+      "kind": "auth-login",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.044Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.045Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.074Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags",
+        "order": "ege_number.asc.nullslast,title.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.075Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "task_id,is_correct",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.076Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_task_stats",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.774Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.774Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:21:53.775Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:21:53.775Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:22:17.397Z",
+      "kind": "scenario",
+      "value": "delay-a"
+    },
+    {
+      "at": "2026-11-09T13:22:29.145Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:22:29.145Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:22:29.145Z",
+      "kind": "progress",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:22:29.146Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:22:29.146Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:22:29.146Z",
+      "kind": "attempts",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:23:20.309Z",
+      "kind": "auth-login",
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.326Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.327Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.353Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags",
+        "order": "ege_number.asc.nullslast,title.asc.nullslast"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.354Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "task_id,is_correct",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.354Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_task_stats",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.845Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.845Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_b",
+      "p_user_id": "b1000000-0000-4000-8000-000000000002",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:23:20.847Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T13:23:20.847Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_b",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:23:38.797Z",
+      "kind": "progress",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:23:38.797Z",
+      "kind": "attempts",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:18.033Z",
+      "kind": "scenario",
+      "value": "normal"
+    },
+    {
+      "at": "2026-11-09T13:24:29.458Z",
+      "kind": "auth-login",
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.476Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.477Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.a1000000-0000-4000-8000-000000000001"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.511Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.511Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:24:29.513Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.513Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:24:29.948Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.948Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:24:29.950Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:29.950Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:24:52.437Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:52.437Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:24:52.438Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:24:52.438Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:26:03.508Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "tasks_public",
+      "params": {
+        "select": "id,slug,ege_number,title,difficulty,tags,statement_md,answer_format,source",
+        "slug": "eq.tc19-t2"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:03.521Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_files",
+      "params": {
+        "select": "filename,content,size_bytes",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:03.524Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_references",
+      "params": {
+        "select": "relevance,sort_order,reference_articles(slug,title,summary,level,reading_minutes,ege_numbers,tags)",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:03.527Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "task_articles",
+      "params": {
+        "select": "article_id,sort_order",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002",
+        "order": "sort_order.asc.nullslast"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:03.548Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "drafts",
+      "params": {
+        "select": "code",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task_id": "eq.d1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:32.200Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:32.200Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:26:32.200Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:26:32.200Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:26:50.971Z",
+      "kind": "scenario",
+      "value": "progress-error"
+    },
+    {
+      "at": "2026-11-09T13:27:02.545Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:27:02.545Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:27:02.546Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:27:02.546Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T13:27:18.526Z",
+      "kind": "scenario",
+      "value": "normal"
+    },
+    {
+      "at": "2026-11-09T13:27:28.733Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:27:28.733Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_a",
+      "p_user_id": "a1000000-0000-4000-8000-000000000001",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T13:27:28.734Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.a1000000-0000-4000-8000-000000000001",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_a"
+    },
+    {
+      "at": "2026-11-09T13:27:28.734Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_a",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    }
+  ]
+}

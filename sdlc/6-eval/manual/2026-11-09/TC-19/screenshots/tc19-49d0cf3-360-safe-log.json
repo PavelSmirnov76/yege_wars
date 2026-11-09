@@ -1,0 +1,42 @@
+{
+  "driver": "TC-19 Playwright route fixture, temporary wrapper around original page",
+  "build_commit": "49d0cf355f400d7f3bb0a8afa0e4565659d93a82",
+  "browser": {
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "viewport_css_px": [360, 800],
+    "device_scale_factor": 1,
+    "user_agent_profile": "Pixel 5",
+    "has_touch": true
+  },
+  "synthetic_fixture_only": true,
+  "measurements_css_px": {
+    "recent_attempt_row": [280, 84],
+    "retry_button": [120.796875, 48],
+    "logout_button": [116.765625, 48],
+    "viewport_width": 360,
+    "document_scroll_width": 360
+  },
+  "observations": [
+    {"step": "1_initial_profile_A", "account": "tc19_a", "summary": "1/3", "ege_24": "1/2", "no_ege_number": "0/1", "recent_rows": 10, "evidence": "tc19-49d0cf3-360-profile-A-loaded.png"},
+    {"step": "2_select_T2", "task_route": "tc19-t2", "statement_visible": true, "mobile_row_enter_opened_task": true, "evidence": "tc19-49d0cf3-360-task-T2-selected.png"},
+    {"step": "3_synthetic_submissions_same_context", "fixture_context": "fresh mobile context, single driver report", "submit_updates": [{"id": "a3000000-0000-4000-8000-000000000017", "task": "tc19-t2", "correct": true}, {"id": "a3000000-0000-4000-8000-000000000018", "task": "tc19-t2", "correct": true}], "after_first": {"summary": "2/3", "first_row": "new correct T2"}, "after_second": {"summary": "2/3", "ege_24": "2/2", "first_rows": ["new correct T2", "new correct T2"]}, "real_submit_sent": false, "evidence": ["tc19-49d0cf3-360-step3-same-context-after-first.png", "tc19-49d0cf3-360-step3-same-context-after-second.png", "tc19-49d0cf3-360-step3-same-context-safe-log.json"]},
+    {"step": "4_errors_and_retry", "progress_error_shown": true, "attempts_error_shown": true, "normal_retry_reissued_queries": true, "profile_recovered": true, "evidence": ["tc19-49d0cf3-360-error-progress.png", "tc19-49d0cf3-360-error-attempts.png"]},
+    {"step": "5_B_and_no_tasks", "B_summary": "0/3", "B_ege_24": "0/2", "B_no_ege_number": "0/1", "B_attempts_empty": true, "no_tasks_summary": "0/0", "no_published_tasks_message": true, "evidence": ["tc19-49d0cf3-360-B-empty.png", "tc19-49d0cf3-360-B-no-tasks.png"]},
+    {"step": "6_release_late_A", "A_progress_and_attempts_delayed": true, "B_loaded_before_release": true, "A_released": true, "screen_remained_B_zero_and_empty": true, "evidence": ["tc19-49d0cf3-360-A-delayed-loading.png", "tc19-49d0cf3-360-B-before-A-release.png", "tc19-49d0cf3-360-B-after-A-release.png"]},
+    {"step": "7_accessibility_and_targets", "semantics_activation": "focus placeholder then Enter", "row_focus_then_enter_opened_T2": true, "focus_screenshot": "tc19-49d0cf3-360-row-focused.png", "touch_input": "Playwright page.touchscreen.tap in original context"}
+  ],
+  "event_logs": {
+    "B_context": "tc19-49d0cf3-360-B-safe-log.json",
+    "delay_context": "tc19-49d0cf3-360-delay-safe-log.json",
+    "A_steps_1_and_4": "raw driver event JSON from the earlier context was not persisted; UI observations have screenshots",
+    "A_step_3": "complete single-context event log saved as tc19-49d0cf3-360-step3-same-context-safe-log.json"
+  },
+  "runner_deviations": [
+    "External CDP attach was discarded because it changed effective DPR/viewport. eval64 was added only to a /tmp copy of the runner; route fixtures and original Playwright page were retained.",
+    "A center tap on the 1x1 mobile semantics placeholder did not enable semantics; focus plus Enter did.",
+    "An attempted headless relaunch rendered a blank Flutter canvas and failed at Chromium permissions. A headful launch with browser execution permission completed the remaining checks without rebuilding."
+  ],
+  "secrets_or_real_user_data": false,
+  "real_submissions_sent": false
+}

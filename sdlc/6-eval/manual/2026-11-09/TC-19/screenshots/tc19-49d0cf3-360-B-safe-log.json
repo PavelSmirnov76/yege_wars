@@ -1,0 +1,181 @@
+{
+  "driver": "TC-19 Playwright route fixture",
+  "viewport": {
+    "width": 360,
+    "height": 800
+  },
+  "appOrigin": "http://127.0.0.1:8081",
+  "fixture": "/private/tmp/tc19-current/fixtures.json",
+  "scenario": "no-tasks",
+  "fixtureIds": {
+    "users": {
+      "tc19_a": "a1000000-0000-4000-8000-000000000001",
+      "tc19_b": "b1000000-0000-4000-8000-000000000002",
+      "tc19_outsider": "c1000000-0000-4000-8000-000000000003"
+    },
+    "baseExpectedRecentIds": [
+      "a2000000-0000-4000-8000-000000000014",
+      "a2000000-0000-4000-8000-000000000013",
+      "a2000000-0000-4000-8000-000000000012",
+      "a2000000-0000-4000-8000-000000000011",
+      "a2000000-0000-4000-8000-000000000010",
+      "a2000000-0000-4000-8000-000000000009",
+      "a2000000-0000-4000-8000-000000000008",
+      "a2000000-0000-4000-8000-000000000007",
+      "a2000000-0000-4000-8000-000000000006",
+      "a2000000-0000-4000-8000-000000000005"
+    ],
+    "currentExpectedRecentIds": []
+  },
+  "events": [
+    {
+      "at": "2026-11-09T16:11:14.439Z",
+      "kind": "browser",
+      "playwright": "1.64.1",
+      "chromium": "156.0.8078.4"
+    },
+    {
+      "at": "2026-11-09T16:11:14.708Z",
+      "kind": "driver-ready",
+      "appUrl": "http://127.0.0.1:8081",
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "scenario": "normal",
+      "fixture": "tc19-current"
+    },
+    {
+      "at": "2026-11-09T16:11:19.813Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-final-headful/1794240679786-360x800-mobile-B-login-form.png"
+    },
+    {
+      "at": "2026-11-09T16:11:55.105Z",
+      "kind": "auth-login",
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:11:55.122Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:11:55.122Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "profiles",
+      "params": {
+        "select": "*",
+        "id": "eq.b1000000-0000-4000-8000-000000000002"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:11:55.162Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:11:55.162Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_b",
+      "p_user_id": "b1000000-0000-4000-8000-000000000002",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T16:11:55.163Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:11:55.163Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_b",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T16:12:01.689Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-final-headful/1794240721659-360x800-mobile-B-empty.png"
+    },
+    {
+      "at": "2026-11-09T16:12:10.865Z",
+      "kind": "scenario",
+      "value": "no-tasks"
+    },
+    {
+      "at": "2026-11-09T16:12:18.971Z",
+      "kind": "api-request",
+      "method": "POST",
+      "endpoint": "get_user_progress",
+      "params": {},
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:12:18.971Z",
+      "kind": "progress-query-contract",
+      "account": "tc19_b",
+      "p_user_id": "b1000000-0000-4000-8000-000000000002",
+      "passed": true
+    },
+    {
+      "at": "2026-11-09T16:12:18.972Z",
+      "kind": "api-request",
+      "method": "GET",
+      "endpoint": "submissions",
+      "params": {
+        "select": "id,task_id,is_correct,created_at,task:tasks!inner(id,slug,title,ege_number)",
+        "user_id": "eq.b1000000-0000-4000-8000-000000000002",
+        "task.status": "eq.published",
+        "order": "created_at.desc.nullslast,id.desc.nullslast",
+        "limit": "10"
+      },
+      "account": "tc19_b"
+    },
+    {
+      "at": "2026-11-09T16:12:18.972Z",
+      "kind": "attempt-query-contract",
+      "account": "tc19_b",
+      "contract": {
+        "user_id": true,
+        "published": true,
+        "order": true,
+        "limit": true
+      }
+    },
+    {
+      "at": "2026-11-09T16:12:24.663Z",
+      "kind": "screenshot",
+      "path": "/tmp/tc19-captures-49d0cf3-360-final-headful/1794240744633-360x800-mobile-B-no-tasks.png"
+    },
+    {
+      "at": "2026-11-09T16:12:37.123Z",
+      "kind": "report-saved",
+      "path": "/tmp/tc19-captures-49d0cf3-360-final-headful/tc19-360x800-safe-log.json"
+    }
+  ]
+}

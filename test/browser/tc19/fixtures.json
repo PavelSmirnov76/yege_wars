@@ -1,0 +1,35 @@
+{
+  "users": {
+    "tc19_a": {"id": "a1000000-0000-4000-8000-000000000001", "username": "tc19_a", "role": "student"},
+    "tc19_b": {"id": "b1000000-0000-4000-8000-000000000002", "username": "tc19_b", "role": "student"},
+    "tc19_outsider": {"id": "c1000000-0000-4000-8000-000000000003", "username": "tc19_outsider", "role": "student"}
+  },
+  "tasks": [
+    {"id":"d1000000-0000-4000-8000-000000000001","slug":"tc19-t1","ege_number":24,"title":"TC-19 T1 — длинное название для проверки переноса текста в последней попытке","statement_md":"Синтетическое условие T1. Ответ для проверки: tc19-synthetic","difficulty":1,"answer_format":"string","status":"published"},
+    {"id":"d1000000-0000-4000-8000-000000000002","slug":"tc19-t2","ege_number":24,"title":"TC-19 T2","statement_md":"Синтетическое условие T2. Ответ для проверки: tc19-synthetic","difficulty":1,"answer_format":"string","status":"published"},
+    {"id":"d1000000-0000-4000-8000-000000000003","slug":"tc19-t3","ege_number":null,"title":"TC-19 T3 без номера","statement_md":"Синтетическое условие T3. Ответ для проверки: tc19-synthetic","difficulty":1,"answer_format":"string","status":"published"},
+    {"id":"d1000000-0000-4000-8000-000000000004","slug":"tc19-hidden","ege_number":24,"title":"TC-19 скрытая H","statement_md":"Скрытая задача, не должна попасть в профиль.","difficulty":1,"answer_format":"string","status":"draft"}
+  ],
+  "attempts": [
+    {"id":"a2000000-0000-4000-8000-000000000001","task_slug":"tc19-t1","user":"tc19_a","is_correct":true,"created_at":"2026-11-08T10:00:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000002","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:01:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000003","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:02:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000004","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:03:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000005","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:04:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000006","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:05:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000007","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:06:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000008","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:07:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000009","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:08:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000010","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:09:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000011","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:10:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000012","task_slug":"tc19-t1","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:11:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000013","task_slug":"tc19-t2","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:12:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000014","task_slug":"tc19-t3","user":"tc19_a","is_correct":false,"created_at":"2026-11-08T10:12:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000015","task_slug":"tc19-hidden","user":"tc19_a","is_correct":true,"created_at":"2026-11-08T10:14:00.000Z"},
+    {"id":"a2000000-0000-4000-8000-000000000016","task_slug":"tc19-t1","user":"tc19_outsider","is_correct":true,"created_at":"2026-11-08T10:15:00.000Z"}
+  ],
+  "expected": {
+    "accountA": {"solved_total":1,"available_total":3,"by_number":[{"ege_number":24,"solved":1,"total":2},{"ege_number":null,"solved":0,"total":1}],"recent_limit":10},
+    "accountB": {"solved_total":0,"available_total":3,"by_number":[{"ege_number":24,"solved":0,"total":2},{"ege_number":null,"solved":0,"total":1}],"recent_limit":10}
+  }
+}

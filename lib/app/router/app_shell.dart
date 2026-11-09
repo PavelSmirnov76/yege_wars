@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:yege_wars/core/utils/l10n_ext.dart';
 import 'package:yege_wars/core/widgets/adaptive_navigation_scaffold.dart';
 import 'package:yege_wars/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:yege_wars/features/profile/presentation/progress_providers.dart';
 
 /// Оболочка приложения с адаптивной навигацией.
 ///
@@ -62,7 +63,13 @@ class AppShell extends ConsumerWidget {
     return AdaptiveNavigationScaffold(
       destinations: destinations,
       selectedIndex: selectedIndex,
-      onDestinationSelected: navigationShell.goBranch,
+      onDestinationSelected: (index) {
+        if (index == 2 && navigationShell.currentIndex == 2) {
+          final id = ref.read(authControllerProvider).profileOrNull?.id;
+          if (id != null) ref.invalidate(profileProgressProvider(id));
+        }
+        navigationShell.goBranch(index);
+      },
       body: navigationShell,
     );
   }

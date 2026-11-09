@@ -2913,6 +2913,48 @@ begin
 end
 $$;
 
+-- UC-41-P-01 UC-41-P-02 UC-41-P-03: опубликованные задачи и повторы.
+do $$
+declare
+  v_user uuid;
+  v_task uuid;
+  v_solved bigint;
+  v_total bigint;
+  v_count bigint;
+begin
+  v_user := tests.signup('progress_test');
+  update public.tasks set status = 'draft';
+  insert into public.tasks (slug, ege_number, title, statement_md, difficulty, answer_format, status)
+  values ('progress-null', null, 'Без номера', 'Условие', 1, 'single', 'draft')
+  returning id into v_task;
+  perform tests.login(v_user);
+  select count(*) into v_count from public.get_user_progress(v_user);
+  if v_count <> 0 then raise exception 'Пустой каталог должен давать пустую сводку'; end if;
+  perform tests.logout();
+  update public.tasks set status = 'published' where id = v_task;
+  perform tests.login(v_user);
+  select solved, total into v_solved, v_total from public.get_user_progress(v_user) where ege_number is null;
+  if v_solved is distinct from 0 or v_total is distinct from 1 then
+    raise exception 'Нулевой прогресс: получено % из %', v_solved, v_total;
+  end if;
+  perform tests.logout();
+  insert into public.submissions (user_id, task_id, code, answer, is_correct)
+  values (v_user, v_task, '', '1', true), (v_user, v_task, '', '1', true);
+  perform tests.login(v_user);
+  select solved, total into v_solved, v_total from public.get_user_progress(v_user) where ege_number is null;
+  if v_solved is distinct from 1 or v_total is distinct from 1 then
+    raise exception 'Повторная попытка или публикация: получено % из %', v_solved, v_total;
+  end if;
+  perform tests.logout();
+  update public.tasks set status = 'draft' where id = v_task;
+  perform tests.login(v_user);
+  select count(*) into v_count from public.get_user_progress(v_user);
+  if v_count <> 0 then raise exception 'Скрытая задача осталась в сводке'; end if;
+  perform tests.logout();
+  raise notice 'OK: прогресс учитывает публикацию, повторы и пустой каталог';
+end
+$$;
+
 -- =============================================================================
 -- Итог
 -- =============================================================================
