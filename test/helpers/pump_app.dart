@@ -7,6 +7,8 @@ import 'package:yege_wars/core/python_runtime/python_runtime_provider.dart';
 import 'package:yege_wars/features/auth/auth_providers.dart';
 import 'package:yege_wars/features/auth/domain/entities/test_account.dart';
 import 'package:yege_wars/features/editor/editor_providers.dart';
+import 'package:yege_wars/features/profile/domain/progress.dart';
+import 'package:yege_wars/features/profile/presentation/progress_providers.dart';
 import 'package:yege_wars/features/reference/reference_providers.dart';
 import 'package:yege_wars/features/submissions/submissions_providers.dart';
 import 'package:yege_wars/features/tasks/domain/repositories/tasks_repository.dart';
@@ -14,6 +16,7 @@ import 'package:yege_wars/features/tasks/tasks_providers.dart';
 
 import 'fake_auth_repository.dart';
 import 'fake_draft_repository.dart';
+import 'fake_progress_repository.dart';
 import 'fake_python_runtime.dart';
 import 'fake_reference_repository.dart';
 import 'fake_submissions_repository.dart';
@@ -42,6 +45,7 @@ Future<void> pumpApp(
   FakePythonRuntime? runtime,
   FakeDraftRepository? drafts,
   FakeSubmissionsRepository? submissions,
+  ProgressRepository? progress,
   TestAccount? testAccount,
 }) async {
   await tester.pumpWidget(
@@ -60,6 +64,9 @@ Future<void> pumpApp(
         ),
         draftRepositoryProvider.overrideWithValue(
           drafts ?? FakeDraftRepository(),
+        ),
+        progressRepositoryProvider.overrideWithValue(
+          progress ?? FakeProgressRepository(),
         ),
         submissionsRepositoryProvider.overrideWithValue(
           submissions ?? FakeSubmissionsRepository(),

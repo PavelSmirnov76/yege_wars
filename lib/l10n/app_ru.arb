@@ -172,5 +172,44 @@
         "type": "String"
       }
     }
-  }
+  },
+  "profileSolvedTitle": "Решено задач",
+  "profileSolvedSummary": "{solved} из {total}",
+  "@profileSolvedSummary": {
+    "placeholders": {
+      "solved": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "profileProgressTitle": "Прогресс по номерам КЕГЭ",
+  "profileProgressCount": "{solved} / {total}",
+  "@profileProgressCount": {
+    "placeholders": {
+      "solved": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "profileEgeNumber": "Задание {number}",
+  "@profileEgeNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoEgeNumber": "Без номера КЕГЭ",
+  "profileRecentAttemptsTitle": "Последние попытки",
+  "profileEmptyAttempts": "Попыток пока нет",
+  "profileEmptyTasks": "Пока нет опубликованных задач",
+  "profileAttemptCorrect": "Верно",
+  "profileAttemptWrong": "Неверно",
+  "profileProgressLoadError": "Не удалось загрузить прогресс."
 }
