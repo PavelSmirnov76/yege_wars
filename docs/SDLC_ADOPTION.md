@@ -36,8 +36,8 @@ GitHub Actions заново не проверялись.
 - В работе новый проход профиля с прогрессом —
   [BT-22](../sdlc/1-business-tasks/planning/BT-22-PLANNING-PROFILE-PROGRESS.md).
   Подготовлены [TASK-12](../sdlc/4-tasks/TASK-12-PROFILE-PROGRESS.md) и
-  [TC-19](../sdlc/6-eval/manual/TC-19-PROFILE-PROGRESS.md), реализация следует
-  после коммита задания и подготовки worktree постановщиком.
+  [TC-19](../sdlc/6-eval/manual/TC-19-PROFILE-PROGRESS.md). Проход и задание
+  отправлены в origin/main коммитом `8bc1c7a`, worktree готов к реализации.
   Последний [машинный прогон](../sdlc/6-eval/auto/2026-11-03-ec9cdc4/summary.md)
   — на сдаче TASK-11: 10 проверок PASS, 399 уникальных Flutter-тестов.
   Это сохранённый прогон ветки, а не новый прогон main.
@@ -68,8 +68,12 @@ GitHub Actions заново не проверялись.
 затем работа преподавателя с попытками, управление группой и выпуск.
 Владелец одобрил начало работы по roadmap и
 [план прохода профиля](../sdlc/0-vibes/raw/2026-11-09/profile-progress-pass-plan.md).
-Требования и задание записаны. Следующий шаг — одобрение коммита прохода
-и TASK-12, затем push и подготовка worktree перед передачей исполнителю.
+Требования и задание закоммичены и отправлены в origin/main. Следующий шаг —
+запуск исполнителя TASK-12. Ветка `task/TASK-12` создана приложением в
+`/Users/pavelsmirnov/.codex/worktrees/task-12/yege_wars`; путь задания
+`/Users/pavelsmirnov/projects/yege_wars-TASK-12` — ссылка на этот worktree.
+Локальные `supabase/.env.local` и `supabase/.env.dev.local` в worktree
+указывают на dev-конфигурацию основной копии и игнорируются Git.
 Блокировка новых функций из решения 49 заменена конечным списком
 оставшихся проверок к выпуску. Ручная приёмка новых заданий обязательна.
 
