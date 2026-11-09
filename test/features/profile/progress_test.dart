@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -30,6 +32,34 @@ class FakeSource implements ProgressDataSource {
     attemptCalls++;
     if (failAttempts) throw const FormatException();
     return attemptRows;
+  }
+}
+
+class PendingSource implements ProgressDataSource {
+  PendingSource({required this.progressFails});
+  final bool progressFails;
+  final pending = Completer<List<Map<String, dynamic>>>();
+  int progressCalls = 0;
+  int attemptCalls = 0;
+  bool fail = true;
+  @override
+  SupabaseClient get client => throw UnimplementedError();
+  @override
+  Future<List<Map<String, dynamic>>> progress(String userId) {
+    progressCalls++;
+    if (!fail) return Future.value([]);
+    return progressFails
+        ? Future.error(const FormatException())
+        : pending.future;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> attempts(String userId) {
+    attemptCalls++;
+    if (!fail) return Future.value([]);
+    return progressFails
+        ? pending.future
+        : Future.error(const FormatException());
   }
 }
 
@@ -117,5 +147,31 @@ void main() {
         expect(source.attemptCalls, 2);
       },
     );
+  }
+  for (final progressFails in [true, false]) {
+    test('UC-41-P-04 UC-41-P-05: отказ при незавершённом втором запросе '
+        '${progressFails ? 'progress' : 'attempts'}', () async {
+      final source = PendingSource(progressFails: progressFails);
+      final repository = ProgressRepositoryImpl(source);
+      var completed = false;
+      final result = repository.getProgress('a');
+      unawaited(
+        result.then<void>((_) {
+          completed = true;
+        }),
+      );
+      await Future<void>.delayed(Duration.zero);
+      expect(completed, isTrue);
+      expect(source.pending.isCompleted, isFalse);
+      expect((await result).failureOrNull, isA<DatabaseFailure>());
+      source.fail = false;
+      final retry = await repository.getProgress('a');
+      expect(retry.valueOrNull, isNotNull);
+      expect(source.progressCalls, 2);
+      expect(source.attemptCalls, 2);
+      source.pending.complete([]);
+      await Future<void>.delayed(Duration.zero);
+      expect(retry.valueOrNull!.total, 0);
+    });
   }
 }

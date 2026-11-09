@@ -40,7 +40,7 @@ class ProgressRepositoryImpl implements ProgressRepository {
       final responses = await Future.wait([
         source.progress(userId),
         source.attempts(userId),
-      ]);
+      ], eagerError: true);
       final numbers =
           [
             for (final row in responses[0])

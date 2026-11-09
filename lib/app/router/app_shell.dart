@@ -64,7 +64,7 @@ class AppShell extends ConsumerWidget {
       destinations: destinations,
       selectedIndex: selectedIndex,
       onDestinationSelected: (index) {
-        if (index == 2) {
+        if (index == 2 && navigationShell.currentIndex == 2) {
           final id = ref.read(authControllerProvider).profileOrNull?.id;
           if (id != null) ref.invalidate(profileProgressProvider(id));
         }
