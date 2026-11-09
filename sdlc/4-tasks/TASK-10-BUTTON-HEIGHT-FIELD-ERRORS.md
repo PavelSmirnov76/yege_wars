@@ -7,7 +7,7 @@
   кнопка отправки «высотой не меньше тап-цели» — [COMP-3](../3-design/design-system/COMP-3-SUBMIT-BUTTON.md);
   подпись ошибки под полем целиком — экраны [FIG-19](../3-design/FIG-19-LOGIN.md)
   «Вход» и [FIG-2](../3-design/FIG-2-REGISTER.md) «Регистрация»; «Выйти» —
-  экран [FIG-10](../3-design/FIG-10-PROFILE.md) «Профиль».
+  экран [FIG-10](../3-design/obsolete/FIG-10-PROFILE.md) «Профиль».
 - Пути UC, на экранах которых виден брак: подпись —
   [UC-10-P-03](../2-specs/use-cases/UC-10-ACTOR-1-EVT-2-ENT-3-SESSION-STARTED-IN-AUTH.md#uc-10-p-03),
   [UC-1-P-02](../2-specs/use-cases/UC-1-ACTOR-1-EVT-1-ENT-1-STUDENT-CREATED-IN-AUTH.md#uc-1-p-02);

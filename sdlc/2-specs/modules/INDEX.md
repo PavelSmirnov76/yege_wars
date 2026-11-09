@@ -12,6 +12,7 @@
 | [MOD-7](MOD-7-REFERENCE.md) | Справочник | [BT-13](../../1-business-tasks/planning/obsolete/BT-13-PLANNING-REFERENCE.md), [BT-14](../../1-business-tasks/planning/BT-14-PLANNING-ARTICLE.md), [BT-15](../../1-business-tasks/planning/BT-15-PLANNING-HELP.md) |
 | [MOD-8](MOD-8-CODE.md) | Код | [MOD-5](obsolete/MOD-5-EDITOR.md), [BT-17](../../1-business-tasks/planning/BT-17-PLANNING-RUN-AND-DRAFT.md) |
 | [MOD-9](MOD-9-SITE.md) | Сайт | [BT-16](../../1-business-tasks/planning/BT-16-PLANNING-SITE.md) |
+| [MOD-10](MOD-10-PROGRESS.md) | Прогресс | [BT-22](../../1-business-tasks/planning/BT-22-PLANNING-PROFILE-PROGRESS.md) |
 
 ## К пересмотру
 

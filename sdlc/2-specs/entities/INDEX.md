@@ -20,6 +20,7 @@
 | [ENT-15](ENT-15-DRAFT-IN-CODE.md) | Черновик | [ENT-8](obsolete/ENT-8-CODE-IN-EDITOR.md), [MOD-8](../modules/MOD-8-CODE.md), [ENT-2](ENT-2-PROFILE-IN-AUTH.md), [ENT-6](ENT-6-PROBLEM-IN-CATALOG.md) |
 | [ENT-16](ENT-16-SITE-IN-SITE.md) | Сайт | [MOD-9](../modules/MOD-9-SITE.md), [ENT-5](ENT-5-BUILD-CONFIG-IN-CONFIG.md) |
 | [ENT-17](ENT-17-TEST-ACCOUNT-IN-AUTH.md) | Тестовая учётная запись | [MOD-1](../modules/MOD-1-AUTH.md), [ENT-1](ENT-1-ACCOUNT-IN-AUTH.md) |
+| [ENT-18](ENT-18-PROGRESS-SUMMARY-IN-PROGRESS.md) | Сводка прогресса | [MOD-10](../modules/MOD-10-PROGRESS.md), [ENT-2](ENT-2-PROFILE-IN-AUTH.md), [ENT-11](ENT-11-ATTEMPT-IN-SUBMISSION.md), [ENT-6](ENT-6-PROBLEM-IN-CATALOG.md), [R46](../../0-vibes/prd/PRD.md#r46) |
 
 ## К пересмотру
 
