@@ -19,6 +19,7 @@
 | [ACC-TASK-10-01](ACC-TASK-10-01.md) | Кнопки не ниже 44 на компьютере, подпись ошибки поля — целиком | [RESULT-TASK-10-01](../../5-results/RESULT-TASK-10-01.md), [TASK-10](../../4-tasks/TASK-10-BUTTON-HEIGHT-FIELD-ERRORS.md), [ACC-TASK-8-01](ACC-TASK-8-01.md) | [RESULT-TASK-10-01](../../5-results/RESULT-TASK-10-01.md) | принято |
 | [ACC-TASK-11-01](ACC-TASK-11-01.md) | Области нажатия чипов каталога | [RESULT-TASK-11-01](../../5-results/RESULT-TASK-11-01.md), [TASK-11](../../4-tasks/TASK-11-CATALOG-CHIP-TAP-TARGETS.md) | [RESULT-TASK-11-01](../../5-results/RESULT-TASK-11-01.md) | принято |
 | [ACC-TASK-12-01](ACC-TASK-12-01.md) | Профиль с прогрессом — возврат | [RESULT-TASK-12-01](../../5-results/RESULT-TASK-12-01.md), [TASK-12](../../4-tasks/TASK-12-PROFILE-PROGRESS.md), [UC-41-P-01](../../2-specs/use-cases/UC-41-ACTOR-2-EVT-25-ENT-18-PROGRESS-SHOWN-IN-PROGRESS.md#uc-41-p-01), [R55](../../0-vibes/prd/PRD.md#r55), [UC-41-P-04](../../2-specs/use-cases/UC-41-ACTOR-2-EVT-25-ENT-18-PROGRESS-SHOWN-IN-PROGRESS.md#uc-41-p-04), [R46](../../0-vibes/prd/PRD.md#r46) | [RESULT-TASK-12-01](../../5-results/RESULT-TASK-12-01.md) | возврат |
+| [ACC-TASK-12-02](ACC-TASK-12-02.md) | Профиль с прогрессом — принято | [RESULT-TASK-12-02](../../5-results/RESULT-TASK-12-02.md), [TASK-12](../../4-tasks/TASK-12-PROFILE-PROGRESS.md), [ACC-TASK-12-01](ACC-TASK-12-01.md) | [RESULT-TASK-12-02](../../5-results/RESULT-TASK-12-02.md) | принято |
 
 ## К пересмотру
 
